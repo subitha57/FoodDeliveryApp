@@ -1,0 +1,29 @@
+.customize-form {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 5%;
+    border: 2px solid black;
+    padding: 3%;
+   
+  }
+  
+  .customize-form form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-top: 2%;
+   
+  }
+  
+  .customize-form label {
+    margin-bottom: 10px;
+    
+  }
+  
+  .customize-form button {
+    margin-top: 10px;
+    color: tomato;
+  }
+  h2{
+    color: tomato;
+  }

@@ -60,6 +60,16 @@ import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
 import parcel_icon from './parcel_icon.png'
 import one from '../assets/one.jpg'
+import menu_9 from '../assets/menu_9.png'
+
+import food_33 from '../assets/food_33.png'
+import food_34 from '../assets/food_34.png';
+import food_35 from '../assets/food_35.png';
+import food_36 from '../assets/food_36.png';
+import food_37 from '../assets/food_37.png';
+import food_38 from '../assets/food_38.png';
+import food_39 from "../assets/food_39.png";
+import food_40 from '../assets/food_40.png';
 
 export const assets = {
     logo,
@@ -85,6 +95,10 @@ export const assets = {
 }
 
 export const menu_list = [
+    {
+        menu_name: "Pizza",
+        menu_image: menu_9
+    },
     {
         menu_name: "Salad",
         menu_image: menu_1
@@ -113,10 +127,12 @@ export const menu_list = [
         menu_name: "Pasta",
         menu_image: menu_7
     },
+   
     {
         menu_name: "Noodles",
         menu_image: menu_8
-    }]
+    }
+   ]
 
 export const food_list = [
     {
@@ -348,5 +364,68 @@ export const food_list = [
         price: 15,
         description: "Food provides essential nutrients for overall health and well-being",
         category: "Noodles"
-    }
-]
+    },
+    {
+        _id: "33",
+        name: "Chilli Paneer Pizza",
+        image: food_33,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "34",
+        name: "Curry Veggie Delight",
+        image: food_34,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "35",
+        name: "Spicy Garden Delight",
+        image: food_35,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "36",
+        name: "Achari Gobhi",
+        image: food_36,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "37",
+        name: "ChatPatta Aaloo Pizza",
+        image: food_37,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "38",
+        name: "Masala Pesto Chicken",
+        image: food_38,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "39",
+        name: "Lamb Kabab Pizza",
+        image: food_39,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    },
+    {
+        _id: "40",
+        name: "Classic Pepperoni",
+        image: food_40,
+        price: 15,
+        description: "Food provides essential nutrients for overall health and well-being",
+        category: "Pizza"
+    }    ]

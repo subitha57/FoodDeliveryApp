@@ -3,9 +3,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+ 
 }
 h1{
-    color: tomato;
+    color:navy;
    
    }
 .navbar-menu{
