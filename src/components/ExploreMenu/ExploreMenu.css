@@ -2,9 +2,10 @@
     display:flex;
     flex-direction: column;
     gap:20px;
+   
 }
 .explore-menu h1{
-    color:#262626;
+    color:navy;
     font-weight: 500;
 }
 .explore-menu-text{

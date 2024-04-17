@@ -14,7 +14,6 @@ const toggleCustomizeForm = () => {
   setShowCustomizeForm(!showCustomizeForm);
 };
 
-
   return (
     <div className='food-display' id='food-display'>
       <h2>Top dishes near you</h2>
@@ -26,7 +25,7 @@ const toggleCustomizeForm = () => {
                 {category === "Pizza" && (
                   <button onClick={() => setShowForm(true)}>Customize Pizza</button>
                 )}
-              <div key={index}>
+              <div key={item._id}>
                 <FoodItem
                   id={item._id}
                   name={item.name}

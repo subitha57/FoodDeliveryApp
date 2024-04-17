@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
-import './CustomizeForm.css'
+import './CustomizeForm.css';
+import addToCart from '../foodItem/FoodItem'
+import { useContext } from 'react';
+import { StoreContext } from '../../context/StoreContextProvider';
 
 function CustomizeForm() {
+  const {addToCart} = useContext(StoreContext);
   const [size, setSize] = useState('medium');
   const [toppings, setToppings] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const prices = {
+    small: 200,
+    medium: 300,
+    large: 400,
+    toppings: {
+      pepperoni: 50,
+      mushrooms: 70,
+      onions: 30,
+      sausage: 20,
+    },
+  };
 
   const handleSizeChange = (e) => {
     setSize(e.target.value);
+    calculateTotalPrice(e.target.value, toppings);
   };
 
   const handleToppingChange = (e) => {
@@ -16,13 +34,31 @@ function CustomizeForm() {
     } else {
       setToppings(toppings.filter((top) => top !== topping));
     }
+    calculateTotalPrice(size, toppings);
+  };
+
+  const calculateTotalPrice = (selectedSize, selectedToppings) => {
+    let totalPrice = prices[selectedSize];
+    selectedToppings.forEach((topping) => {
+      totalPrice += prices.toppings[topping];
+    });
+    setTotalPrice(totalPrice);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can submit the pizza order with selected size and toppings
-    console.log('Pizza Size:', size);
-    console.log('Toppings:', toppings);
+    // Create pizza object with size, toppings, and total price
+    const pizza = {
+      size,
+      toppings,
+      totalPrice,
+    };
+    // Add pizza to cart
+    addToCart(pizza);
+    // Reset form
+    setSize('medium');
+    setToppings([]);
+    setTotalPrice(0);
   };
 
   return (
@@ -52,6 +88,7 @@ function CustomizeForm() {
         </label>
         <br />
         <button type="submit">Submit</button>
+        <div>Total Price: Rs.{totalPrice}</div>
       </form>
     </div>
   );

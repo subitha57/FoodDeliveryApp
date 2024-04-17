@@ -34,3 +34,6 @@ const {cartItems,addToCart,removeFromCart} = useContext(StoreContext);
 }
 
 export default FoodItem
+
+
+

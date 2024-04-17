@@ -5,6 +5,9 @@
     text-align: center;
     font-weight: 500;
 }
+.p{
+    color: navy;
+}
 .app-download-platforms{
     display: flex;
     justify-content: center;
