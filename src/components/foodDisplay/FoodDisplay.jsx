@@ -9,10 +9,14 @@ const FoodDisplay = ({category}) => {
 const {food_list}=useContext(StoreContext)
 const [showCustomizeForm, setShowCustomizeForm] = useState(false);
 const [showForm, setShowForm] = useState(false);
+const [pizzaItemId, setPizzaItemId] = useState(null);
 
-const toggleCustomizeForm = () => {
+
+const toggleCustomizeForm = (itemId) => {
+  console.log("Toggling Customize Form");
+  setPizzaItemId(itemId);
   setShowCustomizeForm(!showCustomizeForm);
-};
+};  
 
   return (
     <div className='food-display' id='food-display'>
@@ -21,11 +25,11 @@ const toggleCustomizeForm = () => {
         {food_list.map((item, index) => {
           if (category === "All" || category === item.category) {
             return (
-              <div>
+              <div key={index}>
                 {category === "Pizza" && (
-                  <button onClick={() => setShowForm(true)}>Customize Pizza</button>
+                  <button onClick={() =>  toggleCustomizeForm(item._id)}>Customize Pizza</button>
                 )}
-              <div key={item._id}>
+              
                 <FoodItem
                   id={item._id}
                   name={item.name}
@@ -33,15 +37,15 @@ const toggleCustomizeForm = () => {
                   price={item.price}
                   image={item.image}
                 />
-                
-              </div>
+       
               </div>
             );
           }
+          return null;
         })}
       </div>
-      {showForm && (
-        <CustomizeForm onClose={() => setShowForm(false)} />
+      {showCustomizeForm && pizzaItemId && (
+        <CustomizeForm id={pizzaItemId} onClose={() => setShowForm(false)} />
       )}
     </div>
   );

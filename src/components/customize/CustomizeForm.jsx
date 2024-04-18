@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CustomizeForm.css';
-import addToCart from '../foodItem/FoodItem'
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContextProvider';
 
-function CustomizeForm() {
+function CustomizeForm({id}) {
   const {addToCart} = useContext(StoreContext);
   const [size, setSize] = useState('medium');
   const [toppings, setToppings] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const prices = {
+  const price = {
     small: 200,
     medium: 300,
     large: 400,
@@ -22,9 +21,12 @@ function CustomizeForm() {
     },
   };
 
+  useEffect(() => {
+    calculateTotalPrice(size, toppings);
+  }, [size, toppings]); // Recalculate totalPrice whenever size or toppings change
+
   const handleSizeChange = (e) => {
     setSize(e.target.value);
-    calculateTotalPrice(e.target.value, toppings);
   };
 
   const handleToppingChange = (e) => {
@@ -34,28 +36,21 @@ function CustomizeForm() {
     } else {
       setToppings(toppings.filter((top) => top !== topping));
     }
-    calculateTotalPrice(size, toppings);
+    console.log("Toppings:", toppings);
   };
 
   const calculateTotalPrice = (selectedSize, selectedToppings) => {
-    let totalPrice = prices[selectedSize];
+    let totalPrice = price[selectedSize];
     selectedToppings.forEach((topping) => {
-      totalPrice += prices.toppings[topping];
+      totalPrice += price.toppings[topping];
     });
     setTotalPrice(totalPrice);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // Create pizza object with size, toppings, and total price
-    const pizza = {
-      size,
-      toppings,
-      totalPrice,
-    };
-    // Add pizza to cart
-    addToCart(pizza);
-    // Reset form
+    e.preventDefault(); 
+    console.log("Submitting form with id:", id, "and totalPrice:", totalPrice);
+    addToCart(id,totalPrice);
     setSize('medium');
     setToppings([]);
     setTotalPrice(0);

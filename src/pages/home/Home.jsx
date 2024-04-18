@@ -5,7 +5,6 @@ import ExploreMenu from '../../components/ExploreMenu/ExploreMenu'
 import FoodDisplay from '../../components/foodDisplay/FoodDisplay'
 import AppDownload from '../../components/appDownload/AppDownload'
 import Location from '../location/Location';
-import CustomizeForm from '../../components/customize/CustomizeForm'
 
 const Home = () => {
 
@@ -16,7 +15,6 @@ const Home = () => {
         <Header/>
         <ExploreMenu category={category} setCategory={setCategory} />
         <FoodDisplay category={category}/>
-       
         <AppDownload/><br/>
         <Location/>
       

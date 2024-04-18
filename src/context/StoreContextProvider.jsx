@@ -7,13 +7,16 @@ const StoreContextProvider = (props) => {
 
     const [cartItems,setCartItems]=useState({})
 
-    const addToCart =(itemId)=>{
+    const addToCart =(itemId,price)=>{
+        console.log("Adding item to cart:", itemId, price);
         if(!cartItems[itemId]){
-            setCartItems((prev)=>({...prev,[itemId]:1}))
+            setCartItems((prev)=>({...prev,[itemId]:{quantity:1,price:price}}))
     }
     else{
-        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
+        setCartItems((prev)=>({...prev,
+            [itemId]:{ ...prev[itemId], quantity: prev[itemId].quantity + 1 }}))
     }
+    console.log("Updated cart items:", cartItems);
     }
 
 const removeFromCart = (itemId) =>{
@@ -25,7 +28,9 @@ const getTotalCartAmount = ()=>{
     {
         if(cartItems[item]>0){
             let itemInfo=food_list.find((product)=>product._id === item)
-        totalAmount += itemInfo.price* cartItems[item];
+            if(itemInfo){
+                totalAmount += itemInfo.price  * cartItems[item];
+            }
         }
        }
        return totalAmount;
