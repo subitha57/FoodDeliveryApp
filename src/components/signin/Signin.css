@@ -1,0 +1,70 @@
+/* LoginForm.css */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    border:2px solid black
+  }
+  
+  .left-side-form {
+    width: 50%;
+    padding: 20px;
+    
+  }
+  
+  .left-side-form h2 {
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-group button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+   display: flex;
+   justify-content: center;
+  }
+  
+  .right-side-image {
+    width: 50%;
+  }
+  
+  .right-side-image img {
+    width: 100%;
+    height: auto;
+  }
+  .login-popup-condition{
+    display: flex;
+    align-items: start;
+    gap:8px;
+    margin-top: -15px;
+}
+.login-popup-condition button{
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  color: white;
+  background-color: tomato;
+  font-size: 15px;
+  cursor: pointer;
+}

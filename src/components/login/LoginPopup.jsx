@@ -2,11 +2,15 @@ import { useState } from 'react';
 import React from 'react'
 import './LoginPopup.css';
 import { assets } from '../../assets/assets';
-
+import { useNavigate } from 'react-router-dom';
 
 const LoginPopup = ({setShowLogin}) => {
 
   const [currState, setCurrState]= useState("Login")
+  const navigate= useNavigate();   
+  const handleGuest=()=>{
+    navigate('/OrderingForm')
+  }
 
   return (
     <div className='login-popup'>
@@ -27,6 +31,8 @@ const LoginPopup = ({setShowLogin}) => {
         </div>
         {currState==='Login' ? <p>Create a new account?<span onClick={()=>setCurrState("Sign Up")}>Click here</span></p>
         : <p>Already have an account? <span onClick={()=>setCurrState("Login")}>Login here</span></p> }
+          
+          <button onClick={handleGuest}>Continue as guest</button>
           </form>
       
     </div>

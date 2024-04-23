@@ -7,16 +7,16 @@ const StoreContextProvider = (props) => {
 
     const [cartItems,setCartItems]=useState({})
 
-    const addToCart =(itemId,price)=>{
-        console.log("Adding item to cart:", itemId, price);
+    const addToCart =(itemId)=>{
+      
         if(!cartItems[itemId]){
-            setCartItems((prev)=>({...prev,[itemId]:{quantity:1,price:price}}))
+            setCartItems((prev)=>({...prev,[itemId]:1}))
     }
     else{
-        setCartItems((prev)=>({...prev,
-            [itemId]:{ ...prev[itemId], quantity: prev[itemId].quantity + 1 }}))
+        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
+            
     }
-    console.log("Updated cart items:", cartItems);
+    
     }
 
 const removeFromCart = (itemId) =>{

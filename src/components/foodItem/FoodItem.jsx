@@ -5,35 +5,31 @@ import { StoreContext } from '../../context/StoreContextProvider';
 
 const FoodItem = ({id,name,price,description,image}) => {
 
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 const {cartItems,addToCart,removeFromCart} = useContext(StoreContext);
 const [itemPrice, setItemPrice] = useState(price);
 
 useEffect(() => {
   if (cartItems[id]) {
     setItemPrice(cartItems[id].price);
+    setIsAddedToCart(true);
   } else {
     setItemPrice(price);
   }
 }, [cartItems, id, price]);
 
-  const handleAddToCart = () => {
-    console.log("Adding item to cart:", id, price);
-    addToCart(id, price);
-  };
-
-  return (
+   return (
     <div className='food-item'>
       <div className='food-item-image-container'>
         <img className='food-item-image' src={image} alt="" />
         {!cartItems[id]
-        ?( <img className='add' onClick={()=>addToCart(id, price)} src={assets.add_icon_white} alt=""/>
-        ):(
-        <div className='food-item-counter'>
+        ? <img className='add' onClick={()=>addToCart(id)} src={assets.add_icon_white} alt=""/>
+        :<div className='food-item-counter'>
           <img onClick={()=>removeFromCart(id)} src={assets.remove_icon_red} alt=""/>
-          <p>{cartItems[id].quantity}</p>
-          <img  onClick={handleAddToCart} src={assets.add_icon_green } alt="" />
+          <p>{cartItems[id]}</p>
+          <img  onClick={()=>addToCart(id)} src={assets.add_icon_green } alt="" />
         </div> 
-        )}
+        }
       </div>
       <div className='food-item-info'>
         <div className='food-item-name-rating'>

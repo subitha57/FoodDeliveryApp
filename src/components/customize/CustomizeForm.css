@@ -1,29 +1,70 @@
-.customize-form {
-    max-width: 400px;
-    margin: auto;
-    margin-top: 5%;
-    border: 2px solid black;
-    padding: 3%;
-   background-color: white;
-  }
-  
-  .customize-form form {
-    display: flex;
+.customize-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.shadow-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.left-side-Pizza {
+  flex: 1;
+}
+
+.left-side-Pizza img {
+  width: 100%;
+  margin-top: 20%;
+}
+
+.right-side {
+  flex: 1;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+
+}
+
+button:hover {
+  background-color: #45a049;
+}
+@media (max-width: 768px) {
+  .shadow-container {
     flex-direction: column;
-    margin-left: 5%;
-    margin-top: 2%;
-   
   }
-  
-  .customize-form label {
-    margin-bottom: 10px;
-    
+
+  .left-side-Pizza,
+  .right-side {
+    width: 100%;
   }
-  
-  .customize-form button {
-    margin-top: 10px;
-    color: tomato;
-  }
-  h2{
-    color: tomato;
-  }
+}
