@@ -25,7 +25,7 @@
     display: none;
 }
 .explore-menu-list-item img{
-    width: 7.5vw;
+    width: 7.0vw;
     min-width: 70px;
     cursor: pointer;
     border-radius: 50%;
@@ -33,7 +33,7 @@
 }
 .explore-menu-list-item p{
     margin-top: 10px;
-    color: #747474;
+    color: black;
     font-size: max(1.4vw,16px);
     cursor: pointer;
 }
@@ -47,6 +47,8 @@
     border:4px solid tomato;
     padding:2px;
 }
+
+
 @media (max-width:750px){
     .explore-menu-text{
         max-width: 100%;

@@ -29,6 +29,9 @@ const LoginForm = () => {
 
   return (
     <div className="login-container">
+       <div className="right-side-image">
+        <img src={image} alt="Login Image" />
+      </div>
       <div className="left-side-form">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
@@ -47,9 +50,7 @@ const LoginForm = () => {
         </form>
        
       </div>
-      <div className="right-side-image">
-        <img src={image} alt="Login Image" />
-      </div>
+     
     </div>
   );
 };

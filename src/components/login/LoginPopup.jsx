@@ -9,7 +9,7 @@ const LoginPopup = ({setShowLogin}) => {
   const [currState, setCurrState]= useState("Login")
   const navigate= useNavigate();   
   const handleGuest=()=>{
-    navigate('/OrderingForm')
+    navigate('/GeoLocation')
   }
 
   return (
@@ -34,7 +34,7 @@ const LoginPopup = ({setShowLogin}) => {
           
           <button onClick={handleGuest}>Continue as guest</button>
           </form>
-      
+         
     </div>
   )
 }

@@ -29,6 +29,7 @@
 .food-item-desc{
     color:#676767;
     font-size: 12px;
+    padding: 3%;
 }
 .food-item-price{
     color:tomato;
@@ -41,7 +42,7 @@
 }
 .food-item-image-container .add{
     width: 35px;
-    position: absolute;
+    position: absolute; 
     bottom: 15px;
     right: 15px;
     cursor: pointer;

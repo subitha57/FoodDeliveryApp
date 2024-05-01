@@ -1,23 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { assets } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
-import OrderNow from '../orderNow/GeoLocation';
-import { Button } from '@mui/material';
+import OrderType from '../Order Type/OrderType';
+
 
 const Navbar = ({setShowLogin}) => {
 
   const [menu,setMenu]=useState("home");
-  const navigate= useNavigate();
+
 
   const {getTotalCartAmount}= useContext(StoreContext)
  
-  const handleOrderNow= ()=>{
-    navigate('/OrderNow');
-  }
 
   return (
     <div className='navbar'>
@@ -27,7 +22,7 @@ const Navbar = ({setShowLogin}) => {
         <a href='#explore-menu' onClick={()=>setMenu("menu")} className={menu==="menu"?"active":""}>Menu</a>
         <a href='#app-download' onClick={()=>setMenu("location")} className={menu==="location"?"active":""}>Location</a>
         <a href='#footer' onClick={()=>setMenu("contact us")} className={menu==="contact us"?"active":""}>Contact Us</a>
-        <a href="#OrderNow" onClick={handleOrderNow} className={menu==="OrderNow"?"active":""}>Order Now</a>
+       
         
       </ul>
       <div className='navbar-right'>

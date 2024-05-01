@@ -1,12 +1,13 @@
-import React, { useState, useContext } from 'react';
-import './HalfAndHalfPizza.css'; // Import CSS file for styling
+  import React, { useState, useContext, useEffect } from 'react';
+import './HalfAndHalfPizza.css'; 
 import { StoreContext } from '../../context/StoreContextProvider';
-import plainPizza from '../../assets/Plain.png';
+import plainPizza from '../../assets/menu_9.png';
+import CloseIcon from '@mui/icons-material/Close';
 
 const HalfAndHalfPizza = ({ onClose }) => {
   const { food_list } = useContext(StoreContext);
-  const [selectedPizzaLeftImage, setSelectedPizzaLeftImage] = useState('');
-  const [selectedPizzaRightImage, setSelectedPizzaRightImage] = useState('');
+  const [selectedPizzaLeftImage, setSelectedPizzaLeftImage] = useState(plainPizza);
+  const [selectedPizzaRightImage, setSelectedPizzaRightImage] = useState(plainPizza);
   const [selectedPizzaLeft, setSelectedPizzaLeft] = useState('');
   const [selectedPizzaRight, setSelectedPizzaRight] = useState('');
   const [size, setSize] = useState('');
@@ -18,6 +19,8 @@ const HalfAndHalfPizza = ({ onClose }) => {
   const [selectedMeatRight, setSelectedMeatRight] = useState('');
   const [selectedVegetablesRight, setSelectedVegetablesRight] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
+
+  
 
   const handlePizzaLeftChange = (e) => {
     const selectedPizzaName = e.target.value;
@@ -81,7 +84,7 @@ const HalfAndHalfPizza = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic to handle form submission, e.g., sending data to server
+    console.log("Total Price :$" + totalPrice)
     onClose();
   };
 
@@ -153,9 +156,12 @@ const HalfAndHalfPizza = ({ onClose }) => {
   };
 
   return (
+    <div className={`half-and-half-popup`}>
     <div className="half-and-half-container">
-      <h2>Half and Half Pizza</h2>
+      <h1>Half and Half Pizza</h1>
+     
       <form onSubmit={handleSubmit}>
+ 
         <table>
           <tbody>
             <tr>
@@ -173,10 +179,10 @@ const HalfAndHalfPizza = ({ onClose }) => {
                 </select>
               </td>
             </tr>
-            <tr>
+            <tr>  
               <td>
-                <h2>First Half</h2>
-                <img src={selectedPizzaLeftImage} alt="Selected Pizza" />
+                <h2>First Half</h2><br/>
+                <img src={selectedPizzaLeftImage} alt="Selected Pizza Left" /><br/><br/>
                 <label htmlFor="pizza-left">Select Pizza:</label>
                 <select id="pizza-left" value={selectedPizzaLeft} onChange={handlePizzaLeftChange}>
                   <option value="">Select Pizza</option>
@@ -210,8 +216,8 @@ const HalfAndHalfPizza = ({ onClose }) => {
 
               </td>
               <td>
-                <h2>Second Half</h2>
-                <img src={selectedPizzaRightImage} alt="Selected Pizza" />
+                <h2>Second Half</h2><br/>
+                <img src={selectedPizzaRightImage} alt="Selected Pizza" /><br/><br/>
                 <label htmlFor="pizza-right">Select Pizza:</label>
                 <select id="pizza-right" value={selectedPizzaRight} onChange={handlePizzaRightChange}>
                   <option value="">Select Pizza</option>
@@ -222,21 +228,21 @@ const HalfAndHalfPizza = ({ onClose }) => {
                 
 
                 <label htmlFor="cheese-right">Select Cheese:</label>
-                <select id="cheese-right" value={selectedCheeseLeft} onChange={handleCheeseRightChange}>
+                <select id="cheese-right" value={selectedCheeseRight} onChange={handleCheeseRightChange}>
                   <option value="">Select Cheese</option>
                   <option value="mozzarella">Mozzarella</option>
                   <option value="cheddar">Cheddar</option>
                   <option value="parmesan">Parmesan</option>
                 </select><br/>
                 <label htmlFor="meat-right">Select Meat:</label>
-                <select id="meat-right" value={selectedMeatLeft} onChange={handleMeatRightChange}>
+                <select id="meat-right" value={selectedMeatRight} onChange={handleMeatRightChange}>
                   <option value="">Select Meat</option>
                   <option value="pepperoni">Pepperoni</option>
                   <option value="sausage">Sausage</option>
                   <option value="ham">Ham</option>
                 </select><br/>
                 <label htmlFor="vegetable-right">Select Vegetable:</label>
-                <select id="vegetable-right" value={selectedVegetablesLeft} onChange={handleVegetablesRightChange}>
+                <select id="vegetable-right" value={selectedVegetablesRight} onChange={handleVegetablesRightChange}>
                   <option value="">Select Vegetable</option>
                   <option value="mushrooms">Mushrooms</option>
                   <option value="onions">Onions</option>
@@ -247,9 +253,12 @@ const HalfAndHalfPizza = ({ onClose }) => {
             </tr>
           </tbody>
         </table>
+        <div className='buttonsbtn'>
         <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
         <button type="submit">Submit</button>
+        </div>
       </form>
+    </div>
     </div>
   );
 };

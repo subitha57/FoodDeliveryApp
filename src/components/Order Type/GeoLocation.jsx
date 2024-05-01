@@ -21,7 +21,7 @@ const onSuccess=(location)=>{
   });
  setLoading(false);
   
-  navigate('/Home');
+  navigate('/OrderType');
 }
 
 const onError = error =>{

@@ -1,11 +1,12 @@
-import React, { useContext , useState, useEffect} from 'react';
-import './CustomizeForm.css'; // Import CSS file for styling
-import plainPizza from '../../assets/Plain.png';
+import React, { useContext, useState, useEffect } from 'react';
+import './CustomizeForm.css';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
+import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza';
+import CloseIcon from '@mui/icons-material/Close';
 
-const CustomizeForm = ({ onClose, selectedPizza, foodList }) => {
+const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // Add 'isVisible' to the function parameters
   const [selectedPizzas, setSelectedPizzas] = useState('');
   const [selectedCheese, setSelectedCheese] = useState('');
   const [selectedMeat, setSelectedMeat] = useState('');
@@ -14,12 +15,30 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList }) => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
-  const { addToCart } = useContext(StoreContext); 
+  const { addToCart } = useContext(StoreContext);
+  const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
+  const [showHalfAndHalfPopup, setShowHalfAndHalfPopup] = useState(false);
+
 
   useEffect(() => {
     // Calculate the total price whenever there's a change in size or selectedPizza
-    setTotalPrice(calculateTotalPrice(size, selectedPizza, selectedCheese, selectedMeat, selectedVegetables, quantity));
+    setTotalPrice(
+      calculateTotalPrice(size, selectedPizza, selectedCheese, selectedMeat, selectedVegetables, quantity)
+    );
   }, [size, selectedPizza, selectedCheese, selectedMeat, selectedVegetables, quantity]);
+
+  useEffect(() => {
+    // Reset form values whenever visibility changes
+    if (!isVisible) {
+      setSelectedPizzas('');
+      setSelectedCheese('');
+      setSelectedMeat('');
+      setSelectedVegetables('');
+      setSize('');
+      setQuantity(1);
+      setTotalPrice(0);
+    }
+  }, [isVisible]);
 
   const handlePizzaChange = (e) => {
     setSelectedPizzas(e.target.value);
@@ -52,7 +71,7 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList }) => {
       name: selectedPizza.name,
       description: selectedPizza.description,
       price: totalPrice, // Use the calculated total price
-      quantity: quantity
+      quantity: quantity,
     };
 
     // Add the custom pizza to the cart
@@ -61,41 +80,46 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList }) => {
     onClose();
   };
 
+  const handleHalfAndHalfClick = () => {
+    setShowHalfAndHalfPopup(true);
+
+  };
+
   const calculateTotalPrice = (size, pizza, cheese, meat, vegetables, quantity) => {
     let basePrice = pizza.price; // Base price of the pizza
     let totalPrice = basePrice; // Initial total price is the base price
 
     // Add additional price for size
-    if (size === "Medium") {
+    if (size === 'Medium') {
       totalPrice += 2; // Example: Increase price by $2 for medium size
-    } else if (size === "Large") {
+    } else if (size === 'Large') {
       totalPrice += 4; // Example: Increase price by $4 for large size
     }
 
     // Add price for cheese
-    if (cheese === "mozzarella") {
+    if (cheese === 'mozzarella') {
       totalPrice += 1; // Example: Increase price by $1 for mozzarella cheese
-    } else if (cheese === "cheddar") {
+    } else if (cheese === 'cheddar') {
       totalPrice += 1.5; // Example: Increase price by $1.5 for cheddar cheese
-    } else if (cheese === "parmesan") {
+    } else if (cheese === 'parmesan') {
       totalPrice += 2; // Example: Increase price by $2 for parmesan cheese
     }
 
     // Add price for meat
-    if (meat === "pepperoni") {
+    if (meat === 'pepperoni') {
       totalPrice += 2; // Example: Increase price by $2 for pepperoni meat
-    } else if (meat === "sausage") {
+    } else if (meat === 'sausage') {
       totalPrice += 2.5; // Example: Increase price by $2.5 for sausage meat
-    } else if (meat === "ham") {
+    } else if (meat === 'ham') {
       totalPrice += 3; // Example: Increase price by $3 for ham meat
     }
 
     // Add price for vegetables
-    if (vegetables === "mushrooms") {
+    if (vegetables === 'mushrooms') {
       totalPrice += 1; // Example: Increase price by $1 for mushrooms
-    } else if (vegetables === "onions") {
+    } else if (vegetables === 'onions') {
       totalPrice += 0.5; // Example: Increase price by $0.5 for onions
-    } else if (vegetables === "bellPeppers") {
+    } else if (vegetables === 'bellPeppers') {
       totalPrice += 1.5; // Example: Increase price by $1.5 for bell peppers
     }
 
@@ -103,67 +127,89 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList }) => {
     totalPrice *= quantity;
 
     return totalPrice;
-   
   };
 
+  if (showHalfAndHalfPizza) {
+    return <HalfAndHalfPizza onClose={onClose} selectedPizza={selectedPizza} />;
+  }
+
   return (
-    <div className="customize-container">
-      <div className="shadow-container">
-        <div className="left-side-Pizza">
-          <img src={selectedPizza.image} alt={selectedPizza.name} />
-          <Link to="/HalfAndHalfPizza">
-            <button className="half-half-btn">Make it half and half Pizza</button>
-          </Link>
-        </div>
-        <div className="right-side">
-          <h2> Customize Your Pizza</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="size">Size:</label>
-              <select id="size" value={size} onChange={handleSizeChange}>
-                <option value="">Select Size</option>
-                <option value="Small">Small (Serving size 1-2 person)</option>
-                <option value="Medium">Medium (Serving size 2-3 person)</option>
-                <option value="Large">Large (Serving size 3-4 person)</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="quantity">Quantity:</label>
-              <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="cheese">Cheese:</label>
-              <select id="cheese" value={selectedCheese} onChange={handleCheeseChange}>
-                <option value="">Select Cheese</option>
-                <option value="mozzarella">Mozzarella</option>
-                <option value="cheddar">Cheddar</option>
-                <option value="parmesan">Parmesan</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="meat">Meat:</label>
-              <select id="meat" value={selectedMeat} onChange={handleMeatChange}>
-                <option value="">Select Meat</option>
-                <option value="pepperoni">Pepperoni</option>
-                <option value="sausage">Sausage</option>
-                <option value="ham">Ham</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="vegetables">Vegetables:</label>
-              <select id="vegetables" value={selectedVegetables} onChange={handleVegetablesChange}>
-                <option value="">Select Vegetables</option>
-                <option value="mushrooms">Mushrooms</option>
-                <option value="onions">Onions</option>
-                <option value="bellPeppers">Bell Peppers</option>
-              </select>
-            </div>
+   
+   <div className={`customize-container ${isVisible ? 'show' : ''}`}>
+    <div className='container'>
+    <div className="heading-container">
+      <h2>Customize Your Pizza</h2>
+    </div>
+       
+      <div className='row'>
+        <div className='col-6'>
+      <div className="form-container">
+     
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="size">Size:</label>
+            <select id="size" value={size} onChange={handleSizeChange}>
+              <option value="">Select Size</option>
+              <option value="Small">Small (Serving size 1-2 person)</option>
+              <option value="Medium">Medium (Serving size 2-3 person)</option>
+              <option value="Large">Large (Serving size 3-4 person)</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="quantity">Quantity:</label>
+            <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cheese">Cheese:</label>
+            <select id="cheese" value={selectedCheese} onChange={handleCheeseChange}>
+              <option value="">Select Cheese</option>
+              <option value="mozzarella">Mozzarella</option>
+              <option value="cheddar">Cheddar</option>
+              <option value="parmesan">Parmesan</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="meat">Meat:</label>
+            <select id="meat" value={selectedMeat} onChange={handleMeatChange}>
+              <option value="">Select Meat</option>
+              <option value="pepperoni">Pepperoni</option>
+              <option value="sausage">Sausage</option>
+              <option value="ham">Ham</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="vegetables">Vegetables:</label>
+            <select id="vegetables" value={selectedVegetables} onChange={handleVegetablesChange}>
+              <option value="">Select Vegetables</option>
+              <option value="mushrooms">Mushrooms</option>
+              <option value="onions">Onions</option>
+              <option value="bellPeppers">Bell Peppers</option>
+            </select>
+          </div><br />
+          <div className="price">
             <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
             <button type="submit">Add to Cart</button>
-          </form>
+          </div>
+        </form>
+      </div>
+      </div>
+      <div className='col-6'>
+      <div className="image-container">
+        <button className="close-button" onClick={onClose}>
+          <CloseIcon />
+        </button>
+        <img src={selectedPizza.image} alt={selectedPizza.name} />
+        <div className='button'>
+          <button onClick={handleHalfAndHalfClick} className="half-half-btn">
+            Make it half and half Pizza
+          </button>
         </div>
       </div>
+      {showHalfAndHalfPopup && <HalfAndHalfPizza onClose={() => setShowHalfAndHalfPopup(false)} />}
     </div>
+    </div>
+    </div>
+</div>
   );
 };
 

@@ -23,6 +23,7 @@
     font-weight: 400;
     color:white;
     font-size: max(3.5vw,20px);
+    text-align: left;
  }
  .header-contents p{
     color:white;
