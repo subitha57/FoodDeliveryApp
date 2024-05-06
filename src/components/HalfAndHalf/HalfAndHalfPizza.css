@@ -86,11 +86,10 @@ label{
   padding: 20px;
 }
 
-.closeButton {
+.close-Button {
   position: absolute; /* Set the close button position to absolute */
   top: 32px; /* Adjust top distance */
   right: 25px; /* Adjust right distance */
-  background: green; /* Remove background */
   border: none; /* Remove border */
   cursor: pointer;
 }

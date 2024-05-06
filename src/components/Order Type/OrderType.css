@@ -1,33 +1,36 @@
+/* OrderType.css */
+
 .orderTypePopup {
   position: fixed;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: antiquewhite;
-  padding: 20px;
+  background-color: white;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 70%;
-  /* margin-bottom: 20px; Remove or reduce the margin-bottom */
+  width: 600px; /* Adjust the width as needed */
+  max-width: 90%; /* Maximum width to ensure it fits within the viewport */
+  max-height: 100%; /* Maximum height to ensure it fits within the viewport */
+  overflow: auto; /* Enable scrolling if content exceeds the modal size */
 }
 
-.Order-type h1 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
+.Order-type {
+  text-align: center;
 }
 
 .order-type-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 20px;
 }
 
-.closeButton {
-  position: absolute; /* Set the close button position to absolute */
+.button {
+  position:fixed; /* Set the close button position to absolute */
   top: 10px; /* Adjust top distance */
-  right: 25px; /* Adjust right distance */
-  background: green; /* Remove background */
+  right: 10px; /* Adjust right distance */
+ /* Remove background */
   border: none; /* Remove border */
   cursor: pointer;
 }
+  
+
+
+

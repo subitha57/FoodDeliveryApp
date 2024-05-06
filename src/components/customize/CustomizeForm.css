@@ -35,14 +35,15 @@ h2{
   margin-top: 10%;
   margin-left: 60px;
 }
-.image-container .button{
+.image-container .half-half-btn{
   text-align: center;
-  margin-right: 10px;
+  margin-left: 40px;
 
 }
 
 .price{
   margin-left: 20px;
+ 
 }
 .form-container {
   position: relative; /* Set the container position to relative */
@@ -52,9 +53,9 @@ h2{
   position: absolute; /* Set the close button position to absolute */
   top: 10px; /* Adjust top distance */
   right: 10px; /* Adjust right distance */
-  background: green; /* Remove background */
   border: none; /* Remove border */
   cursor: pointer;
+
 }
 .customize-container {
   display: flex;
@@ -77,4 +78,7 @@ h2{
 
 .heading-container {
   text-align: center;
+}
+.halfbutton :hover{
+background-color: darkgreen;
 }

@@ -8,6 +8,7 @@ import Location from '../location/Location';
 import OrderType from '../../components/Order Type/OrderType'
 import ScrollButton from '../../ScrollButton'
 
+
 const Home = () => {
 
   const [category, setCategory] = useState("All");
@@ -23,9 +24,11 @@ const Home = () => {
         <ExploreMenu category={category} setCategory={setCategory} />
         <FoodDisplay category={category}/>
         <OrderType onSelectOrderType={handleSelectOrderType} userLocation={""} />
+        
         <AppDownload/><br/>
         <Location/>
        <ScrollButton/>
+       
              </div>
   )
 }

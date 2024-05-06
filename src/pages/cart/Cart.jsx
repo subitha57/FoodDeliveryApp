@@ -4,8 +4,8 @@ import { StoreContext } from '../../context/StoreContextProvider';
 import {useNavigate} from 'react-router-dom';
 
 
-const Cart = () => {
-
+const Cart = ({ selectedOrderType }) => {
+ 
   const navigate = useNavigate()
 
 const {cartItems,food_list,removeFromCart,getTotalCartAmount} = useContext(StoreContext);
@@ -15,6 +15,9 @@ console.log("cartItems:", cartItems);
   return (
     <div className="cart">
      <div className="cart-items">
+    <div className="selected-order-type">
+        <p>Selected Order Type: {selectedOrderType}</p>
+  </div><br/>
       <div className="cart-items-title">
         <p>Items</p>
         <p>Title</p>
@@ -49,6 +52,7 @@ console.log("cartItems:", cartItems);
       })}
 
      </div>
+     
     <div className='cart-bottom'>
       <div className="cart-total">
         <h2>Cart Total</h2>
@@ -80,7 +84,7 @@ console.log("cartItems:", cartItems);
         </div>
       </div>
     </div>
-
+     
     </div>
   )
 }

@@ -142,8 +142,8 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
     </div>
        
       <div className='row'>
-        <div className='col-6'>
-      <div className="form-container">
+        <div className='col-6'> 
+      <div className="form-container"> 
      
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -196,14 +196,14 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
       <div className='col-6'>
       <div className="image-container">
         <button className="close-button" onClick={onClose}>
-          <CloseIcon />
+          <CloseIcon style={{ color: 'black' }}/>
         </button>
         <img src={selectedPizza.image} alt={selectedPizza.name} />
-        <div className='button'>
+        <div className='halfbutton'>
           <button onClick={handleHalfAndHalfClick} className="half-half-btn">
             Make it half and half Pizza
           </button>
-        </div>
+        </div> 
       </div>
       {showHalfAndHalfPopup && <HalfAndHalfPizza onClose={() => setShowHalfAndHalfPopup(false)} />}
     </div>

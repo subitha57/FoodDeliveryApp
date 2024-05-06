@@ -21,12 +21,12 @@
  
  .header-contents h2{
     font-weight: 400;
-    color:white;
+    color:black;
     font-size: max(3.5vw,20px);
     text-align: left;
  }
  .header-contents p{
-    color:white;
+    color:black;
     font-size: 1.5vw;
  }
  .header-contents button{

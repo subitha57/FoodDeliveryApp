@@ -1,66 +1,84 @@
-import React, { useState } from 'react';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import Delivery from './Delivery';
-import TakeOut from './TakeOut';
-import DineIn from './DineIn';
-import './OrderType.css';
-import { useNavigate } from 'react-router-dom'; 
+  import React, { useState } from 'react';
+  import { ToggleButton, ToggleButtonGroup, Modal, Backdrop, Fade, Button } from '@mui/material';
+  import Delivery from './Delivery';
+  import TakeOut from './TakeOut';
+  import DineIn from './DineIn';
+  import './OrderType.css';
+  import CloseIcon from '@mui/icons-material/Close';
 
-const OrderType = ({ onSelectOrderType, onClose }) => {
-  const [selectedOrderType, setSelectedOrderType] = useState('');
-  const navigate = useNavigate(); 
+  const OrderType = ({ onSelectOrderType, onClose }) => {
+    const [selectedOrderType, setSelectedOrderType] = useState('');
+    const [open, setOpen] = useState(true);
 
-  const handleOrderTypeSelect = (orderType) => {
-    setSelectedOrderType(orderType);
-    onSelectOrderType(orderType); 
-  };
-  const handleContinue = () => {
-    onClose();
-   // Navigate to the home page
-  };
-  return (
-    <div className='orderTypePopup'>
-       
-      <div className='Order-type'>
-      
-        <h1>Order Type</h1>
-        <div className="order-type-container">
-          
-        <ToggleButtonGroup
-            value={selectedOrderType}
-            exclusive
-            sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
-          >
+    const handleSelectOrderType  = (orderType) => {
+      setSelectedOrderType(orderType);
+      onSelectOrderType(orderType); 
+    };
+ 
+    const handleContinue = () => {
+    // Call the onClose function passed from the parent component to close the modal
+    };
+
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    return (
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className='orderTypePopup'>
+            <div className='closeButton'>
+          <button  onClick={handleClose} className="button" style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}><CloseIcon /></button> 
+          </div>
+            <div className='Order-type'>
             
-            <ToggleButton value="Delivery" onClick={() => handleOrderTypeSelect('Delivery')}
-                  sx={{ width: '30%', height: '60px', backgroundColor: '#8B0000', color: '#FFFFFF', fontSize: '0.rem' }}>
-                  <span className="order-type-icon">🚚</span>Delivery
-                  {/*{distances.Delivery && <p>{distances.Delivery} km</p>}*/}
-                  {selectedOrderType === 'Delivery' && <span className="checkmark-icon">✔️</span>}
-                </ToggleButton>
-                <ToggleButton value="TakeOut" onClick={() => handleOrderTypeSelect('TakeOut')}
-                  sx={{ width: '30%', height: '60px', backgroundColor: '#8B0000', color: '#FFFFFF', fontSize: '0.9rem' }}>
-                  <span className="order-type-icon">🥡</span>Take Out
-                  {/*{distances.TakeOut && <p>{distances.TakeOut} km</p>}*/}
-                  {selectedOrderType === 'TakeOut' && <span className="checkmark-icon">✔️</span>}
-                </ToggleButton>
-                <ToggleButton value="DineIn" onClick={() => handleOrderTypeSelect('DineIn')}
-                  sx={{ width: '30%', height: '60px', backgroundColor: '#8B0000', color: '#FFFFFF', fontSize: '1.0rem' }}>
-                  <span className="order-type-icon">🍽️</span>Dine In
-                 
-                  {selectedOrderType === 'DineIn' && <span className="checkmark-icon">✔️</span>}
-                </ToggleButton>
+              <h1>Order Type</h1>
+            
+              <div className="order-type-container">
+              <ToggleButtonGroup
+              value={selectedOrderType}
+              exclusive
+              sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
+            >
+              
+              <ToggleButton value="Delivery" onClick={() => handleSelectOrderType ('Delivery')}
+                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '0.rem' }}>
+                    <span className="order-type-icon">🚚</span>Delivery
+                    {/*{distances.Delivery && <p>{distances.Delivery} km</p>}*/}
+                    {selectedOrderType === 'Delivery' && <span className="checkmark-icon">✔️</span>}
+                  </ToggleButton>
+                  <ToggleButton value="TakeOut" onClick={() => handleSelectOrderType ('TakeOut')}
+                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '0.9rem' }}>
+                    <span className="order-type-icon">🥡</span>Take Out
+                    {/*{distances.TakeOut && <p>{distances.TakeOut} km</p>}*/}
+                    {selectedOrderType === 'TakeOut' && <span className="checkmark-icon">✔️</span>}
+                  </ToggleButton>
+                  <ToggleButton value="DineIn" onClick={() => handleSelectOrderType ('DineIn')}
+                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '1.0rem' }}>
+                    <span className="order-type-icon">🍽️</span>Dine In
+                  
+                    {selectedOrderType === 'DineIn' && <span className="checkmark-icon">✔️</span>}
+                  </ToggleButton>
 
-          </ToggleButtonGroup>
+            </ToggleButtonGroup>
 
-        </div>
-      </div>
-      {selectedOrderType === 'Delivery' && <Delivery onClose={() => setSelectedOrderType('')} onContinue={handleContinue} />}
-      {selectedOrderType === 'TakeOut' &&  <TakeOut onClose={onClose} onContinue={handleContinue} />}
-      {selectedOrderType === 'DineIn' && <DineIn onClose={() => setSelectedOrderType('')} onContinue={handleContinue} />}
-    </div>
-    
-  );
-};
+              </div>
+            </div>
+            {selectedOrderType === 'Delivery' && <Delivery onClose={handleContinue} closeOrderType={handleClose}  />}
+            {selectedOrderType === 'TakeOut' &&  <TakeOut onClose={handleContinue} closeOrderType={handleClose} />}
+            {selectedOrderType === 'DineIn' && <DineIn onClose={handleContinue} closeOrderType={handleClose} />}
+          </div>
+        </Fade>
+      </Modal>
+    );
+  };
 
-export default OrderType;
+  export default OrderType;

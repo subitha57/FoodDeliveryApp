@@ -161,7 +161,9 @@ const HalfAndHalfPizza = ({ onClose }) => {
       <h1>Half and Half Pizza</h1>
      
       <form onSubmit={handleSubmit}>
- 
+      <button className="close-Button" onClick={onClose}>
+          <CloseIcon />
+        </button> 
         <table>
           <tbody>
             <tr>
