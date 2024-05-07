@@ -90,6 +90,13 @@
         justify-content: start;
     }
 }
-
+.terms-and-conditions {
+    display: flex;
+    align-items: center; /* Align items vertically */
+  }
+  
+  .terms-and-conditions input[type="checkbox"] {
+    margin-right: 2px; /* Adjust the margin to reduce space */
+  }
 
 

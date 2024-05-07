@@ -84,9 +84,43 @@ const HalfAndHalfPizza = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Total Price :$" + totalPrice)
-    onClose();
+    // Construct left half pizza object
+  const leftHalfPizza = {
+    name: selectedPizzaLeft,
+    cheese: selectedCheeseLeft,
+    meat: selectedMeatLeft,
+    vegetables: selectedVegetablesLeft,
   };
+
+  // Construct right half pizza object
+  const rightHalfPizza = {
+    name: selectedPizzaRight,
+    cheese: selectedCheeseRight,
+    meat: selectedMeatRight,
+    vegetables: selectedVegetablesRight,
+  };
+
+  // Construct half-and-half pizza object
+  const halfAndHalfPizza = {
+    leftHalf: leftHalfPizza,
+    rightHalf: rightHalfPizza,
+    size: size,
+    quantity: quantity,
+    totalPrice: totalPrice,
+  };
+
+  // Get existing cart items from local storage or initialize as an empty array
+  const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+  // Add the half-and-half pizza to the cart
+  existingCartItems.push(halfAndHalfPizza);
+
+  // Update local storage with the updated cart items
+  localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
+
+  // Close the form
+  onClose();
+};
 
   const pizzaItems = food_list.filter(item => item.category === 'Pizza');
 

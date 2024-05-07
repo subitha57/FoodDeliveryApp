@@ -24,7 +24,7 @@ const Home = () => {
         <ExploreMenu category={category} setCategory={setCategory} />
         <FoodDisplay category={category}/>
         <OrderType onSelectOrderType={handleSelectOrderType} userLocation={""} />
-        
+      
         <AppDownload/><br/>
         <Location/>
        <ScrollButton/>

@@ -1,0 +1,38 @@
+.previous-orders-container {
+  margin: 20px;
+}
+
+.previous-orders-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.previous-order-item {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.order-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.order-date {
+  font-weight: bold;
+}
+
+.order-items h3 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.order-items ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.order-items li {
+  margin-bottom: 5px;
+}

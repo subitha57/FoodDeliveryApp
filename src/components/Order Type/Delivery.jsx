@@ -13,7 +13,7 @@ const Delivery = ({ onClose,closeOrderType  }) => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
-  const handleAddressChange = (e) => {
+  const handleAddressChange = (e) => { 
     setAddress(e.target.value);
   };
 

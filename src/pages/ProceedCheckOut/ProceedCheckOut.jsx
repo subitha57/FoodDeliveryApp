@@ -1,6 +1,7 @@
 // ProceedCheckOut.jsx
 import React, { useState } from 'react';
 import './ProceedCheckOut.css';
+import CloseIcon from '@mui/icons-material/Close';
 
 const ProceedCheckOut = ({ closeModal } ) => {
   // State for storing payment details
@@ -31,6 +32,9 @@ const ProceedCheckOut = ({ closeModal } ) => {
   return (
     <div className="proceed-checkout-container1">
       <h2>Payment Details</h2><br/>
+      <button className="close-button" onClick={closeModal}>
+  <CloseIcon className="close-button-icon" />
+</button>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Card Number:</label>
@@ -76,7 +80,7 @@ const ProceedCheckOut = ({ closeModal } ) => {
         <button type="submit">Submit Payment</button>
         </div>
       </form>
-      <button onClick={closeModal}>Close</button>
+      
     </div>
   );
 };

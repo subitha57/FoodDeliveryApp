@@ -16,25 +16,43 @@ import Delivery from './components/Order Type/Delivery.jsx';
 import TakeOut from './components/Order Type/TakeOut.jsx';
 import DineIn from './components/Order Type/DineIn.jsx';
 import ProceedCheckout from './pages/ProceedCheckOut/ProceedCheckOut.jsx';
+import TermsAndConditions from './pages/TermsAnd Conditions/TermsAndCondition.jsx';
+import GeoLocation from './components/Order Type/GeoLocation.jsx';
+import PreviousOrder from './components/Order Type/PreviousOrder/PreviousOrder.jsx'
 
 
 function App() {
 
   const [showLogin, setShowLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedOrderType, setSelectedOrderType] = useState('');
+   const [isAuthenticated, setIsAuthenticated] = useState(true);
+
   const { food_list } = useContext(StoreContext);
   const navigate= useNavigate();  
+
   const handleClose = () => {
     // Define logic to handle closing
   };
-  const [selectedOrderType, setSelectedOrderType] = useState('');
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setShowLogin(false); // Close the login popup after successful login
+    // Redirect the user to the OrderType page after login
+   
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setSelectedOrderType(''); // Reset selected order type on logout
+    navigate('/'); // Redirect to the homepage after logout
+  };
+ 
   const handleSelectOrderType = (orderType) => {
     setSelectedOrderType(orderType);
   };
-  const handleCloseTakeOut = () => {
-    setSelectedOrderType(''); // or any other logic to close the TakeOut component
-  };
+
   const handleContinue = () => {
-    navigate('/')
+    navigate('/OrderType')
     console.log("Button clicked");
   };
   const handleCloseOrderType = () => {
@@ -43,18 +61,44 @@ function App() {
   };
   console.log('Selected Order Type in App:', selectedOrderType);
   
+  const pastOrders = [
+    {
+      date: '2024-05-01',
+      total: 25.5,
+      items: [
+        { name: 'Pizza', price: 12.5 },
+        { name: 'Salad', price: 8 },
+        { name: 'Drink', price: 5 },
+      ],
+    },
+    {
+      date: '2024-04-28',
+      total: 18,
+      items: [
+        { name: 'Burger', price: 10 },
+        { name: 'Fries', price: 5 },
+        { name: 'Drink', price: 3 },
+      ],
+    },
+  ];
+
+
   return (
     <>
-      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
+{showLogin && <LoginPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
       <div className="app">
-        <Navbar setShowLogin={setShowLogin} />
-
-        <Routes>
-
-          {/*<Route path='/' element={<Signin/>}/>*/}
+        <Navbar setShowLogin={setShowLogin} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        
+          <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/Cart' element={<Cart selectedOrderType={selectedOrderType} />} />
-          <Route path='/OrderType' element={<OrderType onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />} />
+
+          <Route path='/OrderType' element={<OrderType 
+         isAuthenticated={isAuthenticated}
+           onSelectOrderType={handleSelectOrderType} 
+           onClose={handleCloseOrderType}
+            onContinue={handleContinue} />} />
+
           <Route path='/PlaceOrder' element={<PlaceOrder />} />
           <Route path='/CustomizePizza' element={<CustomizeForm />} />
           <Route path='/LoginPopup' element={<LoginPopup setShowLogin={setShowLogin} />} />
@@ -64,6 +108,9 @@ function App() {
           <Route path='/TakeOut' element={<TakeOut onContinue={handleContinue} />} />
           <Route path='/DineIn' element={<DineIn />}/>
          <Route path='/ProceedCheckout' element={<ProceedCheckout/>}/>
+         <Route path='/TermsAndConditions' element={<TermsAndConditions/>}/>
+         <Route path='/GeoLocation' element={<GeoLocation/>}/>
+        <Route path='/PreviousOrder' element={<PreviousOrder pastOrders={pastOrders}/>}/>
         </Routes>
       </div>
       <Footer />

@@ -1,66 +1,63 @@
-.login-popup{
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-   
-    display: grid;
-}
-.login-popup-container{
-    place-self: center;
-    width: max(23vw,330px);
-    color: #808080;
+.login-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
-    display: flex;
-    flex-direction: column;
-    gap:25px;
-    padding: 25px 30px;
-    border-radius: 8px;
-    font-size: 14px;
-    animation: fadeIn 0.5s;
-}
-.login-popup-title{
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    z-index: 1000; /* Adjust the z-index to make the popup appear on top */
+  }
+  
+  .login-popup-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: black;
-}
-.login-popup-title img{
-    width: 16px;
+  }
+  
+  .login-popup-title h2 {
+    margin: 0;
+  }
+  
+  .login-popup-title img {
     cursor: pointer;
-    
-}
-.login-popup-inputs{
+  }
+  
+  .login-popup-inputs {
+    margin-top: 20px;
+  }
+  
+  .login-popup-inputs input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .login-popup-condition {
+    margin-top: 20px;
+  }
+  
+  .login-popup-condition input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .login-popup-condition p {
+    margin: 0;
+  }
+  
+  .login-popup-buttons {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.login-popup-inputs input{
-    outline: none;
-    border: 1px solid #c9c9c9;
-    padding: 10px;
-    border-radius: 4pxs;
-}
-.login-popup-condition button{
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    color: white;
-    background-color: tomato;
-    font-size: 15px;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .login-popup-buttons button {
+    width: calc(50% - 5px);
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
     cursor: pointer;
-}
-.login-popup-condition{
-    display: flex;
-    align-items: start;
-    gap:8px;
-    margin-top: -15px;
-}
-.login-popup-condition input{
-    margin-top: 5px;
-}
-.login-popup p span{
-    color: tomato;
-    font-weight: 500;
-    cursor: pointer;
-}
+  }
+  

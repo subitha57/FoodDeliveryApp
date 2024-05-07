@@ -33,3 +33,31 @@
 .place-order .cart-total button{
     margin-top: 30px;
 }
+.place-order {
+    display: flex;
+  }
+  
+  .place-order-left,
+  .place-order-right {
+    flex: 1;
+  }
+  
+  .place-order-left {
+    margin-right: 20px;
+  }
+  
+  .terms-and-conditions {
+    margin-top: 20px;
+  }
+  
+  .terms-and-conditions input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .place-order-left,
+    .place-order-right {
+      flex: 1 1 100%; /* Each section takes 100% of the width */
+      order: unset; /* Reset the order for mobile layout */
+    }
+  }

@@ -73,7 +73,9 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
       price: totalPrice, // Use the calculated total price
       quantity: quantity,
     };
-
+    const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    existingCartItems.push(customPizza);
+    localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
     // Add the custom pizza to the cart
     addToCart(customPizza);
 
@@ -188,7 +190,7 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
           </div><br />
           <div className="price">
             <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
-            <button type="submit">Add to Cart</button>
+            <button  type="submit">Add to Cart</button>
           </div>
         </form>
       </div>
