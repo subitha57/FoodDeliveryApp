@@ -35,26 +35,32 @@ const LoginPopup = ({setShowLogin,onLoginSuccess }) => {
           <img onClick={()=>setShowLogin(false)} src={assets.cross_icon} alt=""/>
         </div>
         <div className='login-popup-inputs'>
-          {currState==="Login"?<></>:<input type='text' placeholder='your name' required />}
+          {currState==="Login"?<></>:
+          
+          <input type='text' placeholder='Name' required />}
           <label>Email</label>
           <input type='email' placeholder='your email' required />
           <label>Password</label>
           <input type='password' placeholder='Password' required />
         </div>
+        <div className='signin'>
         <button  onClick={handleLogin}>{currState==="Sign Up"?"Create Account":"Login"}</button>
-        <div className='login-popup-condition'>
+        </div>
+        {/*<div className='login-popup-condition'>
           <input type='checkbox' required/>
           <p>By Continuing, i agree to the terms of use & privacy policy.</p>
-        </div>
+  </div><br/>*/}
         {currState === 'Login' ? (
-          <div>
-            <p>Create a new account?<span onClick={() => setCurrState("Sign Up")}>Click here</span></p><br/>
-            <p className="forgot-password" onClick={handleForgotPassword}>Forgot your password?</p>
+          <div >
+            <p>Create a new account?<span className="clickhere" onClick={() => setCurrState("Sign Up")}>Click here</span></p><br/>
+            <p className="forgot-password" onClick={handleForgotPassword}>Forgot your password?</p><br/>
           </div>
         ) : (
           <p>Already have an account? <span onClick={() => setCurrState("Login")}>Login here</span></p>
         )}
-        <button onClick={handleGuest}>Continue as guest</button>
+        <div className='guest'>
+        <button  onClick={handleGuest}>Continue as guest</button>
+        </div>
       </form>
          
     </div>

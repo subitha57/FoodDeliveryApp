@@ -59,5 +59,15 @@
   .forgot-password {
     margin-top: 10px;
     cursor: pointer;
+    text-decoration: underline;
   }
-  
+  .clickhere{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .signin{
+    text-align: center;
+  }
+  .guest{
+    text-align: center;
+  }
