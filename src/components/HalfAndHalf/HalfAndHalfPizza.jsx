@@ -19,8 +19,13 @@ const HalfAndHalfPizza = ({ onClose }) => {
   const [selectedMeatRight, setSelectedMeatRight] = useState('');
   const [selectedVegetablesRight, setSelectedVegetablesRight] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
-
+  const [darkMode, setDarkMode] = useState(false); 
   
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+  const containerClass = darkMode ? 'half-and-half-container dark-mode' : 'half-and-half-container';
+  const buttonClass = darkMode ? 'close-Button dark-mode' : 'close-Button';
 
   const handlePizzaLeftChange = (e) => {
     const selectedPizzaName = e.target.value;
@@ -190,7 +195,7 @@ const HalfAndHalfPizza = ({ onClose }) => {
   };
 
   return (
-    <div className={`half-and-half-popup`}>
+    <div className={`half-and-half-popup ${darkMode ? 'dark-mode' : ''}`}>
     <div className="half-and-half-container">
       <h1>Half and Half Pizza</h1>
      

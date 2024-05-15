@@ -72,6 +72,7 @@ import food_39 from "../assets/food_39.png";
 import food_40 from '../assets/food_40.png';
 
 export const assets = {
+    
     logo,
     one,
     basket_icon,

@@ -82,3 +82,15 @@ h2{
 .halfbutton :hover{
 background-color: darkgreen;
 }
+.dark-theme .customize-container {
+  /* Dark theme styles */
+  background-color: #342e2e; /* Black background */
+  color: #ffffff;
+}
+
+.light-theme .customize-container {
+  /* Light theme styles */
+  background-color: antiquewhite; /* White background */
+  color: #000000; /* Black text */
+
+}

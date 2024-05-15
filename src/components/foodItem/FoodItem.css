@@ -33,7 +33,7 @@
 }
 .food-item-price{
     color:tomato;
-    font-size: 22px;
+    font-size: 22px; 
     font-weight: 500;
     margin: 10px;
 }
@@ -62,3 +62,10 @@
 .food-item-counter img{
     margin: 0px;
 }
+.dark-input {
+    color: white;
+  }
+  
+  .light-input {
+    color: black; /* or any other color you prefer for light mode */
+  }

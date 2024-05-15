@@ -2,9 +2,12 @@
 import React, { useState } from 'react';
 import './ProceedCheckOut.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 
-const ProceedCheckOut = ({ closeModal } ) => {
-  // State for storing payment details
+const ProceedCheckOut = ({ closeModal ,darkTheme} ) => {
+  const { t } = useTranslation();
+  
+  // State for storing payment details 
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolderName, setCardHolderName] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -30,14 +33,14 @@ const ProceedCheckOut = ({ closeModal } ) => {
   };
 
   return (
-    <div className="proceed-checkout-container1">
-      <h2>Payment Details</h2><br/>
+    <div className={`proceed-checkout-container1 ${darkTheme ? 'dark-theme' : 'light-theme'}`}>
+      <h2>{t("Payment Details")}</h2><br/>
       <button className="close-button" onClick={closeModal}>
   <CloseIcon className="close-button-icon" />
 </button>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Card Number:</label>
+          <label>{t("Card Number:")}</label>
           <input
             type="text"
             value={cardNumber}
@@ -47,7 +50,7 @@ const ProceedCheckOut = ({ closeModal } ) => {
           />
         </div>
         <div>
-          <label>Cardholder Name:</label>
+          <label>{t("Cardholder Name:")}</label>
           <input
             type="text"
             value={cardHolderName}
@@ -57,7 +60,7 @@ const ProceedCheckOut = ({ closeModal } ) => {
           />
         </div>
         <div>
-          <label>Expiry Date:</label>
+          <label>{t("Expiry Date:")}</label>
           <input
             type="text"
             value={expiryDate}
@@ -67,7 +70,7 @@ const ProceedCheckOut = ({ closeModal } ) => {
           />
         </div>
         <div>
-          <label>CVV:</label>
+        <label>{t("CVV:")}</label>
           <input
             type="text"
             value={cvv}
@@ -77,7 +80,7 @@ const ProceedCheckOut = ({ closeModal } ) => {
           />
         </div>
         <div className='submitbtn'>
-        <button type="submit">Submit Payment</button>
+        <button type="submit">{t("Submit Payment")}</button>
         </div>
       </form>
       

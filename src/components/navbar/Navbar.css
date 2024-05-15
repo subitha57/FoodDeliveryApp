@@ -97,3 +97,16 @@ font-size: 18px;
              }    
              
             }
+            .dark-mode .navbar-menu {
+                background-color: #333; /* Change background color to dark */
+                color: white; /* Change text color to white */
+              }
+              .dark-theme .navbar-menu a {
+                color: white;
+              }
+              .dark-theme .navbar-menu a img {
+                filter: invert(1);
+              }
+              .dark-theme .navbar-menu a h1 {
+                color: white;
+              }

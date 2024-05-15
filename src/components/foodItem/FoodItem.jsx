@@ -3,7 +3,7 @@ import './FoodItem.css'
 import { assets } from '../../assets/assets'
 import { StoreContext } from '../../context/StoreContextProvider';
 
-const FoodItem = ({id,name,price,description,image}) => {
+const FoodItem = ({id,name,price,description,image, darkTheme}) => {
 
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 const {cartItems,addToCart,removeFromCart} = useContext(StoreContext);
@@ -38,7 +38,10 @@ useEffect(() => {
           
         </div>
       </div>
-      <p className="food-item-desc">{description}</p>
+      <p className={`food-item-desc ${darkTheme ? 'light-input' : 'dark-input'}`}>
+      {description}
+    </p>
+    
       <p className="food-item-price">Rs.{itemPrice}</p>
     </div>
   )

@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import './CustomizeForm.css';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
 import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza';
 import CloseIcon from '@mui/icons-material/Close';
+import ViewPromotion from './ViewPromotions';
 
-const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // Add 'isVisible' to the function parameters
+const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionApplied ,darkTheme  }) => { // Add 'isVisible' to the function parameters
   const [selectedPizzas, setSelectedPizzas] = useState('');
   const [selectedCheese, setSelectedCheese] = useState('');
   const [selectedMeat, setSelectedMeat] = useState('');
@@ -18,6 +18,9 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
   const { addToCart } = useContext(StoreContext);
   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const [showHalfAndHalfPopup, setShowHalfAndHalfPopup] = useState(false);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [showPromotion, setShowPromotion] = useState(false);
+ 
 
 
   useEffect(() => {
@@ -127,6 +130,12 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
 
     // Multiply by quantity
     totalPrice *= quantity;
+     // Apply promotion if promotionApplied is true
+     if (promotionApplied) {
+      // Apply 10% discount
+      totalPrice *= 0.9;
+    }
+
 
     return totalPrice;
   };
@@ -137,7 +146,7 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible }) => { // 
 
   return (
    
-   <div className={`customize-container ${isVisible ? 'show' : ''}`}>
+    <div className={`customize-container ${darkTheme ? 'dark-theme' : 'light-theme'} ${isVisible ? 'show' : ''}`}>
     <div className='container'>
     <div className="heading-container">
       <h2>Customize Your Pizza</h2>

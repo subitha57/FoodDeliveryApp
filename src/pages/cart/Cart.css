@@ -1,5 +1,5 @@
 .cart{
-    margin-top: 100px;
+    margin-top: 50px;
 }
 .cart-items-title{
     display: grid;
@@ -93,10 +93,102 @@
 .terms-and-conditions {
     display: flex;
     align-items: center; /* Align items vertically */
+  
   }
   
   .terms-and-conditions input[type="checkbox"] {
-    margin-right: 2px; /* Adjust the margin to reduce space */
+    margin-right: 2px; 
+   /* Adjust the margin to reduce space */
   }
 
+.selected-order-type{
+    margin-top: 0%;
+    font-size: large;
+}
+.order-type {
+    color: blue; /* Change the color to whatever you prefer */
+  }
+  /* Cart.css */
 
+/* Coupon code input field */
+.cart-promocode-input input[type="text"] {
+    width: 200px;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Apply button */
+  .cart-promocode-input button {
+    padding: 8px 20px;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cart-promocode-input button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Coupon error message */
+  .coupon-error {
+    color: red;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+  /* Light Theme */
+.cart.light {
+    background-color: skyblue; /* White background */
+    color: #000000; /* Black text */
+  }
+  
+  /* Dark Theme */
+  .cart.dark {
+    background-color:#342e2e; /* Black background */
+    color: #ffffff; /* White text */
+  }
+  .cart {
+    position: relative; 
+  }
+  
+  .theme-toggle {
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    right: 10px; /* Adjust the right position as needed */
+    cursor: pointer;
+  }
+  .language-select {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  right: 60px; /* Adjust the right position to position it near the theme toggle */
+  z-index: 1; /* Ensure it appears above other elements */
+}
+
+.language-select select {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.dark-theme .cart-items-title p {
+  color: white;
+}
+.dark-theme .cart-total h2,
+.dark-theme .cart-total-details p,
+.dark-theme .cart-total-details b {
+  color: white;
+}
+.dark-theme .terms-and-conditions {
+  color: white;
+}
+  
+.dark-text {
+  color: white;
+}
+
+.light-text {
+  color: black;
+}

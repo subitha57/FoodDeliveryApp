@@ -55,3 +55,19 @@
         font-size: 14px;
     }
 }
+.dark-text {
+    color: white; /* Set text color to white for dark theme */
+}
+.explore-menu-text {
+    color: black; /* Set text color to black for light theme */
+}
+.dark-theme .explore-menu-text {
+    color: white; /* Change text color to white in dark mode */
+  }
+  .dark-theme .explore-menu-list {
+    color: white; /* Change text color to white in dark mode */
+  }
+  .dark-theme .circle {
+    color: white;
+  }
+  

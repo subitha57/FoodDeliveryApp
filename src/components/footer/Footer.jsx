@@ -1,15 +1,18 @@
 import React from 'react'
 import './Footer.css';
 import {assets} from '../../assets/assets';
+import { useTranslation } from 'react-i18next'; 
 
 const Footer = () => {
+    const { t } = useTranslation();
   return (
+    
     <div className='footer' id='footer'>
         <div className='footer-content'>
             <div className="footer-content-left">
-                <h1>Tandoori pizza</h1>
+                <h1>{t("Tandoori Pizza")}</h1>
                
-                <p>text</p>
+                <p>{t("Order your Favourite Food")}</p>
              <div className='footer-social-icon'>
                 <img src={assets.facebook_icon} alt="" />
                 <img src={assets.twitter_icon} alt="" />
@@ -18,19 +21,19 @@ const Footer = () => {
              </div>
             </div>
             <div className="footer-content-center">
-                <h2>COMPANY</h2>
+                <h2>{t("COMPANY")}</h2>
                 <ul>
-                    <li>Home</li>
-                    <li>About Us</li>
-                    <li>Delivery</li>
-                    <li>Privacy Policy</li>
+                    <li>{t("Home")}</li>
+                    <li>{t("About Us")}</li>
+                    <li>{t("Delivery")}</li>
+                    <li>{t("Privacy Policy")}</li>
                 </ul>
             </div>
             <div className="footer-content-right">
-                <h2>GET IN TOUCH</h2>
+                <h2>{t("GET IN TOUCH")}</h2>
                 <ul>
                     <li>+91 00000 00000</li>
-                    <li>contact@dantooripizza.com</li>
+                    <li>contact@tandooripizza.com</li>
                 </ul>
             </div>
         </div>

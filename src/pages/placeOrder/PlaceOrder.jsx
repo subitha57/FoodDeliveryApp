@@ -3,8 +3,11 @@ import './PlaceOrder.css';
 import { StoreContext } from '../../context/StoreContextProvider';
 import { useNavigate } from 'react-router-dom';
 import ProceedCheckOut from '../ProceedCheckOut/ProceedCheckOut';
+import { useTranslation } from 'react-i18next'; 
 
 const PlaceOrder = () => {
+  const { t } = useTranslation();
+
   const [showModal, setShowModal] = useState(false);
 
   const handleCheckout = () => {
@@ -23,7 +26,7 @@ const PlaceOrder = () => {
       <form className='place-order'>
      
         <div className="place-order-left">
-           <p className='title'>Delivery Information</p>
+           <p className='title'>{t("Delivery Information")}</p>
          
           <div className="multi-fields">
             <input type="text" placeholder='First Name'/>
@@ -45,24 +48,24 @@ const PlaceOrder = () => {
         </div>
         <div className="place-order-right">
           <div className="cart-total">
-            <h2>Cart Total</h2>
+            <h2>{t("Cart Total")}</h2>
             <div>
               <div className='cart-total-details'>
-                <p>SubTotal</p>
+                <p>{t("SubTotal")}</p>
                 <p>Rs.{getTotalCartAmount()}</p>
               </div>
               <hr/>
               <div className='cart-total-details'>
-                <p>Delivery Fee</p>
+                <p>{t("Delivery Fee")}</p>
                 <p>Rs.{getTotalCartAmount() === 0 ? 0 : 2}</p>
               </div>
               <hr/>
               <div className='cart-total-details'>
-                <b>Total</b>
+                <b>{t("Total")}</b>
                 <b>Rs.{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
               </div>
             </div>
-            <button type="button" onClick={handleCheckout}>PROCEED TO PAYMENT</button>
+            <button type="button" onClick={handleCheckout}>{t("PROCEED TO PAYMENT")}</button>
           </div>
         </div>
       </form>
