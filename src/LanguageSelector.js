@@ -6,6 +6,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import './LanguageSelector.css'
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation();

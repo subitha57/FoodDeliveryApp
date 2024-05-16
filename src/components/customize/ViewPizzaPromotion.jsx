@@ -3,9 +3,11 @@ import { StoreContext } from '../../context/StoreContextProvider';
 import FoodItem from '../foodItem/FoodItem';
 import CustomizeForm from '../customize/CustomizeForm';
 import './ViewPizzaPromotion.css';
+import { useTheme } from '../Theme/ThemeContext'; // Import the ThemeContext
 
 const FoodDisplay = ({ category }) => {
-  const { food_list, darkTheme } = useContext(StoreContext);
+  const { food_list } = useContext(StoreContext);
+  const { darkTheme } = useTheme(); // Get the current theme from the context
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState(null);
   const [applyPromotion, setApplyPromotion] = useState(false);
@@ -27,6 +29,7 @@ const FoodDisplay = ({ category }) => {
   return (
     <div className={`promotion ${darkTheme ? 'dark-theme' : 'light-theme'}`}>
       <h2>View Current Promotions</h2>
+      
       <div className='food-display-list'>
         {food_list.map((item, index) => {
           if (category === 'All' || category === item.category) {
@@ -44,7 +47,7 @@ const FoodDisplay = ({ category }) => {
                   <button className='customize-button' onClick={() => toggleCustomizeForm(item)}>
                     Customize Pizza
                   </button>
-                )}
+                )} 
               </div>
             );
           }

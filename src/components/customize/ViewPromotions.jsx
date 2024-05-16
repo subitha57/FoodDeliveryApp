@@ -25,7 +25,7 @@ const ViewPromotion = ({ onClose }) => {
       <div className="ViewPromotion-buttons">
         <button className="apply-button" onClick={handleApply}>Apply</button>
       </div>
-    </div>
+    </div> 
   );
 };
 
