@@ -8,7 +8,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ViewPromotions from '../../components/customize/ViewPromotions';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 const Cart = ({ selectedOrderType }) => {
   const { t } = useTranslation();
@@ -108,9 +108,8 @@ const Cart = ({ selectedOrderType }) => {
               </FormGroup>
             </div>
             <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
-
-{/* Conditionally render the ViewCurrentPromotions component */}
-{showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} />}
+            {/* Conditionally render the ViewCurrentPromotions component */}
+            {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} />}
             <div className="cart-promocode-input">
               <input type="text" placeholder='Enter coupon code' value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
               <button onClick={applyCoupon}>{t("Apply")}</button>

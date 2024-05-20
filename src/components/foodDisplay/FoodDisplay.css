@@ -1,43 +1,57 @@
-.food-display{
-    margin-top: 30px;
-   
+.food-display {
+  margin-top: 30px;
 }
-.food-display h2{
-    font-size: max(2vw,24px);
-    font-weight: 600;
-    color: navy;
+
+.food-display h2 {
+  font-size: max(2vw, 24px);
+  font-weight: 600;
+  color: navy;
 }
-.food-display-list{
-    display:grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
-    margin-top: 30px;
-    gap:30px;
-    row-gap: 50px;
+
+.food-display-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-top: 30px;
+  gap: 30px;
+  row-gap: 50px;
 }
+
 .food-item {
-    position: relative;
-    display: inline-block;
-     }
-  
-  .customize-button {
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: transparent; /* Make the button background transparent */
-    border: none; /* Remove button border */
-    color: white; /* Text color */
-    cursor: pointer; /* Show cursor as pointer on hover */
-    padding: 6px 15px; /* Adjust padding as needed */
-    border-radius: 5px; /* Add border radius for rounded corners */
-    font-size: 16px; /* Adjust font size */
-    z-index: 2; /* Ensure the button is above the image */
-    display: none; /* Hide the button by default */
-  }
-  
-  .food-item:hover .customize-button {
-    display: block; /* Show the button on hover */
-  }
-  .food-item-image {
-    padding: 10px; /* Adjust padding as needed */
-  }
+  position: relative;
+  display: inline-block;
+}
+
+.customize-button {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  /* Make the button background transparent */
+  border: none;
+  /* Remove button border */
+  color: white;
+  /* Text color */
+  cursor: pointer;
+  /* Show cursor as pointer on hover */
+  padding: 6px 15px;
+  /* Adjust padding as needed */
+  border-radius: 5px;
+  /* Add border radius for rounded corners */
+  font-size: 16px;
+  /* Adjust font size */
+  z-index: 2;
+  /* Ensure the button is above the image */
+  display: none;
+  /* Hide the button by default */
+}
+
+.food-item:hover .customize-button {
+  display: block;
+  /* Show the button on hover */
+}
+
+.food-item-image {
+  padding: 10px;
+  /* Adjust padding as needed */
+}

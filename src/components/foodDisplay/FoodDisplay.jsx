@@ -3,7 +3,7 @@ import './FoodDisplay.css';
 import { StoreContext } from '../../context/StoreContextProvider';
 import FoodItem from '../foodItem/FoodItem';
 import CustomizeForm from '../customize/CustomizeForm';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 const FoodDisplay = ({ category }) => {
   const { t } = useTranslation();
@@ -11,7 +11,7 @@ const FoodDisplay = ({ category }) => {
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
   const [pizzaItemId, setPizzaItemId] = useState(null);
   const [selectedPizza, setSelectedPizza] = useState(null);
-  const [promotionApplied, setPromotionApplied] = useState(false); 
+  const [promotionApplied, setPromotionApplied] = useState(false);
 
   const toggleCustomizeForm = (item) => {
     setPizzaItemId(item._id);
@@ -48,20 +48,20 @@ const FoodDisplay = ({ category }) => {
             );
           }
           return null;
-        })} 
+        })}
       </div>
       {showCustomizeForm && pizzaItemId && (
-      <CustomizeForm
-        selectedPizza={selectedPizza}
-        foodList={food_list} // Pass the pizza list as a prop
-        onClose={() => setShowCustomizeForm(false)}
-        isVisible={showCustomizeForm}
-        promotionApplied={promotionApplied}
-      />
-    )}
-     {!promotionApplied && (
+        <CustomizeForm
+          selectedPizza={selectedPizza}
+          foodList={food_list} // Pass the pizza list as a prop
+          onClose={() => setShowCustomizeForm(false)}
+          isVisible={showCustomizeForm}
+          promotionApplied={promotionApplied}
+        />
+      )}
+      {!promotionApplied && (
         <button className="apply-promotion-button" onClick={handleApplyPromotion}>
-         {t(" Apply Promotion")}
+          {t(" Apply Promotion")}
         </button>
       )}
     </div>

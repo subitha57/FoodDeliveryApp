@@ -1,5 +1,5 @@
-  import React, { useState, useContext, useEffect } from 'react';
-import './HalfAndHalfPizza.css'; 
+import React, { useState, useContext, useEffect } from 'react';
+import './HalfAndHalfPizza.css';
 import { StoreContext } from '../../context/StoreContextProvider';
 import plainPizza from '../../assets/menu_9.png';
 import CloseIcon from '@mui/icons-material/Close';
@@ -19,8 +19,8 @@ const HalfAndHalfPizza = ({ onClose }) => {
   const [selectedMeatRight, setSelectedMeatRight] = useState('');
   const [selectedVegetablesRight, setSelectedVegetablesRight] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
-  const [darkMode, setDarkMode] = useState(false); 
-  
+  const [darkMode, setDarkMode] = useState(false);
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -90,42 +90,42 @@ const HalfAndHalfPizza = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Construct left half pizza object
-  const leftHalfPizza = {
-    name: selectedPizzaLeft,
-    cheese: selectedCheeseLeft,
-    meat: selectedMeatLeft,
-    vegetables: selectedVegetablesLeft,
+    const leftHalfPizza = {
+      name: selectedPizzaLeft,
+      cheese: selectedCheeseLeft,
+      meat: selectedMeatLeft,
+      vegetables: selectedVegetablesLeft,
+    };
+
+    // Construct right half pizza object
+    const rightHalfPizza = {
+      name: selectedPizzaRight,
+      cheese: selectedCheeseRight,
+      meat: selectedMeatRight,
+      vegetables: selectedVegetablesRight,
+    };
+
+    // Construct half-and-half pizza object
+    const halfAndHalfPizza = {
+      leftHalf: leftHalfPizza,
+      rightHalf: rightHalfPizza,
+      size: size,
+      quantity: quantity,
+      totalPrice: totalPrice,
+    };
+
+    // Get existing cart items from local storage or initialize as an empty array
+    const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    // Add the half-and-half pizza to the cart
+    existingCartItems.push(halfAndHalfPizza);
+
+    // Update local storage with the updated cart items
+    localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
+
+    // Close the form
+    onClose();
   };
-
-  // Construct right half pizza object
-  const rightHalfPizza = {
-    name: selectedPizzaRight,
-    cheese: selectedCheeseRight,
-    meat: selectedMeatRight,
-    vegetables: selectedVegetablesRight,
-  };
-
-  // Construct half-and-half pizza object
-  const halfAndHalfPizza = {
-    leftHalf: leftHalfPizza,
-    rightHalf: rightHalfPizza,
-    size: size,
-    quantity: quantity,
-    totalPrice: totalPrice,
-  };
-
-  // Get existing cart items from local storage or initialize as an empty array
-  const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-  // Add the half-and-half pizza to the cart
-  existingCartItems.push(halfAndHalfPizza);
-
-  // Update local storage with the updated cart items
-  localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
-
-  // Close the form
-  onClose();
-};
 
   const pizzaItems = food_list.filter(item => item.category === 'Pizza');
 
@@ -149,7 +149,6 @@ const HalfAndHalfPizza = ({ onClose }) => {
 
     // Multiply by quantity
     totalPrice *= quantity;
-
     setTotalPrice(totalPrice);
   };
 
@@ -190,116 +189,110 @@ const HalfAndHalfPizza = ({ onClose }) => {
     } else if (vegetables === "bellPeppers") {
       halfPrice += 1.5; // Example: Increase price by $1.5 for bell peppers
     }
-
     return halfPrice;
   };
 
   return (
     <div className={`half-and-half-popup ${darkMode ? 'dark-mode' : ''}`}>
-    <div className="half-and-half-container">
-      <h1>Half and Half Pizza</h1>
-     
-      <form onSubmit={handleSubmit}>
-      <button className="close-Button" onClick={onClose}>
-          <CloseIcon />
-        </button> 
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <label htmlFor="quantity">Quantity:</label>
-                <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
-              </td>
-              <td>
-                <label htmlFor="size">Size:</label>
-                <select id="size" value={size} onChange={handleSizeChange}>
-                  <option value="">Select Size</option>
-                  <option value="Small">Small</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Large">Large</option>
-                </select>
-              </td>
-            </tr>
-            <tr>  
-              <td>
-                <h2>First Half</h2><br/>
-                <img src={selectedPizzaLeftImage} alt="Selected Pizza Left" /><br/><br/>
-                <label htmlFor="pizza-left">Select Pizza:</label>
-                <select id="pizza-left" value={selectedPizzaLeft} onChange={handlePizzaLeftChange}>
-                  <option value="">Select Pizza</option>
-                  {pizzaItems.map((item) => (
-                    item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
-                  ))}
-                </select><br/>
-                {/* Add more select elements for cheese, meat, and vegetables for the first half */}
-                
-                <label htmlFor="cheese-left">Select Cheese:</label>
-                <select id="cheese-left" value={selectedCheeseLeft} onChange={handleCheeseLeftChange}>
-                  <option value="">Select Cheese</option>
-                  <option value="mozzarella">Mozzarella</option>
-                  <option value="cheddar">Cheddar</option>
-                  <option value="parmesan">Parmesan</option>
-                </select><br/>
-                <label htmlFor="meat-left">Select Meat:</label>
-                <select id="meat-left" value={selectedMeatLeft} onChange={handleMeatLeftChange}>
-                  <option value="">Select Meat</option>
-                  <option value="pepperoni">Pepperoni</option>
-                  <option value="sausage">Sausage</option>
-                  <option value="ham">Ham</option>
-                </select><br/>
-                <label htmlFor="vegetable-left">Select Vegetable:</label>
-                <select id="vegetable-left" value={selectedVegetablesLeft} onChange={handleVegetablesLeftChange}>
-                  <option value="">Select Vegetable</option>
-                  <option value="mushrooms">Mushrooms</option>
-                  <option value="onions">Onions</option>
-                  <option value="bellPeppers">Bell Peppers</option>
-                </select>
-
-              </td>
-              <td>
-                <h2>Second Half</h2><br/>
-                <img src={selectedPizzaRightImage} alt="Selected Pizza" /><br/><br/>
-                <label htmlFor="pizza-right">Select Pizza:</label>
-                <select id="pizza-right" value={selectedPizzaRight} onChange={handlePizzaRightChange}>
-                  <option value="">Select Pizza</option>
-                  {pizzaItems.map((item) => (
-                    item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
-                  ))}
-                </select><br/>
-                
-
-                <label htmlFor="cheese-right">Select Cheese:</label>
-                <select id="cheese-right" value={selectedCheeseRight} onChange={handleCheeseRightChange}>
-                  <option value="">Select Cheese</option>
-                  <option value="mozzarella">Mozzarella</option>
-                  <option value="cheddar">Cheddar</option>
-                  <option value="parmesan">Parmesan</option>
-                </select><br/>
-                <label htmlFor="meat-right">Select Meat:</label>
-                <select id="meat-right" value={selectedMeatRight} onChange={handleMeatRightChange}>
-                  <option value="">Select Meat</option>
-                  <option value="pepperoni">Pepperoni</option>
-                  <option value="sausage">Sausage</option>
-                  <option value="ham">Ham</option>
-                </select><br/>
-                <label htmlFor="vegetable-right">Select Vegetable:</label>
-                <select id="vegetable-right" value={selectedVegetablesRight} onChange={handleVegetablesRightChange}>
-                  <option value="">Select Vegetable</option>
-                  <option value="mushrooms">Mushrooms</option>
-                  <option value="onions">Onions</option>
-                  <option value="bellPeppers">Bell Peppers</option>
-                </select>
-                {/* Add more select elements for cheese, meat, and vegetables for the second half */}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div className='buttonsbtn'>
-        <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
-        <button type="submit">Submit</button>
-        </div>
-      </form>
-    </div>
+      <div className="half-and-half-container">
+        <h1>Half and Half Pizza</h1>
+        <form onSubmit={handleSubmit}>
+          <button className="close-Button" onClick={onClose}>
+            <CloseIcon />
+          </button>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <label htmlFor="quantity">Quantity:</label>
+                  <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
+                </td>
+                <td>
+                  <label htmlFor="size">Size:</label>
+                  <select id="size" value={size} onChange={handleSizeChange}>
+                    <option value="">Select Size</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h2>First Half</h2><br />
+                  <img src={selectedPizzaLeftImage} alt="Selected Pizza Left" /><br /><br />
+                  <label htmlFor="pizza-left">Select Pizza:</label>
+                  <select id="pizza-left" value={selectedPizzaLeft} onChange={handlePizzaLeftChange}>
+                    <option value="">Select Pizza</option>
+                    {pizzaItems.map((item) => (
+                      item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
+                    ))}
+                  </select><br />
+                  {/* Add more select elements for cheese, meat, and vegetables for the first half */}
+                  <label htmlFor="cheese-left">Select Cheese:</label>
+                  <select id="cheese-left" value={selectedCheeseLeft} onChange={handleCheeseLeftChange}>
+                    <option value="">Select Cheese</option>
+                    <option value="mozzarella">Mozzarella</option>
+                    <option value="cheddar">Cheddar</option>
+                    <option value="parmesan">Parmesan</option>
+                  </select><br />
+                  <label htmlFor="meat-left">Select Meat:</label>
+                  <select id="meat-left" value={selectedMeatLeft} onChange={handleMeatLeftChange}>
+                    <option value="">Select Meat</option>
+                    <option value="pepperoni">Pepperoni</option>
+                    <option value="sausage">Sausage</option>
+                    <option value="ham">Ham</option>
+                  </select><br />
+                  <label htmlFor="vegetable-left">Select Vegetable:</label>
+                  <select id="vegetable-left" value={selectedVegetablesLeft} onChange={handleVegetablesLeftChange}>
+                    <option value="">Select Vegetable</option>
+                    <option value="mushrooms">Mushrooms</option>
+                    <option value="onions">Onions</option>
+                    <option value="bellPeppers">Bell Peppers</option>
+                  </select>
+                </td>
+                <td>
+                  <h2>Second Half</h2><br />
+                  <img src={selectedPizzaRightImage} alt="Selected Pizza" /><br /><br />
+                  <label htmlFor="pizza-right">Select Pizza:</label>
+                  <select id="pizza-right" value={selectedPizzaRight} onChange={handlePizzaRightChange}>
+                    <option value="">Select Pizza</option>
+                    {pizzaItems.map((item) => (
+                      item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
+                    ))}
+                  </select><br />
+                  <label htmlFor="cheese-right">Select Cheese:</label>
+                  <select id="cheese-right" value={selectedCheeseRight} onChange={handleCheeseRightChange}>
+                    <option value="">Select Cheese</option>
+                    <option value="mozzarella">Mozzarella</option>
+                    <option value="cheddar">Cheddar</option>
+                    <option value="parmesan">Parmesan</option>
+                  </select><br />
+                  <label htmlFor="meat-right">Select Meat:</label>
+                  <select id="meat-right" value={selectedMeatRight} onChange={handleMeatRightChange}>
+                    <option value="">Select Meat</option>
+                    <option value="pepperoni">Pepperoni</option>
+                    <option value="sausage">Sausage</option>
+                    <option value="ham">Ham</option>
+                  </select><br />
+                  <label htmlFor="vegetable-right">Select Vegetable:</label>
+                  <select id="vegetable-right" value={selectedVegetablesRight} onChange={handleVegetablesRightChange}>
+                    <option value="">Select Vegetable</option>
+                    <option value="mushrooms">Mushrooms</option>
+                    <option value="onions">Onions</option>
+                    <option value="bellPeppers">Bell Peppers</option>
+                  </select>
+                  {/* Add more select elements for cheese, meat, and vegetables for the second half */}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className='buttonsbtn'>
+            <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

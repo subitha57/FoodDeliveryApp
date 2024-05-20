@@ -4,7 +4,7 @@ import { assets } from '../../assets/assets';
 import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
 import LoginPopup from '../login/LoginPopup';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 const Navbar = ({ darkMode }) => {
   const { t } = useTranslation();
@@ -36,7 +36,6 @@ const Navbar = ({ darkMode }) => {
         <a href='#footer' onClick={() => setMenu("contact us")} className={menu === "contact us" ? "active" : ""}>{t("Contact Us")}</a>
         {isAuthenticated && <Link to='/PreviousOrder' onClick={() => setMenu('previous-order-page')}>{t("PastOrders")}</Link>}
       </ul>
-     
       <div className='navbar-right'>
         <img src={assets.search_icon} alt="" />
         <div className='navbar-search-icon'>

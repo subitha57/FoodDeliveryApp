@@ -6,8 +6,7 @@ import image from '../../assets/a.png'
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate= useNavigate();  
-  const [currState, setCurrState]= useState("Login")
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -23,13 +22,13 @@ const LoginForm = () => {
     console.log('Username:', username);
     console.log('Password:', password);
   };
-  const handleGuest=()=>{
+  const handleGuest = () => {
     navigate('/GeoLocation')
   }
 
   return (
     <div className="login-container">
-       <div className="right-side-image">
+      <div className="right-side-image">
         <img src={image} alt="Login Image" />
       </div>
       <div className="left-side-form">
@@ -44,13 +43,10 @@ const LoginForm = () => {
             <input type="password" id="password" value={password} onChange={handlePasswordChange} />
           </div>
           <button type="submit">Login</button>
-         <br/>
-          
-         <button onClick={handleGuest}>Continue as guest</button> 
+          <br />
+          <button onClick={handleGuest}>Continue as guest</button>
         </form>
-       
       </div>
-     
     </div>
   );
 };

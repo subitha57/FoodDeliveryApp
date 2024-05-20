@@ -1,39 +1,53 @@
 .light-theme {
-  background-color: skyblue; /* Light background color */
-  color: #333; /* Light text color */
+  background-color: skyblue;
+  /* Light background color */
+  color: #333;
+  /* Light text color */
 }
 
 .dark-theme {
-  background-color: #333; /* Dark background color */
-  color: #fff; /* Dark text color */
+  background-color: #333;
+  /* Dark background color */
+  color: #fff;
+  /* Dark text color */
 }
 
 body {
   min-height: 100vh;
-  background-color: skyblue; /* Default background color */
+  background-color: skyblue;
+  /* Default background color */
 }
 
 .dark-theme body {
-  background-color: #333; /* Change body background color in dark mode */
+  background-color: #333;
+  /* Change body background color in dark mode */
 }
+
 .theme-button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
-  color: white; /* Default color */
+  color: white;
+  /* Default color */
   position: fixed;
-  top:14px; /* Adjust top position as needed */
-  right: 50px; /* Adjust right position as needed */
+  top: 14px;
+  /* Adjust top position as needed */
+  right: 50px;
+  /* Adjust right position as needed */
   z-index: 1000;
+}
 
-}
 .dark-theme .theme-button {
-  color: white; /* Dark mode color */
+  color: white;
+  /* Dark mode color */
 }
+
 .light-theme .theme-button {
-  color: black; /* Dark mode color */
+  color: black;
+  /* Dark mode color */
 }
+
 /* src/App.css */
 .top-right-corner {
   position: fixed;
@@ -43,14 +57,16 @@ body {
   align-items: center;
   z-index: 1000;
 }
- 
+
 .theme-button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
-  margin-left: 10px;/* Adjust the spacing between the icons */
+  margin-left: 10px;
+  /* Adjust the spacing between the icons */
 }
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .top-right-corner {

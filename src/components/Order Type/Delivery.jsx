@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import './Delivery.css'; // Import your CSS file
 
-const Delivery = ({ onClose,closeOrderType  }) => {
+const Delivery = ({ onClose, closeOrderType }) => {
   const [address, setAddress] = useState('');
   const [orderTime, setOrderTime] = useState('');
   const [orderDate, setOrderDate] = useState('');
@@ -13,7 +13,7 @@ const Delivery = ({ onClose,closeOrderType  }) => {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
-  const handleAddressChange = (e) => { 
+  const handleAddressChange = (e) => {
     setAddress(e.target.value);
   };
 
@@ -40,7 +40,7 @@ const Delivery = ({ onClose,closeOrderType  }) => {
 
   const handleContinue = () => {
     handleClose(); // Close the modal
-    closeOrderType(); 
+    closeOrderType();
     navigate('/'); // Navigate to the home page
   };
 
@@ -62,7 +62,7 @@ const Delivery = ({ onClose,closeOrderType  }) => {
             </Button>
           </div>
           <div className="modal-content">
-            <h2>Delivery</h2><br/>
+            <h2>Delivery</h2><br />
             <div className="form-group">
               <label htmlFor="address">Address:</label>
               <input type="text" id="address" value={address} onChange={handleAddressChange} />

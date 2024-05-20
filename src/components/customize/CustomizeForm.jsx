@@ -18,10 +18,6 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
   const { addToCart } = useContext(StoreContext);
   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const [showHalfAndHalfPopup, setShowHalfAndHalfPopup] = useState(false);
-  const [selectedSize, setSelectedSize] = useState('');
-  const [showPromotion, setShowPromotion] = useState(false);
- 
-
 
   useEffect(() => {
     // Calculate the total price whenever there's a change in size or selectedPizza
@@ -42,10 +38,6 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
       setTotalPrice(0);
     }
   }, [isVisible]);
-
-  const handlePizzaChange = (e) => {
-    setSelectedPizzas(e.target.value);
-  };
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value)); // Convert value to integer
@@ -135,17 +127,13 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
       // Apply 10% discount
       totalPrice *= 0.9;
     }
-
-
     return totalPrice;
   };
 
   if (showHalfAndHalfPizza) {
     return <HalfAndHalfPizza onClose={onClose} selectedPizza={selectedPizza} />;
   }
-
   return (
-   
     <div className={`customize-container ${darkTheme ? 'dark-theme' : 'light-theme'} ${isVisible ? 'show' : ''}`}>
     <div className='container'>
     <div className="heading-container">
@@ -153,7 +141,7 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
     </div>
        
       <div className='row'>
-        <div className='col-6'> 
+      <div className='col-6'> 
       <div className="form-container"> 
      
         <form onSubmit={handleSubmit}>

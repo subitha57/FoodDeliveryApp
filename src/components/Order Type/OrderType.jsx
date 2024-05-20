@@ -7,7 +7,7 @@ import DineIn from './DineIn';
 import './OrderType.css';
 import CloseIcon from '@mui/icons-material/Close';
 
-const OrderType = ({ onSelectOrderType, onClose,isAuthenticated  }) => {
+const OrderType = ({ onSelectOrderType, onClose, isAuthenticated }) => {
   const [selectedOrderType, setSelectedOrderType] = useState('');
   const [open, setOpen] = useState(false);
 
@@ -33,6 +33,7 @@ const OrderType = ({ onSelectOrderType, onClose,isAuthenticated  }) => {
   if (!isAuthenticated) {
     return null; // Do not render anything if the user is not authenticated
   }
+  
   return (
     <Modal
       open={open}

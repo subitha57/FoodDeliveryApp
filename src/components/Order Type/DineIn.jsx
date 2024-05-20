@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import './DineIn.css'; // Import your CSS file
 
-const DineIn = ({ onClose,closeOrderType  }) => {
+const DineIn = ({ onClose, closeOrderType }) => {
   const [reservationTime, setReservationTime] = useState('');
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const [open, setOpen] = useState(true);
@@ -46,8 +46,7 @@ const DineIn = ({ onClose,closeOrderType  }) => {
             </Button>
           </div>
           <div className="modal-content">
-            <h2>Dine In</h2><br/>
-           
+            <h2>Dine In</h2><br />
             <div className="form-group">
               <label htmlFor="reservationTime">Reservation Time:</label>
               <input type="time" id="reservationTime" value={reservationTime} onChange={handleReservationTimeChange} />

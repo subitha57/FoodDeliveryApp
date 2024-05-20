@@ -99,7 +99,7 @@ function App() {
   return (
      <>
      <ThemeProvider>
-          {showLogin && <LoginPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
+      {showLogin && <LoginPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
       <div className={`app ${darkTheme ? "dark-theme" : "light-theme"}`}> 
       <div className="top-right-corner">
       <LanguageSelector/>

@@ -1,6 +1,7 @@
 .half-and-half-container {
   margin: 20px;
-  border: 2px solid black; /* Border style */
+  border: 2px solid black;
+  /* Border style */
   padding: 20px;
   margin-top: 5%;
 }
@@ -16,7 +17,6 @@ table {
 
 td {
   padding: 20px;
-
 }
 
 input,
@@ -42,30 +42,37 @@ button {
 button:hover {
   background-color: #45a049;
 }
-.HalfButton{
+
+.HalfButton {
   text-align: center;
 }
-h3{
+
+h3 {
   margin-bottom: 2%;
   color: darkred;
 }
-h2{
+
+h2 {
   color: darkred;
 }
-label{
+
+label {
   color: navy;
   padding: 5px;
   margin-top: 2%;
 }
-.buttonsbtn{
+
+.buttonsbtn {
   text-align: center;
 }
+
 @media (max-width: 768px) {
   table td {
     display: block;
     width: 100%;
   }
 }
+
 .half-and-half-popup {
   position: fixed;
   top: 50%;
@@ -76,10 +83,14 @@ label{
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Adjust width as needed */
-  max-width: 800px; /* Set maximum width */
-  max-height: 100%; /* Set maximum height */
-  overflow-y: auto; /* Enable vertical scrolling if needed */
+  width: 100%;
+  /* Adjust width as needed */
+  max-width: 800px;
+  /* Set maximum width */
+  max-height: 100%;
+  /* Set maximum height */
+  overflow-y: auto;
+  /* Enable vertical scrolling if needed */
 }
 
 .half-and-half-container {
@@ -87,9 +98,13 @@ label{
 }
 
 .close-Button {
-  position: absolute; /* Set the close button position to absolute */
-  top: 32px; /* Adjust top distance */
-  right: 25px; /* Adjust right distance */
-  border: none; /* Remove border */
+  position: absolute;
+  /* Set the close button position to absolute */
+  top: 32px;
+  /* Adjust top distance */
+  right: 25px;
+  /* Adjust right distance */
+  border: none;
+  /* Remove border */
   cursor: pointer;
 }

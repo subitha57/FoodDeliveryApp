@@ -12,9 +12,7 @@ const AppDownload = () => {
             <img src={assets.play_store} alt="" />
             <img src={assets.app_store} alt="" />
         </div>
-
     </div>
   )
 }
-
 export default AppDownload

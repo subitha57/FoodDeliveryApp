@@ -19,6 +19,7 @@ const TakeOut = ({ onClose, closeOrderType }) => {
     setOpen(false);
     onClose(); // Close the modal
   };
+
   const handleOrderTimeChange = (e) => {
     setOrderTime(e.target.value);
   };
@@ -26,6 +27,7 @@ const TakeOut = ({ onClose, closeOrderType }) => {
   const handleOrderDateChange = (e) => {
     setOrderDate(e.target.value);
   };
+
   const handleContinue = () => {
     handleClose();
     closeOrderType(); // Close the modal
@@ -50,7 +52,7 @@ const TakeOut = ({ onClose, closeOrderType }) => {
             </Button>
           </div>
           <div className="modal-content">
-            <h2>Take Out</h2><br/>
+            <h2>Take Out</h2><br />
             <div className="form-group">
               <label htmlFor="orderDate">Order Date:</label>
               <input type="date" id="orderDate" value={orderDate} onChange={handleOrderDateChange} />
@@ -63,7 +65,6 @@ const TakeOut = ({ onClose, closeOrderType }) => {
               <label htmlFor="pickupTime">Pickup Time:</label>
               <input type="time" id="pickupTime" value={pickupTime} onChange={handlePickupTimeChange} />
             </div>
-           
             <Button onClick={handleContinue} variant="contained" className="continue-button">Continue</Button>
           </div>
         </div>

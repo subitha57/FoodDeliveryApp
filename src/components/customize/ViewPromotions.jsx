@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import './ViewPromotions.css';
-import { StoreContext } from '../../context/StoreContextProvider';
 import { useTheme } from '../Theme/ThemeContext'; // Import the ThemeContext
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 
 const ViewPromotion = ({ onClose }) => {
-  const { food_list } = useContext(StoreContext);
   const { darkTheme } = useTheme(); // Get the current theme from the context
   const navigate = useNavigate();
 

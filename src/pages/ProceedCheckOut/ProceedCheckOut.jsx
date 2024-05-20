@@ -4,10 +4,8 @@ import './ProceedCheckOut.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 
-const ProceedCheckOut = ({ closeModal ,darkTheme} ) => {
+const ProceedCheckOut = ({ closeModal, darkTheme }) => {
   const { t } = useTranslation();
-  
-  // State for storing payment details 
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolderName, setCardHolderName] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -34,10 +32,10 @@ const ProceedCheckOut = ({ closeModal ,darkTheme} ) => {
 
   return (
     <div className={`proceed-checkout-container1 ${darkTheme ? 'dark-theme' : 'light-theme'}`}>
-      <h2>{t("Payment Details")}</h2><br/>
+      <h2>{t("Payment Details")}</h2><br />
       <button className="close-button" onClick={closeModal}>
-  <CloseIcon className="close-button-icon" />
-</button>
+        <CloseIcon className="close-button-icon" />
+      </button>
       <form onSubmit={handleSubmit}>
         <div>
           <label>{t("Card Number:")}</label>
@@ -70,7 +68,7 @@ const ProceedCheckOut = ({ closeModal ,darkTheme} ) => {
           />
         </div>
         <div>
-        <label>{t("CVV:")}</label>
+          <label>{t("CVV:")}</label>
           <input
             type="text"
             value={cvv}
@@ -80,10 +78,9 @@ const ProceedCheckOut = ({ closeModal ,darkTheme} ) => {
           />
         </div>
         <div className='submitbtn'>
-        <button type="submit">{t("Submit Payment")}</button>
+          <button type="submit">{t("Submit Payment")}</button>
         </div>
       </form>
-      
     </div>
   );
 };
