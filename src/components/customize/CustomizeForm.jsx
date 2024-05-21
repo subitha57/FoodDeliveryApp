@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
 import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza';
 import CloseIcon from '@mui/icons-material/Close';
-import ViewPromotion from './ViewPromotions';
+import ViewPromotion from '../ViewPromotions/ViewPromotions';
 
 const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionApplied ,darkTheme  }) => { // Add 'isVisible' to the function parameters
   const [selectedPizzas, setSelectedPizzas] = useState('');
@@ -67,7 +67,11 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
       description: selectedPizza.description,
       price: totalPrice, // Use the calculated total price
       quantity: quantity,
-    };
+      size: size,
+      cheese: selectedCheese,
+      meat: selectedMeat,
+      vegetables: selectedVegetables
+  };
     const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     existingCartItems.push(customPizza);
     localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
@@ -205,7 +209,7 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
         </div> 
       </div>
       {showHalfAndHalfPopup && <HalfAndHalfPizza onClose={() => setShowHalfAndHalfPopup(false)} />}
-    </div>
+    </div>  
     </div>
     </div>
 </div>
@@ -213,3 +217,4 @@ const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible,promotionAp
 };
 
 export default CustomizeForm;
+ 

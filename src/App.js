@@ -19,7 +19,7 @@ import ProceedCheckout from './pages/ProceedCheckOut/ProceedCheckOut.jsx';
 import TermsAndConditions from './pages/TermsAnd Conditions/TermsAndCondition.jsx';
 import GeoLocation from './components/Order Type/GeoLocation.jsx';
 import PreviousOrder from './components/Order Type/PreviousOrder/PreviousOrder.jsx';
-import ViewPizzaPromotion from './components/customize/ViewPizzaPromotion.jsx';
+import ViewPizzaPromotion from './components/ViewPromotions/ViewPizzaPromotion.jsx';
 import Brightness4Icon from '@mui/icons-material/Brightness4'; // Dark mode icon
 import Brightness7Icon from '@mui/icons-material/Brightness7'; // Light mode icon
 import { ThemeProvider } from './components/Theme/ThemeContext.js';

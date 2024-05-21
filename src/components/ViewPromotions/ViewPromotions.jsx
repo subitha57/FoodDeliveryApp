@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './ViewPromotions.css';
 import { useTheme } from '../Theme/ThemeContext'; // Import the ThemeContext
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
+import ComboPromotion from './ComboPromotion'; // Import the ComboPromotion component
 
 const ViewPromotion = ({ onClose }) => {
   const { darkTheme } = useTheme(); // Get the current theme from the context
@@ -10,7 +11,7 @@ const ViewPromotion = ({ onClose }) => {
 
   const handleApply = () => {
     navigate('/ViewPizzaPromotion');
-    onClose();
+    onClose(); 
   };
 
   return (
@@ -22,8 +23,9 @@ const ViewPromotion = ({ onClose }) => {
       <p className={darkTheme ? 'dark-text' : 'light-text'}>Get 10% off when you select a large pizza!</p>
       <div className="ViewPromotion-buttons">
         <button className="apply-button" onClick={handleApply}>Apply</button>
-      </div>
-    </div> 
+      </div><br/>
+
+    </div>
   );
 };
 

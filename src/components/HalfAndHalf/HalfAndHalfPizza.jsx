@@ -5,296 +5,271 @@ import plainPizza from '../../assets/menu_9.png';
 import CloseIcon from '@mui/icons-material/Close';
 
 const HalfAndHalfPizza = ({ onClose }) => {
-  const { food_list } = useContext(StoreContext);
-  const [selectedPizzaLeftImage, setSelectedPizzaLeftImage] = useState(plainPizza);
-  const [selectedPizzaRightImage, setSelectedPizzaRightImage] = useState(plainPizza);
-  const [selectedPizzaLeft, setSelectedPizzaLeft] = useState('');
-  const [selectedPizzaRight, setSelectedPizzaRight] = useState('');
-  const [size, setSize] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [selectedCheeseLeft, setSelectedCheeseLeft] = useState('');
-  const [selectedMeatLeft, setSelectedMeatLeft] = useState('');
-  const [selectedVegetablesLeft, setSelectedVegetablesLeft] = useState('');
-  const [selectedCheeseRight, setSelectedCheeseRight] = useState('');
-  const [selectedMeatRight, setSelectedMeatRight] = useState('');
-  const [selectedVegetablesRight, setSelectedVegetablesRight] = useState('');
-  const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
-  const [darkMode, setDarkMode] = useState(false);
+    const { food_list, addToCart } = useContext(StoreContext);
+    const [selectedPizzaLeftImage, setSelectedPizzaLeftImage] = useState(plainPizza);
+    const [selectedPizzaRightImage, setSelectedPizzaRightImage] = useState(plainPizza);
+    const [selectedPizzaLeft, setSelectedPizzaLeft] = useState('');
+    const [selectedPizzaRight, setSelectedPizzaRight] = useState('');
+    const [size, setSize] = useState('');
+    const [quantity, setQuantity] = useState(1);
+    const [selectedCheeseLeft, setSelectedCheeseLeft] = useState('');
+    const [selectedMeatLeft, setSelectedMeatLeft] = useState('');
+    const [selectedVegetablesLeft, setSelectedVegetablesLeft] = useState('');
+    const [selectedCheeseRight, setSelectedCheeseRight] = useState('');
+    const [selectedMeatRight, setSelectedMeatRight] = useState('');
+    const [selectedVegetablesRight, setSelectedVegetablesRight] = useState('');
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [darkMode, setDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-  const containerClass = darkMode ? 'half-and-half-container dark-mode' : 'half-and-half-container';
-  const buttonClass = darkMode ? 'close-Button dark-mode' : 'close-Button';
-
-  const handlePizzaLeftChange = (e) => {
-    const selectedPizzaName = e.target.value;
-    setSelectedPizzaLeft(selectedPizzaName);
-    const selectedPizzaItem = pizzaItems.find(item => item.name === selectedPizzaName);
-    if (selectedPizzaItem) {
-      setSelectedPizzaLeftImage(selectedPizzaItem.image);
-    }
-    calculateTotalPrice();
-  };
-
-  const handlePizzaRightChange = (e) => {
-    const selectedPizzaName = e.target.value;
-    setSelectedPizzaRight(selectedPizzaName);
-    const selectedPizzaItem = pizzaItems.find(item => item.name === selectedPizzaName);
-    if (selectedPizzaItem) {
-      setSelectedPizzaRightImage(selectedPizzaItem.image);
-    }
-    calculateTotalPrice();
-  };
-
-  const handleSizeChange = (e) => {
-    setSize(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleCheeseLeftChange = (e) => {
-    setSelectedCheeseLeft(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleVegetablesLeftChange = (e) => {
-    setSelectedVegetablesLeft(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleMeatLeftChange = (e) => {
-    setSelectedMeatLeft(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleCheeseRightChange = (e) => {
-    setSelectedCheeseRight(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleVegetablesRightChange = (e) => {
-    setSelectedVegetablesRight(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleMeatRightChange = (e) => {
-    setSelectedMeatRight(e.target.value);
-    calculateTotalPrice();
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Construct left half pizza object
-    const leftHalfPizza = {
-      name: selectedPizzaLeft,
-      cheese: selectedCheeseLeft,
-      meat: selectedMeatLeft,
-      vegetables: selectedVegetablesLeft,
+    const toggleDarkMode = () => {
+        setDarkMode(!darkMode);
     };
 
-    // Construct right half pizza object
-    const rightHalfPizza = {
-      name: selectedPizzaRight,
-      cheese: selectedCheeseRight,
-      meat: selectedMeatRight,
-      vegetables: selectedVegetablesRight,
+    const handlePizzaLeftChange = (e) => {
+        const selectedPizzaName = e.target.value;
+        setSelectedPizzaLeft(selectedPizzaName);
+        const selectedPizzaItem = pizzaItems.find(item => item.name === selectedPizzaName);
+        if (selectedPizzaItem) {
+            setSelectedPizzaLeftImage(selectedPizzaItem.image);
+        }
+        calculateTotalPrice();
     };
 
-    // Construct half-and-half pizza object
-    const halfAndHalfPizza = {
-      leftHalf: leftHalfPizza,
-      rightHalf: rightHalfPizza,
-      size: size,
-      quantity: quantity,
-      totalPrice: totalPrice,
+    const handlePizzaRightChange = (e) => {
+        const selectedPizzaName = e.target.value;
+        setSelectedPizzaRight(selectedPizzaName);
+        const selectedPizzaItem = pizzaItems.find(item => item.name === selectedPizzaName);
+        if (selectedPizzaItem) {
+            setSelectedPizzaRightImage(selectedPizzaItem.image);
+        }
+        calculateTotalPrice();
     };
 
-    // Get existing cart items from local storage or initialize as an empty array
-    const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const handleSizeChange = (e) => {
+        setSize(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Add the half-and-half pizza to the cart
-    existingCartItems.push(halfAndHalfPizza);
+    const handleQuantityChange = (e) => {
+        setQuantity(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Update local storage with the updated cart items
-    localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
+    const handleCheeseLeftChange = (e) => {
+        setSelectedCheeseLeft(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Close the form
-    onClose();
-  };
+    const handleVegetablesLeftChange = (e) => {
+        setSelectedVegetablesLeft(e.target.value);
+        calculateTotalPrice();
+    };
 
-  const pizzaItems = food_list.filter(item => item.category === 'Pizza');
+    const handleMeatLeftChange = (e) => {
+        setSelectedMeatLeft(e.target.value);
+        calculateTotalPrice();
+    };
 
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
+    const handleCheeseRightChange = (e) => {
+        setSelectedCheeseRight(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Calculate price for left half
-    const leftHalfPrice = calculateHalfPrice(selectedPizzaLeft, selectedCheeseLeft, selectedMeatLeft, selectedVegetablesLeft);
-    totalPrice += leftHalfPrice;
+    const handleVegetablesRightChange = (e) => {
+        setSelectedVegetablesRight(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Calculate price for right half
-    const rightHalfPrice = calculateHalfPrice(selectedPizzaRight, selectedCheeseRight, selectedMeatRight, selectedVegetablesRight);
-    totalPrice += rightHalfPrice;
+    const handleMeatRightChange = (e) => {
+        setSelectedMeatRight(e.target.value);
+        calculateTotalPrice();
+    };
 
-    // Add additional price for size
-    if (size === "Medium") {
-      totalPrice += 2; // Example: Increase price by $2 for medium size
-    } else if (size === "Large") {
-      totalPrice += 4; // Example: Increase price by $4 for large size
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    // Multiply by quantity
-    totalPrice *= quantity;
-    setTotalPrice(totalPrice);
-  };
+        const halfAndHalfPizza = {
+            name: `Half & Half Pizza: ${selectedPizzaLeft} and ${selectedPizzaRight}`,
+            leftHalf: {
+                name: selectedPizzaLeft,
+                cheese: selectedCheeseLeft,
+                meat: selectedMeatLeft,
+                vegetables: selectedVegetablesLeft,
+            },
+            rightHalf: {
+                name: selectedPizzaRight,
+                cheese: selectedCheeseRight,
+                meat: selectedMeatRight,
+                vegetables: selectedVegetablesRight,
+            },
+            size: size,
+            quantity: parseInt(quantity, 10),
+            price: totalPrice,
+            image: selectedPizzaLeftImage, // Use left image as representative
+        };
 
-  const calculateHalfPrice = (pizza, cheese, meat, vegetables) => {
-    let basePrice = 0;
+        addToCart(halfAndHalfPizza);
+        onClose();
+    };
 
-    // Find the selected pizza item from the food list
-    const selectedPizzaItem = pizzaItems.find(item => item.name === pizza);
-    if (selectedPizzaItem) {
-      basePrice = selectedPizzaItem.price;
-    }
+    const pizzaItems = food_list.filter(item => item.category === 'Pizza');
 
-    let halfPrice = basePrice;
+    const calculateTotalPrice = () => {
+        let totalPrice = 0;
 
-    // Add price for cheese
-    if (cheese === "mozzarella") {
-      halfPrice += 1; // Example: Increase price by $1 for mozzarella cheese
-    } else if (cheese === "cheddar") {
-      halfPrice += 1.5; // Example: Increase price by $1.5 for cheddar cheese
-    } else if (cheese === "parmesan") {
-      halfPrice += 2; // Example: Increase price by $2 for parmesan cheese
-    }
+        const leftHalfPrice = calculateHalfPrice(selectedPizzaLeft, selectedCheeseLeft, selectedMeatLeft, selectedVegetablesLeft);
+        totalPrice += leftHalfPrice;
 
-    // Add price for meat
-    if (meat === "pepperoni") {
-      halfPrice += 2; // Example: Increase price by $2 for pepperoni meat
-    } else if (meat === "sausage") {
-      halfPrice += 2.5; // Example: Increase price by $2.5 for sausage meat
-    } else if (meat === "ham") {
-      halfPrice += 3; // Example: Increase price by $3 for ham meat
-    }
+        const rightHalfPrice = calculateHalfPrice(selectedPizzaRight, selectedCheeseRight, selectedMeatRight, selectedVegetablesRight);
+        totalPrice += rightHalfPrice;
 
-    // Add price for vegetables
-    if (vegetables === "mushrooms") {
-      halfPrice += 1; // Example: Increase price by $1 for mushrooms
-    } else if (vegetables === "onions") {
-      halfPrice += 0.5; // Example: Increase price by $0.5 for onions
-    } else if (vegetables === "bellPeppers") {
-      halfPrice += 1.5; // Example: Increase price by $1.5 for bell peppers
-    }
-    return halfPrice;
-  };
+        if (size === "Medium") {
+            totalPrice += 2;
+        } else if (size === "Large") {
+            totalPrice += 4;
+        }
 
-  return (
-    <div className={`half-and-half-popup ${darkMode ? 'dark-mode' : ''}`}>
-      <div className="half-and-half-container">
-        <h1>Half and Half Pizza</h1>
-        <form onSubmit={handleSubmit}>
-          <button className="close-Button" onClick={onClose}>
-            <CloseIcon />
-          </button>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <label htmlFor="quantity">Quantity:</label>
-                  <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
-                </td>
-                <td>
-                  <label htmlFor="size">Size:</label>
-                  <select id="size" value={size} onChange={handleSizeChange}>
-                    <option value="">Select Size</option>
-                    <option value="Small">Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h2>First Half</h2><br />
-                  <img src={selectedPizzaLeftImage} alt="Selected Pizza Left" /><br /><br />
-                  <label htmlFor="pizza-left">Select Pizza:</label>
-                  <select id="pizza-left" value={selectedPizzaLeft} onChange={handlePizzaLeftChange}>
-                    <option value="">Select Pizza</option>
-                    {pizzaItems.map((item) => (
-                      item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
-                    ))}
-                  </select><br />
-                  {/* Add more select elements for cheese, meat, and vegetables for the first half */}
-                  <label htmlFor="cheese-left">Select Cheese:</label>
-                  <select id="cheese-left" value={selectedCheeseLeft} onChange={handleCheeseLeftChange}>
-                    <option value="">Select Cheese</option>
-                    <option value="mozzarella">Mozzarella</option>
-                    <option value="cheddar">Cheddar</option>
-                    <option value="parmesan">Parmesan</option>
-                  </select><br />
-                  <label htmlFor="meat-left">Select Meat:</label>
-                  <select id="meat-left" value={selectedMeatLeft} onChange={handleMeatLeftChange}>
-                    <option value="">Select Meat</option>
-                    <option value="pepperoni">Pepperoni</option>
-                    <option value="sausage">Sausage</option>
-                    <option value="ham">Ham</option>
-                  </select><br />
-                  <label htmlFor="vegetable-left">Select Vegetable:</label>
-                  <select id="vegetable-left" value={selectedVegetablesLeft} onChange={handleVegetablesLeftChange}>
-                    <option value="">Select Vegetable</option>
-                    <option value="mushrooms">Mushrooms</option>
-                    <option value="onions">Onions</option>
-                    <option value="bellPeppers">Bell Peppers</option>
-                  </select>
-                </td>
-                <td>
-                  <h2>Second Half</h2><br />
-                  <img src={selectedPizzaRightImage} alt="Selected Pizza" /><br /><br />
-                  <label htmlFor="pizza-right">Select Pizza:</label>
-                  <select id="pizza-right" value={selectedPizzaRight} onChange={handlePizzaRightChange}>
-                    <option value="">Select Pizza</option>
-                    {pizzaItems.map((item) => (
-                      item.category === 'Pizza' && <option key={item._id} value={item.name}>{item.name}</option>
-                    ))}
-                  </select><br />
-                  <label htmlFor="cheese-right">Select Cheese:</label>
-                  <select id="cheese-right" value={selectedCheeseRight} onChange={handleCheeseRightChange}>
-                    <option value="">Select Cheese</option>
-                    <option value="mozzarella">Mozzarella</option>
-                    <option value="cheddar">Cheddar</option>
-                    <option value="parmesan">Parmesan</option>
-                  </select><br />
-                  <label htmlFor="meat-right">Select Meat:</label>
-                  <select id="meat-right" value={selectedMeatRight} onChange={handleMeatRightChange}>
-                    <option value="">Select Meat</option>
-                    <option value="pepperoni">Pepperoni</option>
-                    <option value="sausage">Sausage</option>
-                    <option value="ham">Ham</option>
-                  </select><br />
-                  <label htmlFor="vegetable-right">Select Vegetable:</label>
-                  <select id="vegetable-right" value={selectedVegetablesRight} onChange={handleVegetablesRightChange}>
-                    <option value="">Select Vegetable</option>
-                    <option value="mushrooms">Mushrooms</option>
-                    <option value="onions">Onions</option>
-                    <option value="bellPeppers">Bell Peppers</option>
-                  </select>
-                  {/* Add more select elements for cheese, meat, and vegetables for the second half */}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div className='buttonsbtn'>
-            <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+        totalPrice *= quantity;
+        setTotalPrice(totalPrice);
+    };
+
+    const calculateHalfPrice = (pizza, cheese, meat, vegetables) => {
+        let basePrice = 0;
+
+        const selectedPizzaItem = pizzaItems.find(item => item.name === pizza);
+        if (selectedPizzaItem) {
+            basePrice = selectedPizzaItem.price;
+        }
+
+        let halfPrice = basePrice;
+
+        if (cheese === "mozzarella") {
+            halfPrice += 1;
+        } else if (cheese === "cheddar") {
+            halfPrice += 1.5;
+        } else if (cheese === "parmesan") {
+            halfPrice += 2;
+        }
+
+        if (meat === "pepperoni") {
+            halfPrice += 2;
+        } else if (meat === "sausage") {
+            halfPrice += 2.5;
+        } else if (meat === "ham") {
+            halfPrice += 3;
+        }
+
+        if (vegetables === "mushrooms") {
+            halfPrice += 1;
+        } else if (vegetables === "onions") {
+            halfPrice += 0.5;
+        } else if (vegetables === "bellPeppers") {
+            halfPrice += 1.5;
+        }
+        return halfPrice;
+    };
+
+    return (
+        <div className={`half-and-half-popup ${darkMode ? 'dark-mode' : ''}`}>
+            <div className="half-and-half-container">
+                <h1>Half and Half Pizza</h1>
+                <form onSubmit={handleSubmit}>
+                    <button className="close-Button" onClick={onClose}>
+                        <CloseIcon />
+                    </button>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label htmlFor="quantity">Quantity:</label>
+                                    <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} min="1" />
+                                </td>
+                                <td>
+                                    <label htmlFor="size">Size:</label>
+                                    <select id="size" value={size} onChange={handleSizeChange}>
+                                        <option value="">Select Size</option>
+                                        <option value="Small">Small</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Large">Large</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h2>First Half</h2><br />
+                                    <img src={selectedPizzaLeftImage} alt="Selected Pizza Left" /><br /><br />
+                                    <label htmlFor="pizza-left">Select Pizza:</label>
+                                    <select id="pizza-left" value={selectedPizzaLeft} onChange={handlePizzaLeftChange}>
+                                        <option value="">Select Pizza</option>
+                                        {pizzaItems.map((item) => (
+                                            <option key={item._id} value={item.name}>{item.name}</option>
+                                        ))}
+                                    </select><br />
+                                    <label htmlFor="cheese-left">Select Cheese:</label>
+                                    <select id="cheese-left" value={selectedCheeseLeft} onChange={handleCheeseLeftChange}>
+                                        <option value="">Select Cheese</option>
+                                        <option value="mozzarella">Mozzarella</option>
+                                        <option value="cheddar">Cheddar</option>
+                                        <option value="parmesan">Parmesan</option>
+                                    </select><br />
+                                    <label htmlFor="meat-left">Select Meat:</label>
+                                    <select id="meat-left" value={selectedMeatLeft} onChange={handleMeatLeftChange}>
+                                        <option value="">Select Meat</option>
+                                        <option value="pepperoni">Pepperoni</option>
+                                        <option value="sausage">Sausage</option>
+                                        <option value="ham">Ham</option>
+                                    </select><br />
+                                    <label htmlFor="vegetable-left">Select Vegetable:</label>
+                                    <select id="vegetable-left" value={selectedVegetablesLeft} onChange={handleVegetablesLeftChange}>
+                                        <option value="">Select Vegetable</option>
+                                        <option value="mushrooms">Mushrooms</option>
+                                        <option value="onions">Onions</option>
+                                        <option value="bellPeppers">Bell Peppers</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <h2>Second Half</h2><br />
+                                    <img src={selectedPizzaRightImage} alt="Selected Pizza Right" /><br /><br />
+                                    <label htmlFor="pizza-right">Select Pizza:</label>
+                                    <select id="pizza-right" value={selectedPizzaRight} onChange={handlePizzaRightChange}>
+                                        <option value="">Select Pizza</option>
+                                        {pizzaItems.map((item) => (
+                                            <option key={item._id} value={item.name}>{item.name}</option>
+                                        ))}
+                                    </select><br />
+                                    <label htmlFor="cheese-right">Select Cheese:</label>
+                                    <select id="cheese-right" value={selectedCheeseRight} onChange={handleCheeseRightChange}>
+                                        <option value="">Select Cheese</option>
+                                        <option value="mozzarella">Mozzarella</option>
+                                        <option value="cheddar">Cheddar</option>
+                                        <option value="parmesan">Parmesan</option>
+                                    </select><br />
+                                    <label htmlFor="meat-right">Select Meat:</label>
+                                    <select id="meat-right" value={selectedMeatRight} onChange={handleMeatRightChange}>
+                                        <option value="">Select Meat</option>
+                                        <option value="pepperoni">Pepperoni</option>
+                                        <option value="sausage">Sausage</option>
+                                        <option value="ham">Ham</option>
+                                    </select><br />
+                                    <label htmlFor="vegetable-right">Select Vegetable:</label>
+                                    <select id="vegetable-right" value={selectedVegetablesRight} onChange={handleVegetablesRightChange}>
+                                        <option value="">Select Vegetable</option>
+                                        <option value="mushrooms">Mushrooms</option>
+                                        <option value="onions">Onions</option>
+                                        <option value="bellPeppers">Bell Peppers</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className='buttonsbtn'>
+                        <p>Total Price: ${totalPrice.toFixed(2)}</p>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 export default HalfAndHalfPizza;
