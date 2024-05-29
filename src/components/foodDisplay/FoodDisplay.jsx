@@ -1,3 +1,4 @@
+// src/FoodDisplay.js
 import React, { useContext, useState } from 'react';
 import './FoodDisplay.css';
 import { StoreContext } from '../../context/StoreContextProvider';
@@ -18,6 +19,7 @@ const FoodDisplay = ({ category }) => {
     setSelectedPizza(item);
     setShowCustomizeForm(!showCustomizeForm);
   };
+
   const handleApplyPromotion = () => {
     // Set promotionApplied to true when the Apply Promotion button is clicked
     setPromotionApplied(true);

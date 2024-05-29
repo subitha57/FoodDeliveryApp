@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ToggleButton, ToggleButtonGroup, Modal, Backdrop, Fade, Button } from '@mui/material';
 import Delivery from './Delivery';
@@ -29,11 +28,13 @@ const OrderType = ({ onSelectOrderType, onClose, isAuthenticated }) => {
 
   const handleClose = () => {
     setOpen(false);
+    onClose(); // Notify the parent component that the modal is closed
   };
+
   if (!isAuthenticated) {
     return null; // Do not render anything if the user is not authenticated
   }
-  
+
   return (
     <Modal
       open={open}

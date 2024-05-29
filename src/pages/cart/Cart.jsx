@@ -12,28 +12,42 @@ import { useTranslation } from 'react-i18next';
 const Cart = ({ selectedOrderType }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { cartItems, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
+    const { cartItems, removeFromCart, getTotalCartAmount, applyOffer } = useContext(StoreContext);
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState('');
     const [couponError, setCouponError] = useState('');
     const [showPromotions, setShowPromotions] = useState(false);
+    const [discount, setDiscount] = useState(0);
 
     const handleViewPromotions = () => {
         setShowPromotions(true);
     };
 
-    const applyCoupon = () => {
+    const applyCoupon = (offer) => {
         if (couponCode === 'SAVE10') {
             setAppliedCoupon(couponCode);
+            setDiscount(10); // Assuming the discount is Rs. 10 for the SAVE10 coupon
             setCouponError('');
         } else {
             setAppliedCoupon('');
+            setDiscount(0);
             setCouponError('Invalid coupon code');
         }
     };
 
     const calculateItemTotal = (item) => {
         return item.price && item.quantity ? item.price * item.quantity : 0;
+    };
+
+    const calculateTotalWithDiscount = () => {
+        const totalAmount = getTotalCartAmount();
+        return totalAmount - discount;
+    };
+
+    const handleApplyPromotion = (offer) => {
+        const discountAmount = parseFloat(offer.discount.match(/[\d.]+/)[0]);
+        setDiscount(discountAmount);
+        setShowPromotions(false);
     };
 
     return (
@@ -80,13 +94,18 @@ const Cart = ({ selectedOrderType }) => {
                         </div>
                         <hr />
                         <div className='cart-total-details'>
+                            <p>{t("Discount")}</p>
+                            <p>Rs.{discount}</p>
+                        </div>
+                        <hr />
+                        <div className='cart-total-details'>
                             <p>{t("Delivery Fee")}</p>
                             <p>Rs.{getTotalCartAmount() === 0 ? 0 : 2}</p>
                         </div>
                         <hr />
                         <div className='cart-total-details'>
                             <b>{t("Total")}</b>
-                            <b>Rs.{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
+                            <b>Rs.{getTotalCartAmount() === 0 ? 0 : calculateTotalWithDiscount() + 2}</b>
                         </div>
                     </div>
                     <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
@@ -108,7 +127,7 @@ const Cart = ({ selectedOrderType }) => {
                             </FormGroup>
                         </div>
                         <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
-                        {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} />}
+                        {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} onApplyCoupon={handleApplyPromotion} />}
                         <div className="cart-promocode-input">
                             <input type="text" placeholder='Enter coupon code' value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
                             <button onClick={applyCoupon}>{t("Apply")}</button>
