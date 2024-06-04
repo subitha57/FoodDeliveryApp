@@ -34,9 +34,15 @@ function App() {
   const [selectedOrderType, setSelectedOrderType] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(true);
    const { food_list } = useContext(StoreContext);
+   const [selectedPizza, setSelectedPizza] = useState(null);
+   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const handleCloseHalfAndHalfPizza = () => {
+    setShowHalfAndHalfPizza(false);
+     // Close the form by updating state
+  };
   const handleClose = () => {
     // Define logic to handle closing
   };
@@ -95,6 +101,10 @@ function App() {
       ],
     },
   ];
+  const handleSelect = (newSelectedPizza) => {
+    // Update the selected pizza state or do any necessary actions
+    setSelectedPizza(newSelectedPizza);
+  };
 
   return (
      <>
@@ -115,9 +125,9 @@ function App() {
             element={<OrderType isAuthenticated={isAuthenticated} onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
           />
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
-          <Route path="/CustomizePizza" element={<CustomizeForm />} />
+          <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect}  />} />
           <Route path="/LoginPopup" element={<LoginPopup setShowLogin={setShowLogin} />} />
-          <Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza foodList={food_list} onClose={handleClose} />} />
+          <Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza onClose={handleCloseHalfAndHalfPizza} />} />
           <Route path="/ScrollButton" element={<ScrollButton />} />
           <Route path="/Delivery" element={<Delivery onContinue={handleContinue} />} />
           <Route path="/TakeOut" element={<TakeOut onContinue={handleContinue} />} />

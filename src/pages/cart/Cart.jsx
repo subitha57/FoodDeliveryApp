@@ -23,7 +23,8 @@ const Cart = ({ selectedOrderType }) => {
         setShowPromotions(true);
     };
 
-    const applyCoupon = (offer) => {
+    const applyCoupon = () => {
+        // Simulated coupon code validation
         if (couponCode === 'SAVE10') {
             setAppliedCoupon(couponCode);
             setDiscount(10); // Assuming the discount is Rs. 10 for the SAVE10 coupon
@@ -45,6 +46,7 @@ const Cart = ({ selectedOrderType }) => {
     };
 
     const handleApplyPromotion = (offer) => {
+        // Apply promotion logic here
         const discountAmount = parseFloat(offer.discount.match(/[\d.]+/)[0]);
         setDiscount(discountAmount);
         setShowPromotions(false);
@@ -119,7 +121,7 @@ const Cart = ({ selectedOrderType }) => {
                                     control={<Checkbox />}
                                     label={
                                         <span>
-                                            I agree to the{' '}
+                                            {t("I agree to the")}{' '}
                                             <Link to="/TermsAndCondition">{t("terms and conditions")}</Link>
                                         </span>
                                     }
@@ -129,7 +131,7 @@ const Cart = ({ selectedOrderType }) => {
                         <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
                         {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} onApplyCoupon={handleApplyPromotion} />}
                         <div className="cart-promocode-input">
-                            <input type="text" placeholder='Enter coupon code' value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
+                            <input type="text" placeholder={t('Enter coupon code')} value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
                             <button onClick={applyCoupon}>{t("Apply")}</button>
                             {couponError && <p className="coupon-error">{couponError}</p>}
                         </div>

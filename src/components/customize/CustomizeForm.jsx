@@ -1,379 +1,279 @@
-import React, { useContext, useState, useEffect } from 'react';
-import './CustomizeForm.css';
-import { useNavigate } from 'react-router-dom';
-import { StoreContext } from '../../context/StoreContextProvider';
-import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza';
+import React, { useState, useEffect, useContext } from 'react';
+import './CustomizeForm.css'; // Import CSS file for CustomizePizza styling
+import defaultImage from '../../assets/Plain.png'; // Import the default image
 import CloseIcon from '@mui/icons-material/Close';
-import ViewPromotion from '../ViewPromotions/ViewPromotions';
+import { useNavigate } from 'react-router-dom';
+import { StoreContext } from '../../context/StoreContextProvider'; // Adjust the path as needed
+import { FormControl, InputLabel, MenuItem, Select, TextField, Grid, Box, FormControlLabel, Checkbox } from '@mui/material';
 
-const CustomizeForm = ({ onClose, selectedPizza, foodList, isVisible, promotionApplied, darkTheme }) => {
-  const [selectedCheese, setSelectedCheese] = useState([]);
-  const [selectedMeat, setSelectedMeat] = useState([]);
-  const [selectedVegetables, setSelectedVegetables] = useState([]);
-  const [size, setSize] = useState('');
-  const navigate = useNavigate();
+const CustomizePizza = ({  onClose }) => {
+  const [size, setSize] = useState('Medium');
   const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0); // State to hold the total price
-  const { addToCart } = useContext(StoreContext);
-  const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
-  const [showHalfAndHalfPopup, setShowHalfAndHalfPopup] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [crust, setCrust] = useState('');
+  const [cheese, setCheese] = useState('');
+  const [sauce, setSauce] = useState('');
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedPizza,setSelectedPizza] = useState();
+  const navigate = useNavigate();
+
+  const {
+    products,
+    crusts,
+    sauces,
+    aCheeses,
+    pCheeses,
+    meats,
+    vegetables,
+    sizes,
+  } = useContext(StoreContext);
 
   useEffect(() => {
-    // Calculate the total price whenever there's a change in size or selectedPizza
-    setTotalPrice(
-      calculateTotalPrice(size, selectedPizza, selectedCheese, selectedMeat, selectedVegetables, quantity)
-    );
-  }, [size, selectedPizza, selectedCheese, selectedMeat, selectedVegetables, quantity]);
+    if (selectedPizza) {
+      setSize('Medium ');
+      // Set default ingredients
+      setSelectedIngredients([...selectedPizza.DefaultIncrediantIds, ...selectedPizza.FixIncrediantIds]);
+    }
+  }, [selectedPizza]);
 
   useEffect(() => {
-    // Reset form values whenever visibility changes
-    if (!isVisible) {
-      setSelectedCheese([]);
-      setSelectedMeat([]);
-      setSelectedVegetables([]);
-      setSize('');
-      setQuantity(1);
-      setTotalPrice(0);
-    }
-  }, [isVisible]);
-
-  const handleQuantityChange = (e) => {
-    setQuantity(parseInt(e.target.value)); // Convert value to integer
-  };
-
-  const handleCheckboxChange = (setter) => (e) => {
-    const { value, checked } = e.target;
-    setter((prevSelected) =>
-      checked ? [...prevSelected, value] : prevSelected.filter((item) => item !== value)
-    );
-  };
-
-  const handleSizeChange = (e) => {
-    setSize(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const customPizza = {
-      id: selectedPizza._id,
-      name: selectedPizza.name,
-      description: selectedPizza.description,
-      price: totalPrice, // Use the calculated total price
-      quantity: quantity,
-      size: size,
-      cheese: selectedCheese,
-      meat: selectedMeat,
-      vegetables: selectedVegetables,
-    };
-    const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    existingCartItems.push(customPizza);
-    localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
-    // Add the custom pizza to the cart
-    addToCart(customPizza);
-
-    onClose();
-  };
-
-  const handleHalfAndHalfClick = () => {
-    setShowHalfAndHalfPopup(true);
-  };
-
-  const calculateTotalPrice = (size, pizza, cheese, meat, vegetables, quantity) => {
-    let basePrice = pizza.price; // Base price of the pizza
-    let totalPrice = basePrice; // Initial total price is the base price
-
-    // Add additional price for size
-    if (size === 'Medium') {
-      totalPrice += 2; // Example: Increase price by $2 for medium size
-    } else if (size === 'Large') {
-      totalPrice += 4; // Example: Increase price by $4 for large size
-    }
-
-    // Add price for cheese
-    cheese.forEach((item) => {
-      if (item === 'mozzarella') {
-        totalPrice += 1; // Example: Increase price by $1 for mozzarella cheese
-      } else if (item === 'cheddar') {
-        totalPrice += 1.5; // Example: Increase price by $1.5 for cheddar cheese
-      } else if (item === 'parmesan') {
-        totalPrice += 2; // Example: Increase price by $2 for parmesan cheese
+    // Calculate price based on selected options
+    if (selectedPizza) {
+      let calculatedPrice = 0;
+      switch (size) {
+        case 'Small':
+          calculatedPrice = selectedPizza.SmallPrice;
+          break;
+        case 'Medium':
+          calculatedPrice = selectedPizza.MediumPrice;
+          break;
+        case 'Large':
+          calculatedPrice = selectedPizza.LargePrice;
+          break;
+        case 'Extra Large':
+          calculatedPrice = selectedPizza.ExtraLargePrice;
+          break;
+        default:
+          calculatedPrice = 0;
       }
-    });
-
-    // Add price for meat
-    meat.forEach((item) => {
-      if (item === 'pepperoni') {
-        totalPrice += 2; // Example: Increase price by $2 for pepperoni meat
-      } else if (item === 'sausage') {
-        totalPrice += 2.5; // Example: Increase price by $2.5 for sausage meat
-      } else if (item === 'ham') {
-        totalPrice += 3; // Example: Increase price by $3 for ham meat
-      }
-    });
-
-    // Add price for vegetables
-    vegetables.forEach((item) => {
-      if (item === 'mushrooms') {
-        totalPrice += 1; // Example: Increase price by $1 for mushrooms
-      } else if (item === 'onions') {
-        totalPrice += 0.5; // Example: Increase price by $0.5 for onions
-      } else if (item === 'bellPeppers') {
-        totalPrice += 1.5; // Example: Increase price by $1.5 for bell peppers
-      }
-    });
-
-    // Multiply by quantity
-    totalPrice *= quantity;
-     // Apply promotion if promotionApplied is true
-     if (promotionApplied) {
-      // Apply 10% discount
-      totalPrice *= 0.9;
+      setPrice(calculatedPrice);
     }
-    return totalPrice;
+  }, [selectedPizza, size]);
+
+  const handleAddToCart = () => {
+    // Add to cart logic
+    console.log('Pizza added to cart:', {
+      selectedPizza,
+      size,
+      quantity,
+      crust,
+      cheese,
+      sauce,
+      selectedIngredients,
+      price
+    });
   };
 
-  if (showHalfAndHalfPizza) {
-    return <HalfAndHalfPizza onClose={onClose} selectedPizza={selectedPizza} />;
+  const handleHalfButton = () => {
+    navigate("/HalfAndHalfPizza");
   }
+
+  const handleIngredientChange = (id) => {
+    setSelectedIngredients((prevIngredients) =>
+      prevIngredients.includes(id)
+        ? prevIngredients.filter((ingredientId) => ingredientId !== id)
+        : [...prevIngredients, id]
+    );
+  };
+
   return (
-    <div className={`customize-container ${darkTheme ? 'dark-theme' : 'light-theme'} ${isVisible ? 'show' : ''}`}>
-      <div className='container'>
-        <div className="heading-container">
-          <h2>Customize Your Pizza</h2>
-        </div>
+    <div className='customize-container'>
+      <button className="close-button" onClick={onClose}>
+        <CloseIcon />
+      </button>
+      <h2>Customize Pizza</h2><br />
 
-        <div className='row'>
-          <div className='col-6'>
-            <div className="form-container">
-
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="size">Size:</label>
-                  <select id="size" value={size} onChange={handleSizeChange}>
-                    <option value="">Select Size</option>
-                    <option value="Small">Small (Serving size 1-2 person)</option>
-                    <option value="Medium">Medium (Serving size 2-3 person)</option>
-                    <option value="Large">Large (Serving size 3-4 person)</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="quantity">Quantity:</label>
-                  <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} />
-                </div>
-                <div className="form-group">
-                  <label>Cheese:</label>
-                  <div className="checkbox-group">
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="mozzarella"
-                        checked={selectedCheese.includes('mozzarella')}
-                        onChange={handleCheckboxChange(setSelectedCheese)}
-                      />
-                      Mozzarella
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="cheddar"
-                        checked={selectedCheese.includes('cheddar')}
-                        onChange={handleCheckboxChange(setSelectedCheese)}
-                      />
-                      Cheddar
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="parmesan"
-                        checked={selectedCheese.includes('parmesan')}
-                        onChange={handleCheckboxChange(setSelectedCheese)}
-                      />
-                      Parmesan
-                    </label>
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="form-group">
-                  <label>Meat:</label>
-                  <div className="checkbox-group">
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="pepperoni"
-                        checked={selectedMeat.includes('pepperoni')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Curry Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Buffalo Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Malai Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Achari Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Tandoori BB
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Grilled Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Pepperoni
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Bacon
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="ham"
-                        checked={selectedMeat.includes('ham')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                      Ham
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Tandoori Chicken
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Beef
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Italian Sausage
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="sausage"
-                        checked={selectedMeat.includes('sausage')}
-                        onChange={handleCheckboxChange(setSelectedMeat)}
-                      />
-                     Salami
-                    </label>
-                  </div>
-                </div>
-                <hr className="divider" />
-                <div className="form-group">
-                  <label>Vegetables:</label>
-                  <div className="checkbox-group">
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="mushrooms"
-                        checked={selectedVegetables.includes('mushrooms')}
-                        onChange={handleCheckboxChange(setSelectedVegetables)}
-                      />
-                      Mushrooms
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="onions"
-                        checked={selectedVegetables.includes('onions')}
-                        onChange={handleCheckboxChange(setSelectedVegetables)}
-                      />
-                      Onions
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value="bellPeppers"
-                        checked={selectedVegetables.includes('bellPeppers')}
-                        onChange={handleCheckboxChange(setSelectedVegetables)}
-                      />
-                      Bell Peppers
-                    </label>
-                  </div>
-                </div><br />
-                <div className="price">
-                  <p>Total Price: ${totalPrice.toFixed(2)}</p> {/* Display the total price */}
-                  <button type="submit">Add to Cart</button>
-                </div>
-              </form>
-            </div>
+      <div className="customize-pizza-container">
+        <div className="pizza-details">
+          <div className="pizza-image">
+            {selectedPizza && <h3>{selectedPizza.Name}</h3>}
+            <img src={selectedPizza ? selectedPizza.Image || defaultImage : defaultImage} alt={selectedPizza ? selectedPizza.Name : 'Default Pizza'} />
           </div>
-          <div className='col-6'>
-            <div className="image-container">
-              <button className="close-button" onClick={onClose}>
-                <CloseIcon style={{ color: 'black' }} />
-              </button>
-              <img src={selectedPizza.image} alt={selectedPizza.name} />
-              <div className='halfbutton'>
-                <button onClick={handleHalfAndHalfClick} className="half-half-btn">
-                  Make it half and half Pizza
-                </button>
-              </div>
-              <hr className="divider" />
-            </div>
-            {showHalfAndHalfPopup && <HalfAndHalfPizza onClose={() => setShowHalfAndHalfPopup(false)} />}
-          </div>
+          <button onClick={handleHalfButton}>Make it half and half pizza</button>
         </div>
+        <div className="customization-options">
+          <FormControl fullWidth>
+            <InputLabel>Select Pizza</InputLabel>
+            <Select
+              value={selectedPizza ? selectedPizza.Id : ''}
+              onChange={(e) => {
+                const pizzaId = e.target.value;
+                const pizza = products.find(p => p.Id === parseInt(pizzaId));
+                setSelectedPizza(pizza);
+                // Since we no longer have setSelectedPizza here, this code would need modification.
+              }}
+            >
+              <MenuItem value="">Select Pizza</MenuItem>
+              {products.filter(p => p.CategoryName === "The Feisty One" || p.CategoryName === "The Classics").map(pizza => (
+                <MenuItem key={pizza.Id} value={pizza.Id}>
+                  {pizza.Name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="size">Size:</InputLabel>
+            <Select
+              id="size"
+              value={size}
+              onChange={(e) => setSize(e.target.value)}
+            >
+            
+            <MenuItem value="Small">Small (Serving size (1-2) Person)</MenuItem>
+              <MenuItem value="Medium">Medium (Serving size (2-3) Person)</MenuItem>
+              <MenuItem value="Large">Large (Serving size (3-4) Person)</MenuItem>
+              <MenuItem value="Extra Large">Extra Large (Serving size (4-6) Person)</MenuItem>
+            </Select>
+
+          </FormControl>
+
+          <TextField
+            fullWidth
+            id="quantity"
+            label="Quantity"
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+          />
+
+          <FormControl fullWidth>
+            <InputLabel htmlFor="crust">Crust:</InputLabel>
+            <Select
+              id="crust"
+              value={crust}
+              onChange={(e) => setCrust(e.target.value)}
+            >
+              {crusts.map(option => (
+                <MenuItem key={option.Id} value={option.Name}>
+                  {option.Name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="cheese">Cheese:</InputLabel>
+                <Select
+                  id="cheese"
+                  value={cheese}
+                  onChange={(e) => setCheese(e.target.value)}
+                >
+                  <MenuItem value="None">None</MenuItem>
+                  <MenuItem value="Light">Light</MenuItem>
+                  <MenuItem value="Regular">Regular</MenuItem>
+                  <MenuItem value="Double">Double</MenuItem>
+                  <MenuItem value="Triple">Triple</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="sauce">Sauce:</InputLabel>
+                <Select
+                  id="sauce"
+                  value={sauce}
+                  onChange={(e) => setSauce(e.target.value)}
+                >
+                  {sauces.map(option => (
+                    <MenuItem key={option.Id} value={option.Name}>
+                      {option.Name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
+      <hr />
+      <div className="ingredient-lists">
+        <div className="meat-options">
+          <h3>Meat Options:</h3>
+          <Grid container spacing={2}>
+            {meats.map(option => (
+              <Grid item xs={6} sm={3} key={option.Id}>
+                <Box boxShadow={3} borderRadius={2}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id={`meat-${option.Id}`}
+                        name="meat"
+                        checked={selectedIngredients.includes(option.Id)}
+                        onChange={() => handleIngredientChange(option.Id)}
+                      />
+                    }
+                    label={option.Name}
+                  />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+        <hr />
+        <div className="veggie-options">
+          <h3>Veggie Options:</h3>
+          <Grid container spacing={2}>
+            {vegetables.map(option => (
+              <Grid item xs={6} sm={3} key={option.Id}>
+                <Box boxShadow={3} borderRadius={2}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id={`veggie-${option.Id}`}
+                        name="veggie"
+                        checked={selectedIngredients.includes(option.Id)}
+                        onChange={() => handleIngredientChange(option.Id)}
+                      />
+                    }
+                    label={option.Name}
+                  />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+        <hr />
+        <div className="cheese-options">
+          <h3>Cheese Options:</h3>
+          <Grid container spacing={2}>
+            {aCheeses.concat(pCheeses).map(option => (
+              <Grid item xs={6} sm={3} key={option.Id}>
+                <Box boxShadow={3} borderRadius={2}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id={`cheese-${option.Id}`}
+                        name="cheese"
+                        checked={selectedIngredients.includes(option.Id)}
+                        onChange={() => handleIngredientChange(option.Id)}
+                      />
+                    }
+                    label={option.Name}
+                  />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      </div>
+      <div className="price-container">
+        <p>Price: ${price.toFixed(2)}</p>
+        <button onClick={handleAddToCart}>Add to Cart</button>
       </div>
     </div>
   );
-};
+}
 
-export default CustomizeForm;
+export default CustomizePizza;

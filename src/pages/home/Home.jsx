@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../../components/header/Header'
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu'
 import FoodDisplay from '../../components/foodDisplay/FoodDisplay'
@@ -7,9 +7,12 @@ import Location from '../location/Location';
 import OrderType from '../../components/Order Type/OrderType'
 import ScrollButton from '../../ScrollButton'
 
+
 const Home = () => {
   const [category, setCategory] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState('');
+  const [foodList, setFoodList] = useState([]);
+
   const handleSelectOrderType = (orderType) => {
     setSelectedOrderType(orderType);
     // Additional logic related to order type selection can go here
@@ -18,8 +21,12 @@ const Home = () => {
   return (
     <div >
       <Header />
-      <ExploreMenu category={category} setCategory={setCategory} />
-      <FoodDisplay category={category} />
+      <ExploreMenu 
+                category={category} 
+                setCategory={setCategory} 
+               
+            />
+            <FoodDisplay category={category} foodList={foodList} />
       <OrderType onSelectOrderType={handleSelectOrderType} userLocation={""} />
       <AppDownload /><br />
       <Location />

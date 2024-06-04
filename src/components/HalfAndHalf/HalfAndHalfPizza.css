@@ -1,11 +1,24 @@
-.half-and-half-container {
+.half-and-half-container1 {
   margin: 20px;
   border: 2px solid black;
   /* Border style */
   padding: 20px;
   margin-top: 5%;
 }
-
+.size-quantity-crust {
+  display: flex;
+  justify-content: space-between;
+}
+.right-half-container{
+  margin-left: 40px;
+}
+.close-icon{
+  margin-left: 90%;
+}
+.input-container {
+  flex: 1;
+  margin-right: 10px; /* Adjust margin as needed */
+}
 h1 {
   text-align: center;
 }

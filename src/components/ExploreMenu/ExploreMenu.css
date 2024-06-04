@@ -11,26 +11,29 @@
 
 .explore-menu-text {
     max-width: 60%;
-    columns: #808080;
+    color: black;
 }
 
 .explore-menu-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr); /* 8 columns */
+    gap: 5px; /* Equal gap between items */
     text-align: center;
-    margin: 20px 0px;
-    overflow-x: scroll;
+    margin: 10px 0px;
+    overflow: hidden; /* Hide overflow if necessary */
+    justify-items: center; /* Center items horizontally */
 }
 
-.explore-menu-list::-webkit-scrollbar {
-    display: none;
+.explore-menu-list-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px; /* Space out the rows */
 }
 
 .explore-menu-list-item img {
     width: 7.0vw;
-    min-width: 70px;
+    min-width: 10px;
     cursor: pointer;
     border-radius: 50%;
     transition: 0.2s;
@@ -55,31 +58,26 @@
     padding: 2px;
 }
 
-@media (max-width:750px) {
+@media (max-width: 750px) {
     .explore-menu-text {
         max-width: 100%;
         font-size: 14px;
     }
+    .explore-menu-list {
+        grid-template-columns: repeat(4, 1fr); /* Adjust for smaller screens */
+    }
 }
 
 .dark-text {
-    color: white;
-    /* Set text color to white for dark theme */
-}
-
-.explore-menu-text {
-    color: black;
-    /* Set text color to black for light theme */
+    color: white; /* Set text color to white for dark theme */
 }
 
 .dark-theme .explore-menu-text {
-    color: white;
-    /* Change text color to white in dark mode */
+    color: white; /* Change text color to white in dark mode */
 }
 
-.dark-theme .explore-menu-list {
-    color: white;
-    /* Change text color to white in dark mode */
+.dark-theme .explore-menu-list-item p {
+    color: white; /* Change text color to white in dark mode */
 }
 
 .dark-theme .circle {
