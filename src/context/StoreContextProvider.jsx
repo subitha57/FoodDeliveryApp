@@ -4,6 +4,7 @@ import axios from 'axios';
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
+  const [cart, setCart] = useState([]);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
   const [crusts, setCrusts] = useState([]);
@@ -18,7 +19,7 @@ const StoreContextProvider = (props) => {
   const [category, setCategory] = useState('All');
   const [sizes, setSizes] = useState([]);
   const [prices, setPrices] = useState([]);
-  const [Classics,setClassics]= useState([]);
+  const [Classics, setClassics] = useState([]);
 
   const fetchProducts = async () => {
     try {
@@ -52,64 +53,41 @@ const StoreContextProvider = (props) => {
     fetchProducts();
   }, []);
 
-  const addToCart = (item) => {
-    setCartItems((prev) => {
-      const existingItem = prev[item.id];
-      if (existingItem) {
-        return {
-          ...prev,
-          [item.id]: {
-            ...existingItem,
-            quantity: existingItem.quantity + item.quantity,
-          },
-        };
-      } else {
-        return {
-          ...prev,
-          [item.id]: { ...item, quantity: item.quantity },
-        };
-      }
-    });
+  const addToCart = (item, crust, sauce, aCheese, pCheese, toppings) => {
+    const customizedItem = {
+      ...item,
+      crust,
+      sauce,
+      aCheese,
+      pCheese,
+      toppings,
+    };
+    setCart((prevCart) => [...prevCart, customizedItem]);
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => {
-      const existingItem = prev[itemId];
-      if (existingItem.quantity > 1) {
-        return {
-          ...prev,
-          [itemId]: {
-            ...existingItem,
-            quantity: existingItem.quantity - 1,
-          },
-        };
-      } else {
-        const { [itemId]: _, ...rest } = prev;
-        return rest;
-      }
-    });
+    setCart((prevCart) => prevCart.filter((item, index) => index !== itemId));
   };
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
-    for (const itemId in cartItems) {
-      const item = cartItems[itemId];
-      totalAmount += item.price * item.quantity;
+    for (const item of cart) {
+      totalAmount += item.price;
     }
     return totalAmount;
   };
 
   const getTotalPriceOfCartItems = () => {
     let totalPrice = 0;
-    for (const itemId in cartItems) {
-      const item = cartItems[itemId];
-      totalPrice += item.price * item.quantity;
+    for (const item of cart) {
+      totalPrice += item.price;
     }
     return totalPrice;
   };
 
   const contextValue = {
     products,
+    cart,
     cartItems,
     setCartItems,
     addToCart,

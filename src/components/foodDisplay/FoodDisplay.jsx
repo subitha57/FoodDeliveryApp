@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const FoodDisplay = () => {
   const { t } = useTranslation();
-  const { feistyProducts, loading, error, getTotalPriceOfCartItems } = useContext(StoreContext);
+  const { feistyProducts, loading, error, getTotalPriceOfCartItems, cart  } = useContext(StoreContext);
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState(null); // State to store selected pizza
   const [promotionApplied, setPromotionApplied] = useState(false);
@@ -15,7 +15,7 @@ const FoodDisplay = () => {
 
   useEffect(() => {
     setTotalPrice(getTotalPriceOfCartItems());
-  }, [feistyProducts]);
+  }, [feistyProducts, cart]);
 
   const toggleCustomizeForm = (item) => {
     setSelectedPizza(item); // Update selected pizza state when toggling the form
@@ -49,7 +49,7 @@ const FoodDisplay = () => {
           </div>
         ))}
       </div>
-      <p>Total Price: Rs.{totalPrice}</p>
+     <p>Total Price: Rs.{totalPrice}</p>
       {showCustomizeForm && selectedPizza && (
         <CustomizeForm
           selectedPizza={selectedPizza}

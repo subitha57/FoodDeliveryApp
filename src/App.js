@@ -37,11 +37,18 @@ function App() {
    const [selectedPizza, setSelectedPizza] = useState(null);
    const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const navigate = useNavigate();
+  const [selectedPizzaName, setSelectedPizzaName]= useState("");
   const { t } = useTranslation();
 
+  const [isHalfAndHalfPizzaOpen, setIsHalfAndHalfPizzaOpen] = useState(false);
+
+  const handleOpenHalfAndHalfPizza = () => {
+    setIsHalfAndHalfPizzaOpen(false);
+  };
+
   const handleCloseHalfAndHalfPizza = () => {
-    setShowHalfAndHalfPizza(false);
-     // Close the form by updating state
+    console.log("Closing HalfAndHalfPizza");
+    setIsHalfAndHalfPizzaOpen(false);
   };
   const handleClose = () => {
     // Define logic to handle closing
@@ -117,6 +124,9 @@ function App() {
       </button>
       </div>
         <Navbar setShowLogin={setShowLogin} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        {isHalfAndHalfPizzaOpen && (
+          <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizzaName={selectedPizzaName}  />
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType}  darkTheme={darkTheme} />} />
@@ -127,7 +137,7 @@ function App() {
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
           <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect}  />} />
           <Route path="/LoginPopup" element={<LoginPopup setShowLogin={setShowLogin} />} />
-          <Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza onClose={handleCloseHalfAndHalfPizza} />} />
+          {/*<Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza />} />*/}
           <Route path="/ScrollButton" element={<ScrollButton />} />
           <Route path="/Delivery" element={<Delivery onContinue={handleContinue} />} />
           <Route path="/TakeOut" element={<TakeOut onContinue={handleContinue} />} />

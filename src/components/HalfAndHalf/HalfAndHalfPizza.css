@@ -109,15 +109,12 @@ label {
 .half-and-half-container {
   padding: 20px;
 }
+@media only screen and (max-width: 768px) {
+  .half-and-half-container1 {
+    display: flex;
+    flex-direction: column;
+    /* Adjust other styles as needed */
+  }
 
-.close-Button {
-  position: absolute;
-  /* Set the close button position to absolute */
-  top: 32px;
-  /* Adjust top distance */
-  right: 25px;
-  /* Adjust right distance */
-  border: none;
-  /* Remove border */
-  cursor: pointer;
+  /* Adjust other styles for smaller screens */
 }

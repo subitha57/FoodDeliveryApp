@@ -12,13 +12,14 @@ import { useTranslation } from 'react-i18next';
 const Cart = ({ selectedOrderType }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { cartItems, removeFromCart, getTotalCartAmount, applyOffer } = useContext(StoreContext);
+    const { cart, removeFromCart, getTotalPriceOfCartItems, applyOffer } = useContext(StoreContext);
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState('');
     const [couponError, setCouponError] = useState('');
     const [showPromotions, setShowPromotions] = useState(false);
     const [discount, setDiscount] = useState(0);
 
+    console.log("cart items", cart)
     const handleViewPromotions = () => {
         setShowPromotions(true);
     };
@@ -37,12 +38,23 @@ const Cart = ({ selectedOrderType }) => {
     };
 
     const calculateItemTotal = (item) => {
-        return item.price && item.quantity ? item.price * item.quantity : 0;
+        if (item.type === 'pizza') {
+            // Calculate total for regular pizza
+            return item.price && item.quantity ? item.price * item.quantity : 0;
+        } else if (item.type === 'halfAndHalfPizza') {
+            // Calculate total for half and half pizza
+            const totalPriceLeft = item.leftPizza.price * item.quantity;
+            const totalPriceRight = item.rightPizza.price * item.quantity;
+            return totalPriceLeft + totalPriceRight;
+        } else {
+            // Handle other types of items here
+            return 0;
+        }
     };
 
     const calculateTotalWithDiscount = () => {
-        const totalAmount = getTotalCartAmount();
-        return totalAmount - discount;
+        const totalPrice = getTotalPriceOfCartItems();
+        return totalPrice - discount;
     };
 
     const handleApplyPromotion = (offer) => {
@@ -51,7 +63,7 @@ const Cart = ({ selectedOrderType }) => {
         setDiscount(discountAmount);
         setShowPromotions(false);
     };
-
+    const total = cart.reduce((total, item) => total + item.price * item.quantity, 0) - discount + (cart.length === 0 ? 0 : 2);
     return (
         <div className="cart">
             <div className="cart-items">
@@ -68,16 +80,28 @@ const Cart = ({ selectedOrderType }) => {
                 </div>
                 <br />
                 <hr />
-                {Object.keys(cartItems).map((itemId) => {
-                    const item = cartItems[itemId];
+                {cart && cart.map((item, itemId) => {
                     return (
                         <div key={itemId}>
                             <div className='cart-items-title cart-items-item'>
                                 <img src={item.image} alt={item.name} />
-                                <p>{item.name}</p>
-                                <p>Rs.{item.price}</p>
+                                <div className="cart-item-details">
+                                    <p>{item.name}</p>
+                                    {item.size && <p>{t("Size")}: {item.size}</p>}
+                                    {item.crust && <p>{t("Crust")}: {item.crust}</p>}
+                                    {item.sauce && <p>{t("Sauce")}: {item.sauce}</p>}
+                                    {item.cheese && <p>{t("Cheese")}: {item.cheese}</p>}
+                                    {item.ingredients && (
+                                        <>
+                                            <p>{t("Ingredients")}:</p>
+                                            <p>{t("Left")}: {item.ingredients.left.join(', ')}</p>
+                                            <p>{t("Right")}: {item.ingredients.right.join(', ')}</p>
+                                        </>
+                                    )}
+                                </div>
+                                <p>$.{item.price}</p>
                                 <p>{item.quantity}</p>
-                                <p>Rs.{calculateItemTotal(item)}</p>
+                                <p> Rs.{(item.price * item.quantity).toFixed(2)}</p>
                                 <p onClick={() => removeFromCart(itemId)} className='cross'>X</p>
                             </div>
                             <hr />
@@ -92,7 +116,7 @@ const Cart = ({ selectedOrderType }) => {
                     <div>
                         <div className='cart-total-details'>
                             <p>{t("SubTotal")}</p>
-                            <p>Rs.{getTotalCartAmount()}</p>
+                            Rs. {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
                         </div>
                         <hr />
                         <div className='cart-total-details'>
@@ -102,12 +126,12 @@ const Cart = ({ selectedOrderType }) => {
                         <hr />
                         <div className='cart-total-details'>
                             <p>{t("Delivery Fee")}</p>
-                            <p>Rs.{getTotalCartAmount() === 0 ? 0 : 2}</p>
+                            <p>Rs.{getTotalPriceOfCartItems() === 0 ? 0 : 2}</p>
                         </div>
                         <hr />
                         <div className='cart-total-details'>
                             <b>{t("Total")}</b>
-                            <b>Rs.{getTotalCartAmount() === 0 ? 0 : calculateTotalWithDiscount() + 2}</b>
+                            <b>Rs.{total.toFixed(2)}</b>
                         </div>
                     </div>
                     <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
