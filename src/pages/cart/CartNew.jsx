@@ -1,15 +1,13 @@
 import React, { useContext, useState } from 'react';
-import './Cart.css';
+import './CartNew.css';
 import { StoreContext } from '../../context/StoreContextProvider';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import PlaceOrder from '../placeOrder/PlaceOrder';
 import ViewPromotions from '../../components/ViewPromotions/ViewPromotions';
 import { useTranslation } from 'react-i18next';
 
-const Cart = () => {
+const CartNew = ({ selectedOrderType }) => {
+    console.log("type", selectedOrderType)
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cart, removeFromCart, getTotalPriceOfCartItems, applyOffer } = useContext(StoreContext);
@@ -18,10 +16,19 @@ const Cart = () => {
     const [couponError, setCouponError] = useState('');
     const [showPromotions, setShowPromotions] = useState(false);
     const [discount, setDiscount] = useState(0);
+    const [showModal, setShowModal] = useState(false);
 
     console.log("cart items", cart)
     const handleViewPromotions = () => {
         setShowPromotions(true);
+    };
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    // Function to close the modal
+    const closeModal = () => {
+        setShowModal(false);
     };
 
     const applyCoupon = () => {
@@ -64,19 +71,19 @@ const Cart = () => {
         setShowPromotions(false);
     };
     const total = cart.reduce((total, item) => total + item.price * item.quantity, 0) - discount + (cart.length === 0 ? 0 : 2);
+
     return (
-        <div className="cart">
+        <div className="cart-container" style={{ border: '3px solid black', padding: '10px' }}>
+            <h2 style={{ textAlign: 'center' }}>My Orders</h2><br />
             <div className="cart-items">
                 <div className="selected-order-type">
-                    <p>{t("Selected Order Type:")}<span className="order-type"></span></p>
+                    <p>{t("Selected Order Type:")}<span className="order-type">{selectedOrderType}</span></p>
                 </div><br /><br />
                 <div className="cart-items-title">
-                    <p>{t("Items")}</p>
-                    <p>{t("Title")}</p>
-                    <p>{t("Price")}</p>
-                    <p>{t("Quantity")}</p>
-                    <p>{t("Total")}</p>
-                    <p>{t("Remove")}</p>
+                    <p style={{ flex: 3 }}>{t("Title")}</p>
+                    <p style={{ flex: 1, textAlign: 'center' }}>{t("Quantity")}</p>
+                    <p style={{ flex: 1, textAlign: 'right' }}>{t("Total")}</p>
+                    <p style={{ flex: 1, textAlign: 'right' }}>{t("Remove")}</p>
                 </div>
                 <br />
                 <hr />
@@ -84,25 +91,16 @@ const Cart = () => {
                     return (
                         <div key={itemId}>
                             <div className='cart-items-title cart-items-item'>
-                                <img src={item.image} alt={item.name} />
-                                <div className="cart-item-details">
+                                <div className="cart-item-details" style={{ flex: 3 }}>
                                     <p>{item.name}</p>
                                     {item.size && <p>{t("Size")}: {item.size}</p>}
                                     {item.crust && <p>{t("Crust")}: {item.crust}</p>}
                                     {item.sauce && <p>{t("Sauce")}: {item.sauce}</p>}
                                     {item.cheese && <p>{t("Cheese")}: {item.cheese}</p>}
-                                    {item.ingredients && (
-                                        <>
-                                            <p>{t("Ingredients")}:</p>
-                                            <p>{t("Left")}: {item.ingredients.left.join(', ')}</p>
-                                            <p>{t("Right")}: {item.ingredients.right.join(', ')}</p>
-                                        </>
-                                    )} 
                                 </div>
-                                <p>$.{item.price.toFixed(2)}</p>
-                                <p>{item.quantity}</p>
-                                <p> Rs.{(item.price * item.quantity).toFixed(2)}</p>
-                                <p onClick={() => removeFromCart(itemId)} className='cross'>X</p>
+                                <p style={{ flex: 1, marginRight: '10px', textAlign: 'center' }}>No:{item.quantity}</p>
+                                <p style={{ flex: 1, textAlign: 'right' }}> $.{(item.price * item.quantity).toFixed(2)}</p>
+                                <p style={{ flex: 1, textAlign: 'right' }} onClick={() => removeFromCart(itemId)} className='cross'>X</p>
                             </div>
                             <hr />
                         </div>
@@ -116,41 +114,22 @@ const Cart = () => {
                     <div>
                         <div className='cart-total-details'>
                             <p>{t("SubTotal")}</p>
-                            Rs. {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
+                          $. {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
                         </div>
                         <hr />
                         <div className='cart-total-details'>
                             <p>{t("Discount")}</p>
-                            <p>Rs.{discount}</p>
+                            <p>$.{discount}</p>
                         </div>
                         <hr />
                         <div className='cart-total-details'>
                             <p>{t("Delivery Fee")}</p>
-                            <p>Rs.{getTotalPriceOfCartItems() === 0 ? 0 : 2}</p>
+                            <p>$.{getTotalPriceOfCartItems() === 0 ? 0 : 2}</p>
                         </div>
                         <hr />
                         <div className='cart-total-details'>
-                            <b>{t("Total")}</b>
-                            <b>Rs.{total.toFixed(2)}</b>
-                        </div>
-                    </div>
-                    <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
-                </div>
-
-                <div className="cart-promocode">
-                    <div>
-                        <div className="terms-and-conditions">
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={<Checkbox />}
-                                    label={
-                                        <span>
-                                            {t("I agree to the")}{' '}
-                                            <Link to="/TermsAndCondition">{t("terms and conditions")}</Link>
-                                        </span>
-                                    }
-                                />
-                            </FormGroup>
+                            <b>{t("Total")}</b> 
+                            <b>$.{total.toFixed(2)}</b>
                         </div>
                         <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
                         {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} onApplyCoupon={handleApplyPromotion} />}
@@ -160,10 +139,13 @@ const Cart = () => {
                             {couponError && <p className="coupon-error">{couponError}</p>}
                         </div>
                     </div>
+                    <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
+                    {/* Render PlaceOrder component inside a modal */}
+                    
                 </div>
             </div>
         </div>
     );
 };
 
-export default Cart;
+export default CartNew;

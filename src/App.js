@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { StoreContext } from './context/StoreContextProvider.jsx';
 import './App.css';
 import Navbar from './components/navbar/Navbar.jsx';
@@ -26,7 +26,9 @@ import { ThemeProvider } from './components/Theme/ThemeContext.js';
 import DarkMode from './components/Theme/DarkMode.jsx';
 import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector.js';
-
+import CartNew from './pages/cart/CartNew.jsx'; 
+import ExploreMenu from './components/ExploreMenu/ExploreMenu.jsx';
+import FoodDisplay from './components/foodDisplay/FoodDisplay.jsx';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -39,12 +41,11 @@ function App() {
   const navigate = useNavigate();
   const [selectedPizzaName, setSelectedPizzaName]= useState("");
   const { t } = useTranslation();
+  const [showTakeOut, setShowTakeOut] = useState(false);
+
 
   const [isHalfAndHalfPizzaOpen, setIsHalfAndHalfPizzaOpen] = useState(false);
 
-  const handleOpenHalfAndHalfPizza = () => {
-    setIsHalfAndHalfPizzaOpen(false);
-  };
 
   const handleCloseHalfAndHalfPizza = () => {
     console.log("Closing HalfAndHalfPizza");
@@ -80,8 +81,6 @@ function App() {
     console.log('Closing OrderType popup');
   };
 
-  console.log('Selected Order Type in App:', selectedOrderType);
-
   const [darkTheme, setDarkTheme] = useState(false);
 
   const toggleTheme = () => {
@@ -112,6 +111,26 @@ function App() {
     // Update the selected pizza state or do any necessary actions
     setSelectedPizza(newSelectedPizza);
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModalRef = useRef(null);
+
+  const openModal = () => {
+   
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+   
+    setIsModalOpen(false);
+  };
+  closeModalRef.current = closeModal;
+
+
+
+  // Function to handle selecting a pizza
+  const handlePizzaSelection = (pizza) => {
+    setSelectedPizza(pizza);
+  };
 
   return (
      <>
@@ -125,24 +144,29 @@ function App() {
       </div>
         <Navbar setShowLogin={setShowLogin} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         {isHalfAndHalfPizzaOpen && (
-          <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizzaName={selectedPizzaName}  />
+          <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizza={selectedPizza} selectedPizzaName={selectedPizzaName}  />
         )}
+        {isModalOpen && <ProceedCheckout closeModal={closeModalRef.current} darkTheme={true} />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType}  darkTheme={darkTheme} />} />
+          <Route path='/CartNew' element={<CartNew selectedOrderType={selectedOrderType}/>}/>
           <Route
             path="/OrderType"
-            element={<OrderType isAuthenticated={isAuthenticated} onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
+            element={<OrderType isAuthenticated={isAuthenticated}  onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
           />
+          <Route path='/' element={<ExploreMenu/>}/>
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
-          <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect}  />} />
+          <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect} onSelectPizza={handlePizzaSelection} />} />
           <Route path="/LoginPopup" element={<LoginPopup setShowLogin={setShowLogin} />} />
+          <Route path="/FoodDisplay" element={<FoodDisplay/>}/>
+          <Route path="/ExploreMenu" element={<ExploreMenu/>}/>
           {/*<Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza />} />*/}
           <Route path="/ScrollButton" element={<ScrollButton />} />
           <Route path="/Delivery" element={<Delivery onContinue={handleContinue} />} />
-          <Route path="/TakeOut" element={<TakeOut onContinue={handleContinue} />} />
+          <Route path="/TakeOut" element={<TakeOut  />} />
           <Route path="/DineIn" element={<DineIn />} />
-          <Route path="/ProceedCheckout" element={<ProceedCheckout />} />
+          <Route path="/ProceedCheckout" element={<ProceedCheckout closeModal={closeModal} darkTheme={true}/>} />
           <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
           <Route path="/GeoLocation" element={<GeoLocation />} />
           <Route path="/PreviousOrder" element={<PreviousOrder pastOrders={pastOrders} />} />

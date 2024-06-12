@@ -1,15 +1,14 @@
+// TakeOut.jsx
 import React, { useState } from 'react';
 import { Button, Modal, Backdrop, Fade } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
 import './TakeOut.css'; // Import your CSS file
+import { useNavigate } from 'react-router-dom';
 
-const TakeOut = ({ onClose, closeOrderType }) => {
+const TakeOut = ({ onClose, onContinue }) => {
   const [pickupTime, setPickupTime] = useState('');
   const [open, setOpen] = useState(true);
-  const navigate = useNavigate();
-  const [orderTime, setOrderTime] = useState('');
-  const [orderDate, setOrderDate] = useState('');
+  const navigate=useNavigate();
 
   const handlePickupTimeChange = (e) => {
     setPickupTime(e.target.value);
@@ -20,18 +19,10 @@ const TakeOut = ({ onClose, closeOrderType }) => {
     onClose(); // Close the modal
   };
 
-  const handleOrderTimeChange = (e) => {
-    setOrderTime(e.target.value);
-  };
-
-  const handleOrderDateChange = (e) => {
-    setOrderDate(e.target.value);
-  };
-
   const handleContinue = () => {
-    handleClose();
-    closeOrderType(); // Close the modal
-    navigate('/'); // Navigate to the home page
+    onClose(); // Close the modal
+     // Call the onContinue function
+    navigate('/FoodDisplay')
   };
 
   return (
@@ -53,14 +44,6 @@ const TakeOut = ({ onClose, closeOrderType }) => {
           </div>
           <div className="modal-content">
             <h2>Take Out</h2><br />
-            <div className="form-group">
-              <label htmlFor="orderDate">Order Date:</label>
-              <input type="date" id="orderDate" value={orderDate} onChange={handleOrderDateChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="orderTime">Order Time:</label>
-              <input type="time" id="orderTime" value={orderTime} onChange={handleOrderTimeChange} />
-            </div>
             <div className="form-group">
               <label htmlFor="pickupTime">Pickup Time:</label>
               <input type="time" id="pickupTime" value={pickupTime} onChange={handlePickupTimeChange} />

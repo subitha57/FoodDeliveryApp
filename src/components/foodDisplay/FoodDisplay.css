@@ -3,7 +3,7 @@
 }
 
 .food-display h2 {
-  font-size: max(2vw, 24px);
+  font-size: max(2vw, 24px); 
   font-weight: 600;
   color: navy;
 }
@@ -14,13 +14,16 @@
   margin-top: 30px;
   gap: 30px;
   row-gap: 50px;
+  z-index: 0;
 }
 
 .food-item {
   position: relative;
   display: inline-block;
 }
-
+.food-display-container:hover .customize-button {
+  background-color: green;
+}
 .customize-button {
   position: absolute;
   top: 25%;
@@ -54,4 +57,22 @@
 .food-item-image {
   padding: 10px;
   /* Adjust padding as needed */
+}
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1 part for cart-container, 2 parts for food display */
+  gap: 20px; /* Adjust the gap as needed */
+  position: relative;
+}
+  .cart-container {
+    display: inline-block; /* or inline-flex */
+     margin-right: 2%;
+  margin-top: 15%;
+  position: sticky;
+  grid-column: 1;
+}
+
+.food-display-container {
+  grid-column: 2;/* Two-thirds of the screen */
+  padding-top: 0px; 
 }

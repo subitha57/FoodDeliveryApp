@@ -41,7 +41,7 @@ const Delivery = ({ onClose, closeOrderType }) => {
   const handleContinue = () => {
     handleClose(); // Close the modal
     closeOrderType();
-    navigate('/'); // Navigate to the home page
+    navigate('/FoodDisplay'); // Navigate to the home page
   };
 
   return (

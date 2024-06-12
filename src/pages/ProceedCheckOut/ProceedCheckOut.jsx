@@ -1,5 +1,4 @@
-// ProceedCheckOut.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProceedCheckOut.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
@@ -11,18 +10,19 @@ const ProceedCheckOut = ({ closeModal, darkTheme }) => {
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
 
-  // Function to handle form submission
+  useEffect(() => {
+    
+    console.log('Received closeModal prop:', closeModal); // Log the prop
+  }, [closeModal]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic for handling form submission (e.g., sending data to server)
-    // You can customize this part based on your application's requirements
     console.log({
       cardNumber,
       cardHolderName,
       expiryDate,
       cvv,
     });
-    // Reset form fields after submission
     setCardNumber('');
     setCardHolderName('');
     setExpiryDate('');

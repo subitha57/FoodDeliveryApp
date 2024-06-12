@@ -27,7 +27,7 @@ const FoodItem = ({ id, name, price, description, image, darkTheme, customizatio
     });
   };
 
-  const handleRemoveFromCart = () => {
+  const handleRemoveFromCart = () => {  
     removeFromCart(id);
   };
 
@@ -38,7 +38,7 @@ const FoodItem = ({ id, name, price, description, image, darkTheme, customizatio
     <div className='food-item'>
       <div className='food-item-image-container'>
         <img className='food-item-image' src={image || defaultPizzaImage} alt={name} />
-        {!isAddedToCart ? (
+       {/*  {!isAddedToCart ? (
           <img
             className='add'
             onClick={handleAddToCart}
@@ -49,10 +49,10 @@ const FoodItem = ({ id, name, price, description, image, darkTheme, customizatio
           <div className='food-item-counter'>
             <img onClick={handleRemoveFromCart} src={assets.remove_icon_red} alt="Remove from cart" />
             <p>{cartItem.quantity}</p>
-            <img onClick={handleAddToCart} src={assets.add_icon_green} alt="Add to cart" />
+           <img onClick={handleAddToCart} src={assets.add_icon_green} alt="Add to cart" />
           </div>
-        )}
-      </div>
+        )}*/}
+      </div> 
       <div className='food-item-info'>
         <div className='food-item-name-rating'>
           <p>{name}</p>

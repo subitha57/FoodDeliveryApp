@@ -53,6 +53,7 @@
 
 .ingredient-lists > div {
   flex-basis: 100%; /* Adjust width as needed */
+
 }
 
 .price-container {
@@ -73,6 +74,7 @@ hr {
   justify-content: space-between;
   align-items: center; /* Center the items vertically */
   margin-top: 2px;
+  background-color: white;
 }
 
 .half-dropdown {

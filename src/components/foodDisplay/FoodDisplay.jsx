@@ -4,6 +4,8 @@ import { StoreContext } from '../../context/StoreContextProvider';
 import FoodItem from '../foodItem/FoodItem';
 import CustomizeForm from '../customize/CustomizeForm';
 import { useTranslation } from 'react-i18next';
+import CartNew from '../../pages/cart/CartNew';
+import Cart from '../../pages/cart/Cart'
 
 const FoodDisplay = () => {
   const { t } = useTranslation();
@@ -30,41 +32,48 @@ const FoodDisplay = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className='food-display' id='food-display'>
-      <h2>{t("Top dishes near you")}</h2>
-      <div className='food-display-list'>
-        {feistyProducts.map((item) => (
-          <div className='food-item' key={item.Id}>
-            <FoodItem
-              key={item.Id}
-              id={item.Id}
-              name={item.Name}
-              description={item.Description}
-              price={item.price}
-              image={item.Image}
-            />
-            <button className='customize-button' onClick={() => toggleCustomizeForm(item)}>
-              {t("Customize Pizza")}
-            </button>
-          </div>
-        ))}
+    <div className='container'>
+      <div className='cart-container fixed-cart'>
+        <CartNew />
       </div>
-     <p>Total Price: Rs.{totalPrice}</p>
-      {showCustomizeForm && selectedPizza && (
-        <CustomizeForm
-          selectedPizza={selectedPizza}
-          foodList={feistyProducts}
-          onClose={() => setShowCustomizeForm(false)}
-          isVisible={showCustomizeForm}
-          promotionApplied={promotionApplied}
-          setSelectedPizza={setSelectedPizza} // Pass function to update selectedPizza
-        />
-      )}
-      {!promotionApplied && (
-        <button className="apply-promotion-button" onClick={handleApplyPromotion}>
-          {t("Apply Promotion")}
-        </button>
-      )}
+      <div className='food-display-container'>
+        <div className='food-display' id='food-display'>
+          <h2>{t("Top dishes near you")}</h2>
+          <div className='food-display-list'>
+            {feistyProducts.map((item) => (
+              <div className='food-item' key={item.Id}>
+                <FoodItem
+                  key={item.Id}
+                  id={item.Id} 
+                  name={item.Name}
+                  description={item.Description}
+                  price={item.price}
+                  image={item.Image}
+                />
+                <button className='customize-button' onClick={() => toggleCustomizeForm(item)}>
+                  {t("Customize Pizza")}
+                </button>
+              </div>
+            ))}
+          </div>
+          <p>Total Price: $.{totalPrice}</p>
+          {showCustomizeForm && selectedPizza && (
+            <CustomizeForm
+              selectedPizza={selectedPizza}
+              foodList={feistyProducts}
+              onClose={() => setShowCustomizeForm(false)}
+              isVisible={showCustomizeForm}
+              promotionApplied={promotionApplied}
+              setSelectedPizza={setSelectedPizza} // Pass function to update selectedPizza
+            />
+          )}
+          {!promotionApplied && (
+            <button className="apply-promotion-button" onClick={handleApplyPromotion}>
+              {t("Apply Promotion")}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

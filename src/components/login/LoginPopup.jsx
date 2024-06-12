@@ -11,14 +11,14 @@ const LoginPopup = ({ setShowLogin, onLoginSuccess }) => {
 
   const handleGuest = () => {
     // Directly navigate to the home page
-    navigate('/');
+    navigate('/FoodDisplay');
     // Close the login popup if it's open
     setShowLogin(false);
   };
   const handleLogin = () => {
     const loginSuccess = true;
     if (loginSuccess) {
-      onLoginSuccess();
+     
       navigate('/OrderType');
     }
   };

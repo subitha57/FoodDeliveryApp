@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './CustomizeForm.css'; 
-import defaultImage from '../../assets/Plain.png'; 
+import './CustomizeForm.css';
+import defaultImage from '../../assets/Plain.png';
 import CloseIcon from '@mui/icons-material/Close';
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import { useNavigate } from 'react-router-dom';
-import { StoreContext } from '../../context/StoreContextProvider'; 
+import { StoreContext } from '../../context/StoreContextProvider';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Grid, Box, FormControlLabel, Checkbox } from '@mui/material';
-import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza'; 
+import HalfAndHalfPizza from '../HalfAndHalf/HalfAndHalfPizza';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -19,13 +20,15 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
   const [cheese, setCheese] = useState('');
   const [sauce, setSauce] = useState('');
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [selectedPizzaName, setSelectedPizzaName] = useState(''); // Added state for selected pizza name
+  const [selectedPizzaName, setSelectedPizzaName] = useState('');
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  
+  const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
+
   useEffect(() => {
     console.log("Selected Pizza Name:", selectedPizzaName);
   }, [selectedPizzaName]);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -40,8 +43,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
   useEffect(() => {
     console.log("Selected Pizza Name:", selectedPizzaName);
   }, [selectedPizzaName]);
-  
-  // Ensure `selectedPizzaName` is being set correctly and passed to `HalfAndHalfPizza`
+
   console.log("Passing selectedPizzaName to HalfAndHalfPizza:", selectedPizzaName);
 
   const FIXED_INGREDIENT_COST = 2;
@@ -84,25 +86,35 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
         default:
           calculatedPrice = 0;
       }
-
+  
+      // Calculate additional cost based on selected customizations
       let additionalCost = 0;
-      if (crust) additionalCost += FIXED_INGREDIENT_COST;
-      if (cheese) additionalCost += FIXED_INGREDIENT_COST;
-      if (sauce) additionalCost += FIXED_INGREDIENT_COST;
-      additionalCost += selectedIngredients.length * FIXED_INGREDIENT_COST;
-
+      
+      // Add $2 for each selected customization option that is not a default ingredient
+      selectedIngredients.forEach(ingredientId => {
+        if (!isDefaultIngredient(ingredientId)) {
+          additionalCost += 2;
+        }
+      });
+  
       calculatedPrice += additionalCost;
       setPrice(calculatedPrice);
     }
-  }, [selectedPizza, size, crust, cheese, sauce, selectedIngredients]);
-
+  }, [selectedPizza, size, selectedIngredients]);
+  
+    
   const handleAddToCart = () => {
+    const deselectedDefaultIngredients = selectedPizza.DefaultIncrediantIds.filter(id => !selectedIngredients.includes(id));
+
     const customizedPizza = {
       name: selectedPizza.Name,
       size,
       price: price,
       quantity,
       image: selectedPizza.Image || defaultImage,
+      cheese: deselectedDefaultIngredients.length > 0 ? 'None ' : selectedIngredients.filter(id => aCheeses.concat(pCheeses).map(option => option.Id).includes(id)).map(id => aCheeses.concat(pCheeses).find(option => option.Id === id).Name).join(', '),
+      meat: selectedIngredients.filter(id => meats.map(option => option.Id).includes(id)).map(id => meats.find(option => option.Id === id).Name).join(', '),
+      vegetable: selectedIngredients.filter(id => vegetables.map(option => option.Id).includes(id)).map(id => vegetables.find(option => option.Id === id).Name).join(', '),
     };
 
     addToCart(customizedPizza);
@@ -111,12 +123,47 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
   };
 
   const handleIngredientChange = (id) => {
-    setSelectedIngredients((prevIngredients) =>
-      prevIngredients.includes(id)
-        ? prevIngredients.filter((ingredientId) => ingredientId !== id)
-        : [...prevIngredients, id]
-    );
+    if (isDefaultIngredient(id)) {
+      setSelectedIngredients((prevIngredients) => prevIngredients.filter(ingredientId => !isDefaultIngredient(ingredientId)));
+    } else {
+      setSelectedIngredients((prevIngredients) =>
+        prevIngredients.includes(id)
+          ? prevIngredients.filter((ingredientId) => ingredientId !== id)
+          : [...prevIngredients, id]
+      );
+    }
   };
+
+  const isDefaultIngredient = (id) => {
+    return selectedPizza && selectedPizza.DefaultIncrediantIds.includes(id);
+  };
+  const [cheeseCustomizations, setCheeseCustomizations] = useState({});
+  const [meatCustomizations, setMeatCustomizations] = useState({});
+const [vegetableCustomizations, setVegetableCustomizations] = useState({});
+
+// Function to handle customization change for meat ingredients
+const handleMeatCustomizationChange = (ingredientId, customization) => {
+  setMeatCustomizations(prevState => ({
+    ...prevState,
+    [ingredientId]: customization
+  }));
+};
+
+const handleCheeseCustomizationChange = (ingredientId, customization) => {
+  setCheeseCustomizations(prevState => ({
+    ...prevState,
+    [ingredientId]: customization
+  }));
+};
+
+
+// Function to handle customization change for vegetable ingredients
+const handleVegetableCustomizationChange = (ingredientId, customization) => {
+  setVegetableCustomizations(prevState => ({
+    ...prevState,
+    [ingredientId]: customization
+  }));
+};
 
   return (
     <div className='customize-container'>
@@ -132,13 +179,13 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
             <img src={selectedPizza ? selectedPizza.Image || defaultImage : defaultImage} alt={selectedPizza ? selectedPizza.Name : 'Default Pizza'} />
           </div>
           <div>
-            <Button variant="contained" onClick={handleOpen}>Make it half and half pizza</Button>
-            <Dialog open={open} onClose={handleClose} PaperProps={{ style: { maxWidth: '1500px', width: '100%' } }}>
+            <Button variant="contained" onClick={() => setOpen(true)}>Make it half and half pizza</Button>
+            <Dialog open={open} onClose={() => setOpen(false)} PaperProps={{ style: { maxWidth: '1500px', width: '100%' } }}>
               <DialogContent>
-                <HalfAndHalfPizza selectedPizzaName={selectedPizzaName} />
+                <HalfAndHalfPizza handleCloseHalfAndHalfPizza={() => setOpen(false)} selectedPizzaName={selectedPizzaName} />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCancel} color="primary">
+                <Button onClick={() => setOpen(false)} color="primary">
                   <CloseIcon />
                 </Button>
               </DialogActions>
@@ -146,14 +193,14 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
           </div>
         </div>
         <div className="customization-options">
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Select Pizza</InputLabel>
             <Select
               value={selectedPizza ? selectedPizza.Id : ''}
               onChange={(e) => {
                 const pizzaId = e.target.value;
                 const pizza = products.find(p => p.Id === parseInt(pizzaId));
-                setSelectedPizzaName(pizza.Name); // Update the selectedPizzaName state
+                setSelectedPizzaName(pizza.Name);
               }}
             >
               <MenuItem value="">Select Pizza</MenuItem>
@@ -164,7 +211,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel htmlFor="size">Size:</InputLabel>
             <Select
               id="size"
@@ -179,7 +226,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
           </FormControl>
 
           <TextField
-            fullWidth
+            fullWidth sx={{ mb: 2 }}
             id="quantity"
             label="Quantity"
             type="number"
@@ -187,7 +234,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
             onChange={(e) => setQuantity(parseInt(e.target.value))}
           />
 
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel htmlFor="crust">Crust:</InputLabel>
             <Select
               id="crust"
@@ -204,7 +251,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
 
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth sx={{ mb: 2 }}>
                 <InputLabel htmlFor="cheese">Cheese:</InputLabel>
                 <Select
                   id="cheese"
@@ -242,33 +289,55 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
       <div className="ingredient-lists">
         <div className="cheese-options">
           <h3>Cheese Options:</h3>
-          <Grid container spacing={2}>
+          <Grid container spacing={2}  >
             {aCheeses.concat(pCheeses).map(option => (
               <Grid item xs={6} sm={3} key={option.Id}>
-                <Box boxShadow={3} borderRadius={2}>
+                <Box boxShadow={3} borderRadius={2} style={{ backgroundColor: 'white' }}>
                   <FormControlLabel
+                 
                     control={
                       <Checkbox
                         id={`cheese-${option.Id}`}
                         name="cheese"
                         checked={selectedIngredients.includes(option.Id)}
                         onChange={() => handleIngredientChange(option.Id)}
+                       
                       />
                     }
                     label={option.Name}
                   />
+                  {selectedIngredients.includes(option.Id) && (
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <InputLabel htmlFor={`cheese-customization-${option.Id}`}>  </InputLabel>
+                      <Select
+                        id={`cheese-customization-${option.Id}`}
+                        style={{ backgroundColor: 'white' }}
+                        value={cheeseCustomizations[option.Id] || 'Regular'}
+                        onChange={(e) => handleCheeseCustomizationChange(option.Id, e.target.value)}
+                      >
+                        <MenuItem value="Light">Light</MenuItem>
+                        <MenuItem value="Regular">Regular</MenuItem>
+                        <MenuItem value="Double">Double</MenuItem>
+                        <MenuItem value="Triple">Triple</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                  {isDefaultIngredient(option.Id) && !selectedIngredients.includes(option.Id) && (
+                    <DoNotDisturbIcon color="error" />
+                  )}
                 </Box>
               </Grid>
             ))}
           </Grid>
         </div>
         <hr />
+
         <div className="meat-options">
           <h3>Meat Options:</h3>
           <Grid container spacing={2}>
             {meats.map(option => (
               <Grid item xs={6} sm={3} key={option.Id}>
-                <Box boxShadow={3} borderRadius={2}>
+                <Box boxShadow={3} borderRadius={2} style={{ backgroundColor: 'white' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -280,6 +349,25 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
                     }
                     label={option.Name}
                   />
+                  {selectedIngredients.includes(option.Id)  && (
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <InputLabel htmlFor={`meat-customization-${option.Id}`}>Customization:</InputLabel>
+                      <Select
+                        id={`meat-customization-${option.Id}`}
+                        style={{ backgroundColor: 'white' }}
+                        value={meatCustomizations[option.Id] || 'Regular'}
+                        onChange={(e) => handleMeatCustomizationChange(option.Id, e.target.value)}
+                      >
+                        <MenuItem value="Light">Light</MenuItem>
+                        <MenuItem value="Regular">Regular</MenuItem>
+                        <MenuItem value="Double">Double</MenuItem>
+                        <MenuItem value="Triple">Triple</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                  {isDefaultIngredient(option.Id) && !selectedIngredients.includes(option.Id) && (
+                    <DoNotDisturbIcon color="error" />
+                  )}
                 </Box>
               </Grid>
             ))}
@@ -291,7 +379,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
           <Grid container spacing={2}>
             {vegetables.map(option => (
               <Grid item xs={6} sm={3} key={option.Id}>
-                <Box boxShadow={3} borderRadius={2}>
+                <Box boxShadow={3} borderRadius={2}style={{ backgroundColor: 'white' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -303,6 +391,24 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
                     }
                     label={option.Name}
                   />
+                  {selectedIngredients.includes(option.Id) && (
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <InputLabel htmlFor={`vegetable-customization-${option.Id}`}>Customization:</InputLabel>
+                      <Select
+                        id={`vegetable-customization-${option.Id}`}
+                        value={vegetableCustomizations[option.Id] || 'Regular'}
+                        onChange={(e) => handleVegetableCustomizationChange(option.Id, e.target.value)}
+                      >
+                        <MenuItem value="Light">Light</MenuItem>
+                        <MenuItem value="Regular">Regular</MenuItem>
+                        <MenuItem value="Double">Double</MenuItem>
+                        <MenuItem value="Triple">Triple</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                  {isDefaultIngredient(option.Id) && !selectedIngredients.includes(option.Id) && (
+                    <DoNotDisturbIcon color="error" />
+                  )}
                 </Box>
               </Grid>
             ))}

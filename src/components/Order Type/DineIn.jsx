@@ -26,7 +26,7 @@ const DineIn = ({ onClose, closeOrderType }) => {
   const handleContinue = () => {
     handleClose();
     closeOrderType();  // Close the modal
-    navigate('/'); // Navigate to the home page
+    navigate('/FoodDisplay'); // Navigate to the home page
   };
 
   return (

@@ -60,6 +60,7 @@
 .terms-and-conditions input[type="checkbox"] {
   margin-right: 10px;
 }
+/* CSS for the modal overlay */
 
 @media screen and (max-width: 768px) {
 

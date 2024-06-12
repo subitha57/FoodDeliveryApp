@@ -4,8 +4,10 @@ import { StoreContext } from '../../context/StoreContextProvider';
 import { useNavigate } from 'react-router-dom';
 import ProceedCheckOut from '../ProceedCheckOut/ProceedCheckOut';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-const PlaceOrder = () => {
+const PlaceOrder = ({ onClose }) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
@@ -22,7 +24,11 @@ const PlaceOrder = () => {
 
   return (
     <div>
+      
       <form className='place-order'>
+      <div className="modal-content">
+      <button className="close-button" onClick={closeModal}>Close</button>
+            </div>
         <div className="place-order-left">
           <p className='title'>{t("Delivery Information")}</p>
           <div className="multi-fields">
@@ -69,7 +75,7 @@ const PlaceOrder = () => {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <ProceedCheckOut closeModal={closeModal} />
+            <ProceedCheckOut closeModal={onClose} />
           </div>
         </div>
       )}
