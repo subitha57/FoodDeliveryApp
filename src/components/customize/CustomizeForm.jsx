@@ -12,10 +12,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
-const CustomizePizza = ({ selectedPizza, onClose }) => {
+const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   const [size, setSize] = useState('Medium');
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState(0);
+  const [localPrice, setLocalPrice] = useState(0);
   const [crust, setCrust] = useState('');
   const [cheese, setCheese] = useState('');
   const [sauce, setSauce] = useState('');
@@ -98,6 +98,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
       });
   
       calculatedPrice += additionalCost;
+      setLocalPrice(calculatedPrice);  // Update local price state
       setPrice(calculatedPrice);
     }
   }, [selectedPizza, size, selectedIngredients]);
@@ -109,7 +110,7 @@ const CustomizePizza = ({ selectedPizza, onClose }) => {
     const customizedPizza = {
       name: selectedPizza.Name,
       size,
-      price: price,
+      price: localPrice,
       quantity,
       image: selectedPizza.Image || defaultImage,
       cheese: deselectedDefaultIngredients.length > 0 ? 'None ' : selectedIngredients.filter(id => aCheeses.concat(pCheeses).map(option => option.Id).includes(id)).map(id => aCheeses.concat(pCheeses).find(option => option.Id === id).Name).join(', '),
@@ -417,7 +418,7 @@ const handleVegetableCustomizationChange = (ingredientId, customization) => {
       </div>
       <hr />
       <div className="total-price">
-        <h3>Total Price: ${price.toFixed(2)}</h3>
+        <h3>Total Price: ${localPrice.toFixed(2)}</h3>
         <Button variant="contained" color="primary" onClick={handleAddToCart}>Add to Cart</Button>
       </div>
     </div>

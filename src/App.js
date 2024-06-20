@@ -1,12 +1,12 @@
-import React, { useState, useContext, useRef } from 'react';
-import { StoreContext } from './context/StoreContextProvider.jsx';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 import Navbar from './components/navbar/Navbar.jsx';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './pages/home/Home.jsx';
 import Cart from './pages/cart/Cart.jsx';
 import Footer from './components/footer/Footer.jsx';
-import LoginPopup from './components/login/LoginPopup.jsx';
+import RegisterPopup from './components/login/RegisterPopup.jsx'; // Adjusted import path
 import PlaceOrder from './pages/placeOrder/PlaceOrder.jsx';
 import CustomizeForm from './components/customize/CustomizeForm.jsx';
 import HalfAndHalfPizza from './components/HalfAndHalf/HalfAndHalfPizza.jsx';
@@ -29,36 +29,27 @@ import LanguageSelector from './LanguageSelector.js';
 import CartNew from './pages/cart/CartNew.jsx'; 
 import ExploreMenu from './components/ExploreMenu/ExploreMenu.jsx';
 import FoodDisplay from './components/foodDisplay/FoodDisplay.jsx';
+import LoginModal from './components/login/LoginModal.jsx'; // Ensure LoginModal is imported
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(false); // State to manage RegisterPopup or LoginPopup visibility
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedOrderType, setSelectedOrderType] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-   const { food_list } = useContext(StoreContext);
-   const [selectedPizza, setSelectedPizza] = useState(null);
-   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Adjust authentication state as needed
   const navigate = useNavigate();
-  const [selectedPizzaName, setSelectedPizzaName]= useState("");
-  const { t } = useTranslation();
-  const [showTakeOut, setShowTakeOut] = useState(false);
-
-
+  const [selectedPizza, setSelectedPizza] = useState(null);
+  const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const [isHalfAndHalfPizzaOpen, setIsHalfAndHalfPizzaOpen] = useState(false);
 
-
   const handleCloseHalfAndHalfPizza = () => {
-    console.log("Closing HalfAndHalfPizza");
     setIsHalfAndHalfPizzaOpen(false);
-  };
-  const handleClose = () => {
-    // Define logic to handle closing
   };
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setShowLogin(false); // Close the login popup after successful login
     // Redirect the user to the OrderType page after login
+    navigate('/OrderType');
   };
 
   const handleLogout = () => {
@@ -73,11 +64,9 @@ function App() {
 
   const handleContinue = () => {
     navigate('/OrderType');
-    console.log('Button clicked');
   };
 
   const handleCloseOrderType = () => {
-    // Implement logic to close the OrderType component
     console.log('Closing OrderType popup');
   };
 
@@ -107,66 +96,45 @@ function App() {
       ],
     },
   ];
+
   const handleSelect = (newSelectedPizza) => {
-    // Update the selected pizza state or do any necessary actions
     setSelectedPizza(newSelectedPizza);
-  };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const closeModalRef = useRef(null);
-
-  const openModal = () => {
-   
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-   
-    setIsModalOpen(false);
-  };
-  closeModalRef.current = closeModal;
-
-
-
-  // Function to handle selecting a pizza
-  const handlePizzaSelection = (pizza) => {
-    setSelectedPizza(pizza);
   };
 
   return (
-     <>
-     <ThemeProvider>
-      {showLogin && <LoginPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
-      <div className={`app ${darkTheme ? "dark-theme" : "light-theme"}`}> 
-      <div className="top-right-corner">
-      <LanguageSelector/>
-      <button className='theme-button' onClick={toggleTheme}> {darkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
-      </button>
-      </div>
+    <ThemeProvider>
+      {showLogin && <RegisterPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
+      <div className={`app ${darkTheme ? "dark-theme" : "light-theme"}`}>
+        <div className="top-right-corner">
+          <LanguageSelector />
+          <button className='theme-button' onClick={toggleTheme}>
+            {darkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+          </button>
+        </div>
         <Navbar setShowLogin={setShowLogin} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         {isHalfAndHalfPizzaOpen && (
-          <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizza={selectedPizza} selectedPizzaName={selectedPizzaName}  />
+          <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizza={selectedPizza} />
         )}
-        {isModalOpen && <ProceedCheckout closeModal={closeModalRef.current} darkTheme={true} />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType}  darkTheme={darkTheme} />} />
-          <Route path='/CartNew' element={<CartNew selectedOrderType={selectedOrderType}/>}/>
+          <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType} darkTheme={darkTheme} />} />
+          <Route path='/CartNew' element={<CartNew selectedOrderType={selectedOrderType} />} />
           <Route
             path="/OrderType"
-            element={<OrderType isAuthenticated={isAuthenticated}  onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
+            element={<OrderType isAuthenticated={isAuthenticated} onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
           />
-          <Route path='/' element={<ExploreMenu/>}/>
+          <Route path='/RegisterPopup' element={<RegisterPopup/>}/>
+          <Route path="/LoginModal" element={<LoginModal onLoginSuccess={handleLoginSuccess} />} /> {/* Adjust the route path for LoginModal */}
+          <Route path='/' element={<ExploreMenu />} />
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
-          <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect} onSelectPizza={handlePizzaSelection} />} />
-          <Route path="/LoginPopup" element={<LoginPopup setShowLogin={setShowLogin} />} />
-          <Route path="/FoodDisplay" element={<FoodDisplay/>}/>
-          <Route path="/ExploreMenu" element={<ExploreMenu/>}/>
-          {/*<Route path="/HalfAndHalfPizza" element={<HalfAndHalfPizza />} />*/}
+          <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect} />} />
+          <Route path="/FoodDisplay" element={<FoodDisplay category={'FeistyProducts'} />} />
+          <Route path="/ExploreMenu" element={<ExploreMenu />} />
           <Route path="/ScrollButton" element={<ScrollButton />} />
           <Route path="/Delivery" element={<Delivery onContinue={handleContinue} />} />
-          <Route path="/TakeOut" element={<TakeOut  />} />
+          <Route path="/TakeOut" element={<TakeOut />} />
           <Route path="/DineIn" element={<DineIn />} />
-          <Route path="/ProceedCheckout" element={<ProceedCheckout closeModal={closeModal} darkTheme={true}/>} />
+          <Route path="/ProceedCheckout" element={<ProceedCheckout darkTheme={true} />} />
           <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
           <Route path="/GeoLocation" element={<GeoLocation />} />
           <Route path="/PreviousOrder" element={<PreviousOrder pastOrders={pastOrders} />} />
@@ -175,8 +143,7 @@ function App() {
       </div>
       <Footer />
       <DarkMode darkTheme={darkTheme} toggleTheme={toggleTheme} />
-       </ThemeProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

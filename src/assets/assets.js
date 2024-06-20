@@ -101,15 +101,15 @@ export const menu_list = [
         menu_image: menu_9
     },
     {
-        menu_name: "Salad",
+        menu_name: "Beverages",
         menu_image: menu_1
     },
     {
-        menu_name: "Rolls",
+        menu_name: "Appetizers",
         menu_image: menu_2
     },
     {
-        menu_name: "Deserts",
+        menu_name: "Extras",
         menu_image: menu_3
     },
     {

@@ -1,10 +1,12 @@
+// src/components/navbar/Navbar.js
 import React, { useContext, useState } from 'react';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
-import LoginPopup from '../login/LoginPopup';
+import LoginModal from '../login/LoginModal'; // Update the import path if necessary
 import { useTranslation } from 'react-i18next';
+import RegisterPopup from '../login/RegisterPopup';
 
 const Navbar = ({ darkMode }) => {
   const { t } = useTranslation();
@@ -12,6 +14,7 @@ const Navbar = ({ darkMode }) => {
   const { getTotalCartAmount } = useContext(StoreContext);
   const [showLogin, setShowLogin] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = () => {
     setShowLogin(true);
@@ -24,6 +27,7 @@ const Navbar = ({ darkMode }) => {
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     setShowLogin(false);
+    navigate('/'); // Redirect to home or desired route
   };
 
   return (
@@ -48,7 +52,7 @@ const Navbar = ({ darkMode }) => {
           <button onClick={handleSignIn}>{t("Sign In")}</button>
         )}
       </div>
-      {showLogin && <LoginPopup setShowLogin={setShowLogin} onLoginSuccess={handleLoginSuccess} />}
+      {showLogin && <RegisterPopup onLoginSuccess={handleLoginSuccess} />} {/* Use LoginModal here */}
     </div>
   );
 };

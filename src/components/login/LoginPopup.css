@@ -71,3 +71,11 @@
   .guest{
     text-align: center;
   }
+  .login-here{
+    padding: 2%;
+    margin-right: 5%;
+   
+  }
+  .login-here .span{
+    cursor: pointer;
+  }

@@ -83,3 +83,15 @@
     color: black;
     /* or any other color you prefer for light mode */
 }
+/* FoodItem.css */
+
+.food-item-options input[type="number"] {
+    width: 100px; /* Adjust the width as per your preference */
+    padding: 8px; /* Add padding for better appearance */
+    font-size: 16px; /* Adjust font size for readability */
+    text-align: center; /* Center-align text within the input */
+    border: 1px solid #ccc; /* Add a border to the input */
+    border-radius: 4px; /* Optional: Rounded corners */
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width */
+    
+  }

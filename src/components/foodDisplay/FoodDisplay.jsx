@@ -2,26 +2,36 @@ import React, { useContext, useState, useEffect } from 'react';
 import './FoodDisplay.css';
 import { StoreContext } from '../../context/StoreContextProvider';
 import FoodItem from '../foodItem/FoodItem';
-import CustomizeForm from '../customize/CustomizeForm';
 import { useTranslation } from 'react-i18next';
 import CartNew from '../../pages/cart/CartNew';
-import Cart from '../../pages/cart/Cart'
+import CustomizePizza from '../customize/CustomizeForm';
 
-const FoodDisplay = () => {
+const FoodDisplay = ({ category }) => {
   const { t } = useTranslation();
-  const { feistyProducts, loading, error, getTotalPriceOfCartItems, cart  } = useContext(StoreContext);
+  const {
+    feistyProducts,
+    beverages,
+    appetizers,
+    extras,
+    loading,
+    error,
+    getTotalPriceOfCartItems,
+    cart
+  } = useContext(StoreContext);
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
-  const [selectedPizza, setSelectedPizza] = useState(null); // State to store selected pizza
+  const [selectedPizza, setSelectedPizza] = useState(null);
   const [promotionApplied, setPromotionApplied] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [customizedPrice, setCustomizedPrice] = useState(0);
 
   useEffect(() => {
     setTotalPrice(getTotalPriceOfCartItems());
-  }, [feistyProducts, cart]);
+  }, [feistyProducts, beverages, appetizers, extras, cart]);
 
   const toggleCustomizeForm = (item) => {
-    setSelectedPizza(item); // Update selected pizza state when toggling the form
+    setSelectedPizza(item);
     setShowCustomizeForm(!showCustomizeForm);
+    setCustomizedPrice(null); 
   };
 
   const handleApplyPromotion = () => {
@@ -31,40 +41,99 @@ const FoodDisplay = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  const renderItems = () => {
+    switch (category) {
+      case 'Beverages':
+        return beverages.map(item => (
+          <div className='food-item' key={item.Id}>
+            <FoodItem
+              key={item.Id}
+              id={item.Id}
+              name={item.Name}
+              description={item.Description}
+              price={item.Cost}
+              image={item.Image}
+              showAddToCartButton={true}
+            />
+          </div>
+        ));
+      case 'Appetizers':
+        return appetizers.map(item => (
+          <div className='food-item' key={item.Id}>
+            <FoodItem
+              key={item.Id}
+              id={item.Id}
+              name={item.Name}
+              description={item.Description}
+              price={item.Cost}
+              image={item.Image}
+              showAddToCartButton={true}
+            />
+          </div>
+        ));
+      case 'Extras':
+        return extras.map(item => (
+          <div className='food-item' key={item.Id}>
+            <FoodItem
+              key={item.Id}
+              id={item.Id}
+              name={item.Name}
+              description={item.Description}
+              price={item.Cost}
+              image={item.Image}
+              showAddToCartButton={true}
+            />
+          </div>
+        ));
+      default:
+        return feistyProducts.map(item => (
+          <div className='food-item' key={item.Id}>
+            <FoodItem
+              key={item.Id}
+              id={item.Id}
+              name={item.Name}
+              description={item.Description}
+              price={item.Id === selectedPizza?.Id && customizedPrice !== null ? customizedPrice : item.LargePrice}
+              image={item.Image}
+              isFeisty={true}
+              showAddToCartButton={false} // Don't show the "Add to Cart" button for feistyProducts
+            />
+            <button className='customize-button' onClick={() => toggleCustomizeForm(item)}>
+              {t("Customize Pizza")}
+            </button>
+          </div>
+        ));
+    }
+  };
+
   return (
     <div className='container'>
-      <div className='cart-container fixed-cart'>
+      <div className='cart-container fixed-cart' >
         <CartNew />
       </div>
       <div className='food-display-container'>
         <div className='food-display' id='food-display'>
-          <h2>{t("Top dishes near you")}</h2>
+          <h2>{category === 'Beverages'
+              ? t("Beverages")
+              : category === 'Appetizers'
+              ? t("Appetizers")
+              : category === 'Extras'
+              ? t("Extras")
+              : t("Top dishes near you")}
+          </h2>
           <div className='food-display-list'>
-            {feistyProducts.map((item) => (
-              <div className='food-item' key={item.Id}>
-                <FoodItem
-                  key={item.Id}
-                  id={item.Id} 
-                  name={item.Name}
-                  description={item.Description}
-                  price={item.price}
-                  image={item.Image}
-                />
-                <button className='customize-button' onClick={() => toggleCustomizeForm(item)}>
-                  {t("Customize Pizza")}
-                </button>
-              </div>
-            ))}
+            {renderItems()}
           </div>
-          <p>Total Price: $.{totalPrice}</p>
+          <p>Total Price: ${totalPrice}</p>
           {showCustomizeForm && selectedPizza && (
-            <CustomizeForm
+            <CustomizePizza
               selectedPizza={selectedPizza}
               foodList={feistyProducts}
               onClose={() => setShowCustomizeForm(false)}
+              setPrice={setCustomizedPrice}
               isVisible={showCustomizeForm}
               promotionApplied={promotionApplied}
-              setSelectedPizza={setSelectedPizza} // Pass function to update selectedPizza
+              setSelectedPizza={setSelectedPizza}
             />
           )}
           {!promotionApplied && (

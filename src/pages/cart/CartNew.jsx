@@ -7,7 +7,7 @@ import ViewPromotions from '../../components/ViewPromotions/ViewPromotions';
 import { useTranslation } from 'react-i18next';
 
 const CartNew = ({ selectedOrderType }) => {
-    console.log("type", selectedOrderType)
+
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cart, removeFromCart, getTotalPriceOfCartItems, applyOffer } = useContext(StoreContext);
@@ -70,11 +70,12 @@ const CartNew = ({ selectedOrderType }) => {
         setDiscount(discountAmount);
         setShowPromotions(false);
     };
-    const total = cart.reduce((total, item) => total + item.price * item.quantity, 0) - discount + (cart.length === 0 ? 0 : 2);
+    const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0) - discount + (cart.length === 0 ? 0 : 2);
+
 
     return (
-        <div className="cart-container" style={{ border: '3px solid black', padding: '10px' }}>
-            <h2 style={{ textAlign: 'center' }}>My Orders</h2><br />
+        <div className="cart-container" style={{ border: '3px solid black', padding: '10px',backgroundColor: 'white'  }}>
+            <h2 style={{ textAlign: 'center' }}>My Cart</h2><br />
             <div className="cart-items">
                 <div className="selected-order-type">
                     <p>{t("Selected Order Type:")}<span className="order-type">{selectedOrderType}</span></p>
@@ -99,6 +100,7 @@ const CartNew = ({ selectedOrderType }) => {
                                     {item.cheese && <p>{t("Cheese")}: {item.cheese}</p>}
                                 </div>
                                 <p style={{ flex: 1, marginRight: '10px', textAlign: 'center' }}>No:{item.quantity}</p>
+
                                 <p style={{ flex: 1, textAlign: 'right' }}> $.{(item.price * item.quantity).toFixed(2)}</p>
                                 <p style={{ flex: 1, textAlign: 'right' }} onClick={() => removeFromCart(itemId)} className='cross'>X</p>
                             </div>
@@ -114,7 +116,7 @@ const CartNew = ({ selectedOrderType }) => {
                     <div>
                         <div className='cart-total-details'>
                             <p>{t("SubTotal")}</p>
-                          $. {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
+                            $. {cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
                         </div>
                         <hr />
                         <div className='cart-total-details'>
@@ -128,7 +130,7 @@ const CartNew = ({ selectedOrderType }) => {
                         </div>
                         <hr />
                         <div className='cart-total-details'>
-                            <b>{t("Total")}</b> 
+                            <b>{t("Total")}</b>
                             <b>$.{total.toFixed(2)}</b>
                         </div>
                         <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
@@ -141,7 +143,7 @@ const CartNew = ({ selectedOrderType }) => {
                     </div>
                     <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
                     {/* Render PlaceOrder component inside a modal */}
-                    
+
                 </div>
             </div>
         </div>

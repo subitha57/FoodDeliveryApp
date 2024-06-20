@@ -6,7 +6,7 @@ const RestaurantComponent = () => {
 const navigate=useNavigate();
 
     const handleClick =()=>{
-      navigate("/LoginPopup")
+      navigate("/RegisterPopup")
     }
   return (
     <div className='dummy-container'>

@@ -67,7 +67,7 @@
   .cart-container {
     display: inline-block; /* or inline-flex */
      margin-right: 2%;
-  margin-top: 15%;
+  margin-top: 10%;
   position: sticky;
   grid-column: 1;
 }
