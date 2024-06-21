@@ -34,6 +34,8 @@
 .place-order-right {
   width: 100%;
   max-width: max(40%, 500px);
+  background-color: white;
+  padding: 2%;
 }
 
 .place-order .cart-total button {
@@ -59,6 +61,10 @@
 
 .terms-and-conditions input[type="checkbox"] {
   margin-right: 10px;
+}
+.check-avaliability{
+  background-color: white;
+  padding: 2%;
 }
 /* CSS for the modal overlay */
 

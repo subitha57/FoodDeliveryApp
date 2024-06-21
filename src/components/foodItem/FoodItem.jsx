@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import './FoodItem.css';
 import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContextProvider';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import defaultPizzaImage from '../../assets/Plain.png';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const FoodItem = ({
   id,
@@ -21,8 +21,8 @@ const FoodItem = ({
   const [sizes, setSizes] = useState([]); // State to hold sizes fetched from API
   const [selectedSize, setSelectedSize] = useState(null); // State to track selected size
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
-  const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
- 
+  const { cartItems, addToCart, removeFromCart, user } = useContext(StoreContext);
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const existingCartItem = cartItems[id];
@@ -50,6 +50,10 @@ const FoodItem = ({
   };
 
   const handleAddToCart = () => {
+    if (!user) {
+      navigate('/LoginModal'); // Navigate to login modal if not logged in
+      return;
+    }
     addToCart({
       id,
       name,
@@ -122,4 +126,3 @@ const FoodItem = ({
 };
 
 export default FoodItem;
-

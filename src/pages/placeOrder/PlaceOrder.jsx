@@ -91,6 +91,7 @@ const PlaceOrder = ({ onClose }) => {
       <div>
         <button className="close-button" onClick={closeModal}>Close</button>
       </div>
+      <div className='check-avaliability'>
       <Container maxWidth="sm">
         <Typography variant="h4" gutterBottom>
           Check Delivery Availability
@@ -219,6 +220,7 @@ const PlaceOrder = ({ onClose }) => {
           </Alert>
         </Snackbar>
       </Container>
+      </div>
       <div className="place-order-right">
         <div className="cart-total">
           <h2>{t("Cart Total")}</h2>

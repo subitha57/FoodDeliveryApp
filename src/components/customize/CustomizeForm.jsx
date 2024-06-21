@@ -58,6 +58,7 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
     vegetables,
     sizes,
     addToCart,
+    user,
   } = useContext(StoreContext);
 
   useEffect(() => {
@@ -105,6 +106,10 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   
     
   const handleAddToCart = () => {
+    if (!user) {
+      navigate('/LoginModal');
+      return;
+    }
     const deselectedDefaultIngredients = selectedPizza.DefaultIncrediantIds.filter(id => !selectedIngredients.includes(id));
 
     const customizedPizza = {
