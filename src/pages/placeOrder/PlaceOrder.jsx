@@ -75,8 +75,41 @@ const PlaceOrder = ({ onClose }) => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleCheckout = () => {
-    // Handle checkout logic here
+  const handleCheckout = async () => {
+    try {
+      const orderDetails = {
+        ...formData,
+        cartTotal: getTotalCartAmount(),
+        deliveryFee: getTotalCartAmount() === 0 ? 0 : 2,
+        totalAmount: getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2
+      };
+
+      const response = await axios.post(
+        'https://test.tandooripizza.com/api/online/order/save',
+        orderDetails
+      );
+
+      if (response.data.Code === 0) {
+        setSnackbar({
+          open: true,
+          message: 'Order placed successfully!',
+          severity: 'success'
+        });
+        setShowModal(true);
+      } else {
+        setSnackbar({
+          open: true,
+          message: response.data.Message,
+          severity: 'error'
+        });
+      }
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'An error occurred while placing the order.',
+        severity: 'error'
+      });
+    }
   };
 
   const closeModal = () => {
@@ -91,135 +124,135 @@ const PlaceOrder = ({ onClose }) => {
       <div>
         <button className="close-button" onClick={closeModal}>Close</button>
       </div>
-      <div className='check-avaliability'>
-      <Container maxWidth="sm">
-        <Typography variant="h4" gutterBottom>
-          Check Delivery Availability
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                select
-                label="Type"
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
-                fullWidth
-                required
-              >
-                <MenuItem value="DineIn">Dine In</MenuItem>
-                <MenuItem value="Delivery">Delivery</MenuItem>
-                <MenuItem value="TakeOut">Take Out</MenuItem>
-              </TextField>
+      <div className='check-availability'>
+        <Container maxWidth="sm">
+          <Typography variant="h4" gutterBottom>
+            Check Delivery Availability
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  select
+                  label="Type"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                >
+                  <MenuItem value="DineIn">Dine In</MenuItem>
+                  <MenuItem value="Delivery">Delivery</MenuItem>
+                  <MenuItem value="TakeOut">Take Out</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="futureOrder"
+                      checked={formData.futureOrder}
+                      onChange={handleChange}
+                    />
+                  }
+                  label="Future Order"
+                />
+              </Grid>
+              {formData.futureOrder && (
+                <>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Future Date"
+                      type="date"
+                      name="futureDate"
+                      value={formData.futureDate}
+                      onChange={handleChange}
+                      fullWidth
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Future Time"
+                      type="time"
+                      name="futureTime"
+                      value={formData.futureTime}
+                      onChange={handleChange}
+                      fullWidth
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      required
+                    />
+                  </Grid>
+                </>
+              )}
+              <Grid item xs={12}>
+                <TextField
+                  label="Full Name"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Check Delivery Availability
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name="futureOrder"
-                    checked={formData.futureOrder}
-                    onChange={handleChange}
-                  />
-                }
-                label="Future Order"
-              />
-            </Grid>
-            {formData.futureOrder && (
-              <>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Future Date"
-                    type="date"
-                    name="futureDate"
-                    value={formData.futureDate}
-                    onChange={handleChange}
-                    fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Future Time"
-                    type="time"
-                    name="futureTime"
-                    value={formData.futureTime}
-                    onChange={handleChange}
-                    fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    required
-                  />
-                </Grid>
-              </>
-            )}
-            <Grid item xs={12}>
-              <TextField
-                label="Full Name"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Phone Number"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Check Delivery Availability
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Container>
+          </form>
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+          >
+            <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
+        </Container>
       </div>
       <div className="place-order-right">
         <div className="cart-total">

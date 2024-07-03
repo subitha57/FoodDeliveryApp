@@ -31,7 +31,7 @@ h1 {
     padding: 10px 30px;
     border-radius: 50px;
     cursor: pointer;
-    transform: 0.3s;
+    transition: 0.3s;
 }
 
 .navbar button:hover {
@@ -61,7 +61,7 @@ h1 {
     right: -8px;
 }
 
-@media (max-width:1050px) {
+@media (max-width: 1050px) {
     .navbar .logo {
         width: 140px;
     }
@@ -84,7 +84,7 @@ h1 {
     }
 }
 
-@media (max-width:900px) {
+@media (max-width: 900px) {
     .navbar .logo {
         width: 120px;
     }
@@ -108,7 +108,7 @@ h1 {
     }
 }
 
-@media (max-width:750px) {
+@media (max-width: 750px) {
     .navbar-menu {
         display: none;
     }
@@ -116,9 +116,7 @@ h1 {
 
 .dark-mode .navbar-menu {
     background-color: #333;
-    /* Change background color to dark */
     color: white;
-    /* Change text color to white */
 }
 
 .dark-theme .navbar-menu a {

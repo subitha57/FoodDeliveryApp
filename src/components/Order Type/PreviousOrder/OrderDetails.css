@@ -1,0 +1,89 @@
+.order-details {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.order-details h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-details p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left, .right {
+    width: 48%;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the items horizontally */
+}
+
+.cart {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.left-button, .right-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px; /* Set a specific width */
+    max-width: 100%; /* Ensure it doesn't exceed the container width */
+}
+
+.left-button {
+    background-color: #007BFF;
+    color: white;
+    margin-top: 20px;
+    margin-right: 50%;
+}
+
+.right-button {
+    background-color: #28a745;
+    color: white;
+    margin-bottom: 20px;
+    margin-left: 50%;
+}
+
+.left-button:hover {
+    background-color: #0056b3;
+}
+
+.right-button:hover {
+    background-color: #218838;
+}
+
+.details {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.details p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.details h3 {
+    margin-top: 20px;
+}

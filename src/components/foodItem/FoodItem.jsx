@@ -21,8 +21,10 @@ const FoodItem = ({
   const [sizes, setSizes] = useState([]); // State to hold sizes fetched from API
   const [selectedSize, setSelectedSize] = useState(null); // State to track selected size
   const [quantity, setQuantity] = useState(1); // Default quantity is 1
-  const { cartItems, addToCart, removeFromCart, user } = useContext(StoreContext);
+  const { cartItems, addToCart, removeFromCart, user, cartRestaurant } = useContext(StoreContext);
   const navigate = useNavigate(); // Initialize navigate
+  const isLoggedIn = localStorage.getItem('authToken') !== null;
+  const [showSelectRestaurantPopup, setShowSelectRestaurantPopup] = useState(false);
 
   useEffect(() => {
     const existingCartItem = cartItems[id];
@@ -50,10 +52,16 @@ const FoodItem = ({
   };
 
   const handleAddToCart = () => {
-    if (!user) {
+    if (!isLoggedIn) {
       navigate('/LoginModal'); // Navigate to login modal if not logged in
       return;
     }
+
+    if (!cartRestaurant) {
+      setShowSelectRestaurantPopup(true);
+      return;
+    }
+
     addToCart({
       id,
       name,
@@ -118,8 +126,14 @@ const FoodItem = ({
           value={quantity}
           onChange={(e) => setQuantity(parseInt(e.target.value))}
         />
-      
+
       </div>
+      {showSelectRestaurantPopup && (
+        <div className="select-restaurant-popup">
+          <p>Please select a restaurant before adding items to the cart.</p>
+          <button onClick={() => setShowSelectRestaurantPopup(false)}>OK</button>
+        </div>
+      )}
       {/* <p className="food-item-price">Rs.{dynamicPrice}</p> Display dynamic price */}
     </div>
   );

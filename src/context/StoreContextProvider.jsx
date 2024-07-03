@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const StoreContext = createContext(null);
@@ -23,7 +23,30 @@ const StoreContextProvider = (props) => {
   const [sizes, setSizes] = useState([]);
   const [prices, setPrices] = useState([]);
   const [Classics, setClassics] = useState([]);
-  const [user, setUser] = useState(null); // User state
+  const [user, setUser] = useState(null);
+  const [cartRestaurant, setCartRestaurant] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      console.log('Stored user loaded:', JSON.parse(storedUser)); // Debug log
+    }
+    fetchProducts();
+  }, []);
+
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData)); // Save user data to local storage
+    console.log('User logged in:', userData); // Debug log
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('user'); // Remove user data from local storage
+    localStorage.removeItem('authToken');
+    console.log('User logged out'); // Debug log
+  };
 
   const fetchProducts = async () => {
     try {
@@ -51,18 +74,15 @@ const StoreContextProvider = (props) => {
       setSizes(sizes);
       setPrices(prices);
 
-      // Fetch and set Beverages
       const beverages = allProducts.filter(product => ['Water', 'Soft Drinks', 'Wine', 'Beer', 'Juice'].includes(product.CategoryName));
       setBeverages(beverages);
 
-      // Fetch and set Appetizers
       const appetizers = allProducts.filter(product => ['Garlic Sticks with Cheese', 'Boneless', 'Garlic Bread with Cheese', 'Mozzarella Sticks', 'Jalapeno Poppers', 'Traditional Wings', 'Wing Flavor'].includes(product.CategoryName));
       setAppetizers(appetizers);
 
-      // Fetch and set Extras with a fixed price of $0.50
       const extras = allProducts.filter(product => ['Green Beans (greenbeans)', 'Wing Flavor', 'Cookies', 'Sides (extraside)', 'Sides'].includes(product.CategoryName));
       extras.forEach(extra => {
-        extra.Cost = 0.50; // Set a fixed price of $0.50
+        extra.Cost = 0.50; 
       });
       setExtras(extras);
 
@@ -72,10 +92,6 @@ const StoreContextProvider = (props) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   const addToCart = (item, crust, sauce, aCheese, pCheese, toppings) => {
     const customizedItem = {
@@ -133,8 +149,12 @@ const StoreContextProvider = (props) => {
     extras,
     sizes,
     prices,
-    user, // Add user to context value
-    setUser, // Add setUser to context value
+    user,
+    setUser: login,
+    cartRestaurant,
+    setCartRestaurant,
+    login,
+    logout,
   };
 
   return (

@@ -13,19 +13,24 @@ const Navbar = ({ darkMode }) => {
   const [menu, setMenu] = useState("home");
   const { getTotalCartAmount } = useContext(StoreContext);
   const [showLogin, setShowLogin] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('authToken') !== null);
   const navigate = useNavigate();
+  const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
   const handleSignIn = () => {
     setShowLogin(true);
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
     setIsAuthenticated(false);
+    setUsername('');
   };
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
+    setUsername(localStorage.getItem('username'));
     setShowLogin(false);
     navigate('/'); // Redirect to home or desired route
   };
@@ -52,7 +57,7 @@ const Navbar = ({ darkMode }) => {
           <button onClick={handleSignIn}>{t("Sign In")}</button>
         )}
       </div>
-      {showLogin && <RegisterPopup onLoginSuccess={handleLoginSuccess} />} {/* Use LoginModal here */}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLoginSuccess={handleLoginSuccess} />} {/* Use LoginModal here */}
     </div>
   );
 };

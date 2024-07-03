@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import LoginModal from '../login/LoginModal';
 
 const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   const [size, setSize] = useState('Medium');
@@ -24,6 +25,7 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false); 
 
   useEffect(() => {
     console.log("Selected Pizza Name:", selectedPizzaName);
@@ -59,6 +61,8 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
     sizes,
     addToCart,
     user,
+    cartRestaurant,
+    setUser 
   } = useContext(StoreContext);
 
   useEffect(() => {
@@ -104,13 +108,23 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
     }
   }, [selectedPizza, size, selectedIngredients]);
   
-    
   const handleAddToCart = () => {
-    if (!user) {
-      navigate('/LoginModal');
+    if (!cartRestaurant) {
+      alert('Please select a restaurant before adding items to the cart.');
+      navigate('/restaurants'); // Redirect to the restaurant selection page
       return;
     }
-    const deselectedDefaultIngredients = selectedPizza.DefaultIncrediantIds.filter(id => !selectedIngredients.includes(id));
+    const authToken = localStorage.getItem('authToken');
+    if (authToken) {
+      addPizzaToCart();
+    } else {
+      setLoginModalOpen(true);
+    }
+  };
+  const addPizzaToCart = () => {
+    const deselectedDefaultIngredients = selectedPizza.DefaultIncrediantIds.filter(
+      (id) => !selectedIngredients.includes(id)
+    );
 
     const customizedPizza = {
       name: selectedPizza.Name,
@@ -118,15 +132,36 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
       price: localPrice,
       quantity,
       image: selectedPizza.Image || defaultImage,
-      cheese: deselectedDefaultIngredients.length > 0 ? 'None ' : selectedIngredients.filter(id => aCheeses.concat(pCheeses).map(option => option.Id).includes(id)).map(id => aCheeses.concat(pCheeses).find(option => option.Id === id).Name).join(', '),
-      meat: selectedIngredients.filter(id => meats.map(option => option.Id).includes(id)).map(id => meats.find(option => option.Id === id).Name).join(', '),
-      vegetable: selectedIngredients.filter(id => vegetables.map(option => option.Id).includes(id)).map(id => vegetables.find(option => option.Id === id).Name).join(', '),
+      cheese:
+        deselectedDefaultIngredients.length > 0
+          ? "None "
+          : selectedIngredients
+            .filter((id) =>
+              aCheeses.concat(pCheeses).map((option) => option.Id).includes(id)
+            )
+            .map(
+              (id) =>
+                aCheeses
+                  .concat(pCheeses)
+                  .find((option) => option.Id === id).Name
+            )
+            .join(", "),
+      meat: selectedIngredients
+        .filter((id) => meats.map((option) => option.Id).includes(id))
+        .map((id) => meats.find((option) => option.Id === id).Name)
+        .join(", "),
+      vegetable: selectedIngredients
+        .filter((id) => vegetables.map((option) => option.Id).includes(id))
+        .map((id) => vegetables.find((option) => option.Id === id).Name)
+        .join(", "),
     };
 
     addToCart(customizedPizza);
 
     onClose();
   };
+
+  
 
   const handleIngredientChange = (id) => {
     if (isDefaultIngredient(id)) {
@@ -171,8 +206,14 @@ const handleVegetableCustomizationChange = (ingredientId, customization) => {
   }));
 };
 
+const handleLoginSuccess = (userData) => {
+  setUser(userData); // Update user state in context
+  setLoginModalOpen(false); // Close the login modal
+};
+
   return (
     <div className='customize-container'>
+       {loginModalOpen && <LoginModal onClose={() => setLoginModalOpen(false)} onLoginSuccess={handleLoginSuccess} />}
       <button className="close-button" onClick={onClose}>
         <CloseIcon />
       </button>

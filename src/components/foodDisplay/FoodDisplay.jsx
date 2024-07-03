@@ -15,7 +15,7 @@ const FoodDisplay = ({ category }) => {
     extras,
     loading,
     error,
-    getTotalPriceOfCartItems,
+    getTotalPriceOfCartItems, 
     cart
   } = useContext(StoreContext);
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
