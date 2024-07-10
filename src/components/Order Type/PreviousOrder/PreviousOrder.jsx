@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './PreviousOrder.css'; // Import the CSS file
+import ViewOrderDetails from './ViewOrderDetails';
 
 const AllOrder = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -13,11 +14,7 @@ const AllOrder = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Add any other headers if needed
           },
-          body: JSON.stringify({
-            // Add any request body parameters if required by your API
-          }),
         });
         if (!response.ok) {
           throw new Error('Failed to fetch orders');
@@ -27,26 +24,27 @@ const AllOrder = () => {
       } catch (error) {
         console.error('Error fetching orders:', error);
         // Handle error state or notification to the user
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchOrders();
   }, []);
 
-  const viewOrderDetails = async (orderID) => {
-    try {
-      const response = await fetch(`https://test.tandooripizza.com/api/online/order/${orderID}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch order details');
-      }
-      const data = await response.json();
-      setSelectedOrder(orderID);
-      setOrderDetails(data); // Assuming the response has detailed order information
-    } catch (error) {
-      console.error('Error fetching order details:', error);
-      // Handle error state or notification to the user
-    }
+  const handleViewClick = (orderId) => {
+    console.log('View button clicked for order ID:', orderId);
+    setSelectedOrder(orderId);
   };
+
+  const handleClose = () => {
+    console.log('Closing ViewOrderDetails');
+    setSelectedOrder(null);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading indicator while data is being fetched
+  }
 
   return (
     <div>
@@ -55,11 +53,11 @@ const AllOrder = () => {
         <table>
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Order Status</th>
-              <th>Item Name</th>
-              <th>Quantity</th>
-              <th>Price</th>
+              <th>Transaction ID</th>
+              <th>Order Type</th>
+              <th>Date Ordered</th>
+              <th>Promise Date</th>
+              <th>Order Total</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -71,15 +69,15 @@ const AllOrder = () => {
                     {index === 0 && (
                       <React.Fragment>
                         <td rowSpan={order.order.OrderItems.length}>{order.order.ID}</td>
-                        <td rowSpan={order.order.OrderItems.length}>{order.order.OrderHistory[0].OrderStatus}</td>
+                        <td rowSpan={order.order.OrderItems.length}>{order.order.Status === 1 ? 'Delivery' : 'Pickup'}</td>
+                        <td rowSpan={order.order.OrderItems.length}>{new Date(order.order.PlacedOn).toLocaleDateString()}</td>
+                        <td rowSpan={order.order.OrderItems.length}>{new Date(order.order.PromiseDate).toLocaleDateString()}</td>
+                        <td rowSpan={order.order.OrderItems.length}>{order.order.TotalAmmount}</td>
                       </React.Fragment>
                     )}
-                    <td>{item.Name}</td>
-                    <td>{item.Quantity}</td>
-                    <td>{item.ItemPrice}</td>
                     {index === 0 && (
                       <td rowSpan={order.order.OrderItems.length}>
-                        <button onClick={() => viewOrderDetails(order.order.ID)}>View</button>
+                        <button onClick={() => handleViewClick(order.order.ID)}>View</button>
                       </td>
                     )}
                   </tr>
@@ -90,23 +88,9 @@ const AllOrder = () => {
         </table>
       </div>
 
-      {selectedOrder && orderDetails && (
-        <div className="order-details">
-          <h3>Order Details for Order ID: {selectedOrder}</h3>
-          <p><strong>Order Date:</strong> {orderDetails.order.Date}</p>
-          <p><strong>Customer Name:</strong> {orderDetails.order.CustomerName}</p>
-          <p><strong>Total Price:</strong> {orderDetails.order.TotalPrice}</p>
-          <h4>Items:</h4>
-          <ul>
-            {orderDetails.order.OrderItems.map(item => (
-              <li key={item.ID}>
-                <div>Item Name: {item.Name}</div>
-                <div>Quantity: {item.Quantity}</div>
-                <div>Price: {item.ItemPrice}</div>
-                {/* Render other item details as needed */}
-              </li>
-            ))}
-          </ul>
+      {selectedOrder && (
+        <div className="modal">
+          <ViewOrderDetails orderID={selectedOrder} onClose={handleClose} />
         </div>
       )}
     </div>

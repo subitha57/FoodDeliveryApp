@@ -30,7 +30,9 @@ import CartNew from './pages/cart/CartNew.jsx';
 import ExploreMenu from './components/ExploreMenu/ExploreMenu.jsx';
 import FoodDisplay from './components/foodDisplay/FoodDisplay.jsx';
 import LoginModal from './components/login/LoginModal.jsx'; // Ensure LoginModal is imported
-import OrderDetails from './components/Order Type/PreviousOrder/OrderDetails.jsx'
+import ViewOrderDetails from './components/Order Type/PreviousOrder/ViewOrderDetails.jsx';
+import RestaurantList from './pages/location/RestaurantList.jsx';
+import CartView from './components/Order Type/PreviousOrder/CartView.jsx'
 
 
 function App() {
@@ -114,21 +116,23 @@ function App() {
           <button className='theme-button' onClick={toggleTheme}>
             {darkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
           </button>
-        </div>
+        </div> 
         <Navbar setShowLogin={setShowLogin} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         {isHalfAndHalfPizzaOpen && (
           <HalfAndHalfPizza handleCloseHalfAndHalfPizza={handleCloseHalfAndHalfPizza} selectedPizza={selectedPizza} />
         )}
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path='/' element={<RestaurantList/>}/>
+          <Route path="/Home" element={<Home />} />
           <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType} darkTheme={darkTheme} />} />
           <Route path='/CartNew' element={<CartNew selectedOrderType={selectedOrderType} />} />
           {/*<Route
             path="/OrderType"
             element={<OrderType isAuthenticated={isAuthenticated} onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
           />*/}
-          <Route path='/RegisterPopup' element={<RegisterPopup/>}/>
-          <Route path='/OrderDetails' element={<OrderDetails/>}/>
+          <Route path='/OrderType' element={<OrderType/>}/>
+          <Route path='/RegisterPopup' element={<RegisterPopup onLoginSuccess={handleLoginSuccess}/>}/>
+          <Route path='/ViewOrderDetails' element={<ViewOrderDetails/>}/>
           <Route path="/LoginModal" element={<LoginModal onLoginSuccess={handleLoginSuccess} />} /> {/* Adjust the route path for LoginModal */}
           <Route path='/' element={<ExploreMenu />} />
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
@@ -144,7 +148,7 @@ function App() {
           <Route path="/GeoLocation" element={<GeoLocation />} />
           <Route path="/PreviousOrder" element={<PreviousOrder pastOrders={pastOrders} />} />
           <Route path="/ViewPizzaPromotion" element={<ViewPizzaPromotion />} />
-     
+          <Route path='/CartView' element={<CartView/>} />
         </Routes>
       </div>
       <Footer />

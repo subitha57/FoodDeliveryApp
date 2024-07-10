@@ -29,18 +29,16 @@ body {
   cursor: pointer;
   padding: 0;
   color: white;
-  /* Default color */
   position: fixed;
   top: 14px;
-  /* Adjust top position as needed */
   right: 50px;
-  /* Adjust right position as needed */
   z-index: 1000;
 }
 
 .dark-theme .theme-button {
   color: white;
   /* Dark mode color */
+
 }
 
 .light-theme .theme-button {
@@ -66,14 +64,20 @@ body {
   margin-left: 10px;
   /* Adjust the spacing between the icons */
 }
-
+@media screen and (max-width: 600px) {
+  .theme-button {
+    top: 3px; /* Adjust for smaller screens */
+    right: 40px; /* Adjust for smaller screens */
+  }
+}
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .top-right-corner {
     top: 5px;
     right: 10px;
     flex-direction: column;
-    align-items: flex-end;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   .theme-button {

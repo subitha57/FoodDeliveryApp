@@ -40,7 +40,7 @@ const LoginModal = ({ onClose, onLoginSuccess }) => {
       setError('');
       onLoginSuccess();
       onClose();
-      navigate('/'); // Redirect to home or any other page
+      navigate('/Home'); // Redirect to home or any other page
     } catch (err) {
       console.error('Login error:', err); // Debug log
       setError('Login failed. Please check your credentials.');

@@ -51,6 +51,9 @@ const HalfAndHalfPizza = ({ handleCloseHalfAndHalfPizza  }) => {
     meats,
     vegetables,
     addToCart,
+    user,
+    cartRestaurant,
+    setUser
   } = useContext(StoreContext);
 
   useEffect(() => {
@@ -126,13 +129,24 @@ const HalfAndHalfPizza = ({ handleCloseHalfAndHalfPizza  }) => {
   ]);
 
 const handleAddToCart = () => {
+  if (!cartRestaurant) {
+    alert('Please select a restaurant before adding items to the cart.');
+        return;
+  }
+  const authToken = localStorage.getItem('authToken');
+  if (authToken) {
+    
+  } else {
+    alert('Please login to add items to the cart.');
+  }
+
     const mapIngredientIdsToNames = (ingredientIds) => {
       return ingredientIds.map(id => {
         const ingredient = [...meats, ...vegetables, ...aCheeses, ...pCheeses].find(item => item.Id === id);
         return ingredient ? ingredient.Name : '';
       });
     };
-  
+   
     const leftCustomizedPizza = {
       name: leftSelectedPizza ? leftSelectedPizza.Name : 'Custom Pizza',
       size: leftSize,

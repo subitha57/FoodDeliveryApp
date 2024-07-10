@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
-import './CartNew.css';
+import './CartView.css';
 import axios from 'axios';
-import { StoreContext } from '../../context/StoreContextProvider';
+import { StoreContext } from '../../../context/StoreContextProvider';
 import { useNavigate } from 'react-router-dom';
-import PlaceOrder from '../placeOrder/PlaceOrder';
-import ViewPromotions from '../../components/ViewPromotions/ViewPromotions';
+import ViewPromotions from '../../ViewPromotions/ViewPromotions';
 import { useTranslation } from 'react-i18next';
 
 const CartNew = ({ selectedOrderType }) => {
@@ -231,13 +230,7 @@ const CartNew = ({ selectedOrderType }) => {
                             <b>{t("Total")}</b>
                             <b>$.{total.toFixed(2)}</b>
                         </div>
-                        <button onClick={handleViewPromotions}>{t("View Current Promotions")}</button>
-                        {showPromotions && <ViewPromotions onClose={() => setShowPromotions(false)} onApplyCoupon={handleApplyPromotion} />}
-                        <div className="cart-promocode-input">
-                            <input type="text" placeholder={t('Enter coupon code')} value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
-                            <button onClick={applyCoupon}>{t("Apply")}</button>
-                            {couponError && <p className="coupon-error">{couponError}</p>}
-                        </div>
+                       
                     </div>
                     <button onClick={handleProceedToCheckout}>{t("PROCEED TO CHECKOUT")}</button>
                 </div>

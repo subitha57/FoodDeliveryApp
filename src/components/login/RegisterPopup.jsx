@@ -38,7 +38,7 @@ const RegisterPopup = ({ setShowLogin, onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+   
       const response = await axios.post('https://test.tandooripizza.com/api/online/account/register', formData);
       const { Code, Message, Errors } = response.data;
       if (Code === 0) {
@@ -50,9 +50,7 @@ const RegisterPopup = ({ setShowLogin, onLoginSuccess }) => {
         setResponseMessage(Message);
         setErrorMessages(Errors);
       }
-    } catch (error) {
-      setResponseMessage('An error occurred. Please try again later.');
-    }
+   
   };
 
   const handleClose = () => {

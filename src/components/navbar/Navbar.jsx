@@ -1,10 +1,9 @@
-// src/components/navbar/Navbar.js
 import React, { useContext, useState } from 'react';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
-import LoginModal from '../login/LoginModal'; // Update the import path if necessary
+import LoginModal from '../login/LoginModal';
 import { useTranslation } from 'react-i18next';
 import RegisterPopup from '../login/RegisterPopup';
 
@@ -48,7 +47,7 @@ const Navbar = ({ darkMode }) => {
       <div className='navbar-right'>
         <img src={assets.search_icon} alt="" />
         <div className='navbar-search-icon'>
-          <Link to='/Cart'><img src={assets.basket_icon} alt="" /></Link>
+          <Link to='/CartNew'><img src={assets.basket_icon} alt="" /></Link>
           <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
         {isAuthenticated ? (

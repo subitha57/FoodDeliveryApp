@@ -111,14 +111,15 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   const handleAddToCart = () => {
     if (!cartRestaurant) {
       alert('Please select a restaurant before adding items to the cart.');
-      navigate('/restaurants'); // Redirect to the restaurant selection page
+      navigate('/'); // Redirect to the restaurant selection page
+      onClose();
       return;
     }
     const authToken = localStorage.getItem('authToken');
     if (authToken) {
       addPizzaToCart();
     } else {
-      setLoginModalOpen(true);
+      alert('Please login to add items to the cart.');
     }
   };
   const addPizzaToCart = () => {

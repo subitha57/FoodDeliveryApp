@@ -5,7 +5,6 @@ import FoodDisplay from '../../components/foodDisplay/FoodDisplay';
 import AppDownload from '../../components/appDownload/AppDownload';
 import OrderType from '../../components/Order Type/OrderType';
 import ScrollButton from '../../ScrollButton';
-import LocationDummy from '../location/RestaurantList';
 import TakeOut from '../../components/Order Type/TakeOut'; // Import the TakeOut component
 
 const Home = () => {
@@ -31,7 +30,7 @@ const Home = () => {
 
   return (
     <div>
-      <LocationDummy />
+     
       {/* Conditionally render TakeOut or ExploreMenu based on selectedOrderType */}
       {showTakeOut ? (
         <TakeOut onClose={() => setShowTakeOut(false)} onContinue={handleContinue} />

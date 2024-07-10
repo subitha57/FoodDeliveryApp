@@ -29,8 +29,13 @@ const StoreContextProvider = (props) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      console.log('Stored user loaded:', JSON.parse(storedUser)); // Debug log
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        console.log('Stored user loaded:', parsedUser); // Debug log
+      } catch (error) {
+        console.error('Failed to parse stored user:', error); // Handle parsing error
+      }
     }
     fetchProducts();
   }, []);

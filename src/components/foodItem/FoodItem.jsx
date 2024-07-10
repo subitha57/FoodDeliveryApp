@@ -24,7 +24,6 @@ const FoodItem = ({
   const { cartItems, addToCart, removeFromCart, user, cartRestaurant } = useContext(StoreContext);
   const navigate = useNavigate(); // Initialize navigate
   const isLoggedIn = localStorage.getItem('authToken') !== null;
-  const [showSelectRestaurantPopup, setShowSelectRestaurantPopup] = useState(false);
 
   useEffect(() => {
     const existingCartItem = cartItems[id];
@@ -53,12 +52,12 @@ const FoodItem = ({
 
   const handleAddToCart = () => {
     if (!isLoggedIn) {
-      navigate('/LoginModal'); // Navigate to login modal if not logged in
+      alert("Please login."); // Navigate to login modal if not logged in
       return;
     }
 
     if (!cartRestaurant) {
-      setShowSelectRestaurantPopup(true);
+      alert("Please select a restaurant before adding items to the cart.");
       return;
     }
 
@@ -126,15 +125,7 @@ const FoodItem = ({
           value={quantity}
           onChange={(e) => setQuantity(parseInt(e.target.value))}
         />
-
       </div>
-      {showSelectRestaurantPopup && (
-        <div className="select-restaurant-popup">
-          <p>Please select a restaurant before adding items to the cart.</p>
-          <button onClick={() => setShowSelectRestaurantPopup(false)}>OK</button>
-        </div>
-      )}
-      {/* <p className="food-item-price">Rs.{dynamicPrice}</p> Display dynamic price */}
     </div>
   );
 };

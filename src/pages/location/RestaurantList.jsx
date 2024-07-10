@@ -4,7 +4,7 @@ import './LocationDummy.css';
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContextProvider';
 
-const RestaurantComponent = () => {
+const RestaurantList = () => {
   const { setCartRestaurant } = useContext(StoreContext);
   const [stores, setStores] = useState([]);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const RestaurantComponent = () => {
   const handleOrderNow = (e, restaurant) => {
     e.stopPropagation();
     handleSelectRestaurant(restaurant);
-    navigate('/');
+    navigate('/OrderType');
   };
 
   return (
@@ -52,4 +52,4 @@ const RestaurantComponent = () => {
   );
 };
 
-export default RestaurantComponent;
+export default RestaurantList;
