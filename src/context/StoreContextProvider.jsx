@@ -25,6 +25,8 @@ const StoreContextProvider = (props) => {
   const [Classics, setClassics] = useState([]);
   const [user, setUser] = useState(null);
   const [cartRestaurant, setCartRestaurant] = useState(null);
+  const [extraPrice, setExtraPrice] = useState(0); // Extra price for customizations
+  const [selectedOrderType, setSelectedOrderType] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -53,6 +55,10 @@ const StoreContextProvider = (props) => {
     console.log('User logged out'); // Debug log
   };
 
+  const updateExtraPrice = (price) => {
+    setExtraPrice(price);
+  };
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -61,7 +67,17 @@ const StoreContextProvider = (props) => {
       const sizes = response.data.Sizes;
       const prices = response.data.Prices;
 
-      setProducts(allProducts.filter(product => 
+      const updatedProducts = allProducts.map(product => {
+        if (product.CategoryType === 2 && product.ExtraPrice === undefined) {
+          return {
+            ...product,
+            ExtraPrice: response.data.ExtraPrices.find(extra => extra.ProductId === product.ProductId)?.Price || 0,
+          };
+        }
+        return product;
+      });
+  
+      setProducts(updatedProducts.filter(product => 
         product.CategoryName !== 'Crust' && 
         product.CategoryName !== 'Sauce' && 
         product.CategoryName !== 'ACheese' && 
@@ -69,7 +85,7 @@ const StoreContextProvider = (props) => {
         product.CategoryName !== 'Pizza-Toppings'));
 
       setCrusts(allProducts.filter(product => product.CategoryName === 'Crust'));
-      setSauces(allProducts.filter(product => product.CategoryName === 'Sauce'));
+      setSauces(allProducts.filter(product => product.CategoryName === 'Sauces'));
       setACheeses(allProducts.filter(product => product.CategoryName === 'ACheese'));
       setPCheeses(allProducts.filter(product => product.CategoryName === 'PCheese'));
       setMeats(allProducts.filter(product => product.CategoryName === 'Pizza-Toppings' && product.IsNonVeg));
@@ -159,7 +175,11 @@ const StoreContextProvider = (props) => {
     cartRestaurant,
     setCartRestaurant,
     login,
-    logout,
+    logout, 
+  extraPrice,
+  updateExtraPrice  ,
+  selectedOrderType,
+    setSelectedOrderType,
   };
 
   return (

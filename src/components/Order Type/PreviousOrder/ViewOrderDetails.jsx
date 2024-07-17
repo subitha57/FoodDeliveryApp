@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import CartView from '../../Order Type/PreviousOrder/CartView';
 import './OrderDetails.css';
 
 const ViewOrderDetails = ({ orderID, onClose }) => {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        console.log('Fetching details for order ID:', orderID);
         const response = await fetch(`https://test.tandooripizza.com/api/online/order/${orderID}`, {
           method: 'POST',
           headers: {
@@ -27,6 +26,7 @@ const ViewOrderDetails = ({ orderID, onClose }) => {
         console.log('Order details fetched:', data.Data);
       } catch (error) {
         console.error('Error fetching order details:', error);
+        setError('There is no order'); // Set error message for display
       } finally {
         setLoading(false);
       }
@@ -39,19 +39,44 @@ const ViewOrderDetails = ({ orderID, onClose }) => {
     return <div>Loading...</div>;
   }
 
-  if (!orderDetails) {
-    return <div>Error loading order details. Please try again.</div>;
+  if (error) {
+    alert(error); // Show alert with error message
+    onClose(); // Close the modal
+    return null; // Return null to render nothing
   }
 
   const { order } = orderDetails;
-  const payment = order.OrderModel?.payments?.find(p => p.mode.name === 'Credit Card') || {};
 
   return (
     <div className="order-details-container">
+      <h2>View Order Details</h2><br/>
       <button className="close-button" onClick={onClose}>X</button>
       <div className="order-details-content">
         <div className="order-details-left">
-          <CartView />
+          <div>
+            <h3>Products:</h3>
+            {order.OrderItems.map((item, index) => (
+              <p key={index}>
+                {item.ProductName} - ${item.ItemPrice.toFixed(2)}
+              </p>
+            ))}
+          </div>
+          <div>
+            <h3>Total Amount:</h3>
+            <p>{order.TotalAmmount}</p>
+          </div>
+          <div>
+            <h3>Delivery Charges:</h3>
+            <p>{order.DeliveryCharges}</p>
+          </div>
+          <div>
+            <h3>Tax:</h3>
+            <p>{order.Tax}</p>
+          </div>
+          <div>
+            <h3>Final Amount:</h3>
+            <p>{order.FinalAmmount}</p>
+          </div>
         </div>
         <div className="order-details-right">
           <h3>Order Details for Order ID: {orderID}</h3>
@@ -66,10 +91,10 @@ const ViewOrderDetails = ({ orderID, onClose }) => {
           </div><br/>
           <h3>Payment Details</h3><br/>
           <div className="payment-info">
-            <p><strong>Card Holder Name:</strong> {payment.holdername || 'N/A'}</p><br/>
-            <p><strong>Card Number:</strong> {payment.cardnumber || 'N/A'}</p><br/>
-            <p><strong>Card Issuer:</strong> {payment.cardtype || 'N/A'}</p><br/>
-            <p><strong>Zip Code:</strong> {payment.zipcode || 'N/A'}</p><br/>
+            <p><strong>Card Holder Name:</strong> {order.PaymentMethod === 1 ? 'Cash' : 'Credit Card'}</p><br/>
+            <p><strong>Card Number:</strong> {order.TransactionID || 'N/A'}</p><br/>
+            <p><strong>Card Issuer:</strong> {order.CCName || 'N/A'}</p><br/>
+            <p><strong>Zip Code:</strong> {order.CustomerZipCode || 'N/A'}</p><br/>
           </div>
         </div>
       </div>

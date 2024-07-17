@@ -44,7 +44,14 @@ function App() {
   const [selectedPizza, setSelectedPizza] = useState(null);
   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
   const [isHalfAndHalfPizzaOpen, setIsHalfAndHalfPizzaOpen] = useState(false);
+  const [orderType, setOrderType] = useState(null);
+  
 
+  const handleOrderTypeChange = (orderType) => {
+    setOrderType(orderType);
+    setSelectedOrderType(orderType);
+    console.log('Order Type Selected:', orderType);
+  };
   const handleCloseHalfAndHalfPizza = () => {
     setIsHalfAndHalfPizzaOpen(false);
   };
@@ -64,16 +71,10 @@ function App() {
     navigate('/'); // Redirect to the homepage after logout
   };
 
-  const handleSelectOrderType = (orderType) => {
-    setSelectedOrderType(orderType);
-  };
+  
 
   const handleContinue = () => {
     navigate('/OrderType');
-  };
-
-  const handleCloseOrderType = () => {
-    console.log('Closing OrderType popup');
   };
 
   const [darkTheme, setDarkTheme] = useState(false);
@@ -125,19 +126,16 @@ function App() {
           <Route path='/' element={<RestaurantList/>}/>
           <Route path="/Home" element={<Home />} />
           <Route path="/Cart" element={<Cart selectedOrderType={selectedOrderType} darkTheme={darkTheme} />} />
-          <Route path='/CartNew' element={<CartNew selectedOrderType={selectedOrderType} />} />
-          {/*<Route
-            path="/OrderType"
-            element={<OrderType isAuthenticated={isAuthenticated} onSelectOrderType={handleSelectOrderType} onClose={handleCloseOrderType} onContinue={handleContinue} />}
-          />*/}
-          <Route path='/OrderType' element={<OrderType/>}/>
+          <Route path='/CartNew' element={<CartNew  selectedOrderType={selectedOrderType}/>} />
+          <Route path='/OrderType' element={<OrderType onOrderTypeChange={handleOrderTypeChange} />}/>
+          <Route path="/FoodDisplay" element={<FoodDisplay selectedOrderType={selectedOrderType} category={'FeistyProducts'} />} />
           <Route path='/RegisterPopup' element={<RegisterPopup onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path='/ViewOrderDetails' element={<ViewOrderDetails/>}/>
           <Route path="/LoginModal" element={<LoginModal onLoginSuccess={handleLoginSuccess} />} /> {/* Adjust the route path for LoginModal */}
           <Route path='/' element={<ExploreMenu />} />
           <Route path="/PlaceOrder" element={<PlaceOrder />} />
           <Route path="/CustomizePizza" element={<CustomizeForm onSelect={handleSelect} />} />
-          <Route path="/FoodDisplay" element={<FoodDisplay category={'FeistyProducts'} />} />
+          
           <Route path="/ExploreMenu" element={<ExploreMenu />} />
           <Route path="/ScrollButton" element={<ScrollButton />} />
           <Route path="/Delivery" element={<Delivery onContinue={handleContinue} />} />

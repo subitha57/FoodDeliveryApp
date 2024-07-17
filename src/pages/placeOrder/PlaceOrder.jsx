@@ -1,290 +1,233 @@
-import React, { useContext, useState } from 'react';
-import './PlaceOrder.css';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import CartNew from '../cart/CartNew'; // Import your CartNew component
 import { StoreContext } from '../../context/StoreContextProvider';
 import { useNavigate } from 'react-router-dom';
-import ProceedCheckOut from '../ProceedCheckOut/ProceedCheckOut';
-import { useTranslation } from 'react-i18next';
-import {
-  Container,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  Button,
-  Grid,
-  Typography,
-  Snackbar,
-  Alert
-} from '@mui/material';
+import { Grid, Box, Typography, TextField, Button } from '@mui/material';
+import './PlaceOrder.css'; // Import the CSS file
 
-const PlaceOrder = ({ onClose }) => {
-  const { t } = useTranslation();
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    type: '',
-    futureOrder: false,
-    futureDate: '',
-    futureTime: '',
-    fullName: '',
+const PlaceOrder = ({ selectedOrderType }) => {
+  const navigate = useNavigate();
+  const { cart, user } = useContext(StoreContext);
+  const [orderDetails, setOrderDetails] = useState({
+    name: '',
+    address: '',
+    phone: '',
     email: '',
-    phoneNumber: '',
-    address: ''
-  });
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: '',
-    severity: 'info'
+    cardHolderName: '',
+    billingZipCode: '',
+    cardNumber: '',
+    cvv: '',
+    cartItems: [], // Assume CartNew provides this data
+    selectedOrderType: selectedOrderType || ''
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const { name, value } = e.target;
+    setOrderDetails(prevDetails => ({
+      ...prevDetails,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const updateCartItems = (cartItems) => {
+    setOrderDetails(prevDetails => ({
+      ...prevDetails,
+      cartItems
+    }));
+  };
+
+  const handleProceedToCheckout = async (e) => {
     e.preventDefault();
 
+    const orderData = {
+      userName: orderDetails.name || user?.userName || null,
+      email: orderDetails.email || user?.email || null,
+      phoneNumber: orderDetails.phone || user?.phoneNumber || null,
+      address: orderDetails.address || user?.address || null,
+      promoID: 0,
+      discount: 0,
+      items: cart.map(item => ({
+        isHybrid: false,
+        name: item.name,
+        productId: item.id,
+        quantity: item.quantity,
+        cost: item.price,
+        items: (item.toppings || []).map(topping => ({
+          id: topping.id,
+          isHybrid: false,
+          name: topping.name,
+          productId: topping.productId,
+          quantity: topping.quantity,
+          cost: topping.cost,
+          items: [],
+          isPizza: false,
+          isNo: topping.isNo,
+          isExtra: topping.isExtra,
+          isRegular: topping.isRegular,
+          size: topping.size,
+          topCat: topping.topCat,
+          subCat: topping.subCat
+        })),
+        isPizza: item.isPizza,
+        isNo: item.isNo,
+        isExtra: item.isExtra,
+        isLight: item.isLight,
+        isRegular: item.isRegular,
+        isSubstitude: item.isSubstitude,
+        size: item.size,
+        topCat: item.topCat,
+        subCat: item.subCat,
+        crust: item.crust,
+        crustprice: item.crustprice
+      })),
+      deliveryCharges: 0,
+      paymentMethod: null,
+      payments: [],
+      amountDue: 0,
+      paid: 0,
+      mode: 0,
+      appliedCredits: 0,
+      remainingCredits: 0,
+      customerCredits: 0,
+      comments: cart.map(item => ({
+        type: 0,
+        itemId: `pizza-${item.id}`
+      })),
+      taxExempt: false,
+      waitTime: 15,
+      gratuity: 0,
+      creditApplied: false,
+      futureOrder: false,
+      subtotal: cart.reduce((acc, item) => acc + item.price, 0),
+      total: cart.reduce((acc, item) => acc + item.price, 0),
+      storeUID: 2270,
+      cardHolderName: orderDetails.cardHolderName,
+      billingZipCode: orderDetails.billingZipCode,
+      cardNumber: orderDetails.cardNumber,
+      cvv: orderDetails.cvv
+    };
+
     try {
-      const response = await axios.post(
-        'https://test.tandooripizza.com/api/online/order/delivery/check',
-        { address: formData.address }
-      );
-
-      const { Code, Message } = response.data;
-
-      setSnackbar({
-        open: true,
-        message: Message,
-        severity: Code === 0 ? 'success' : 'error'
-      });
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: 'An error occurred while checking delivery availability.',
-        severity: 'error'
-      });
-    }
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
-  const handleCheckout = async () => {
-    try {
-      const orderDetails = {
-        ...formData,
-        cartTotal: getTotalCartAmount(),
-        deliveryFee: getTotalCartAmount() === 0 ? 0 : 2,
-        totalAmount: getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2
-      };
-
-      const response = await axios.post(
-        'https://test.tandooripizza.com/api/online/order/save',
-        orderDetails
-      );
-
-      if (response.data.Code === 0) {
-        setSnackbar({
-          open: true,
-          message: 'Order placed successfully!',
-          severity: 'success'
-        });
-        setShowModal(true);
+      const response = await axios.post('https://test.tandooripizza.com/api/online/order/save', orderData);
+      if (response.status === 200) {
+        console.log('Order saved:', response.data);
+        alert("Order placed successfully");
+        navigate('/Home');
       } else {
-        setSnackbar({
-          open: true,
-          message: response.data.Message,
-          severity: 'error'
-        });
+        console.error('Failed to save order:', response.data);
       }
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: 'An error occurred while placing the order.',
-        severity: 'error'
-      });
+      console.error('Error saving order:', error);
     }
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const { getTotalCartAmount } = useContext(StoreContext);
-  const navigate = useNavigate();
-
   return (
-    <div className='place-order'>
-      <div>
-        <button className="close-button" onClick={closeModal}>Close</button>
-      </div>
-      <div className='check-availability'>
-        <Container maxWidth="sm">
-          <Typography variant="h4" gutterBottom>
-            Check Delivery Availability
-          </Typography>
-          <form onSubmit={handleSubmit}>
+    <Box className='place-your-order' maxWidth="md" mx="auto" mt={4}>
+      <Typography variant="h4" component="h2" className="title" align="center" gutterBottom>
+        Place Your Order
+      </Typography>
+      <Grid container spacing={2} className="place-order">
+        <Grid item xs={10} md={5}>
+          <CartNew selectedOrderType={selectedOrderType}  hideCheckoutButton={true} 
+          updateCartItems={updateCartItems} />
+        </Grid>
+        <Grid item xs={12} md={6} mt={5}>
+          <form onSubmit={handleProceedToCheckout}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  select
-                  label="Type"
-                  name="type"
-                  value={formData.type}
+                  label="Name"
+                  name="name"
+                  value={orderDetails.name}
                   onChange={handleChange}
-                  fullWidth
                   required
-                >
-                  <MenuItem value="DineIn">Dine In</MenuItem>
-                  <MenuItem value="Delivery">Delivery</MenuItem>
-                  <MenuItem value="TakeOut">Take Out</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="futureOrder"
-                      checked={formData.futureOrder}
-                      onChange={handleChange}
-                    />
-                  }
-                  label="Future Order"
-                />
-              </Grid>
-              {formData.futureOrder && (
-                <>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Future Date"
-                      type="date"
-                      name="futureDate"
-                      value={formData.futureDate}
-                      onChange={handleChange}
-                      fullWidth
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Future Time"
-                      type="time"
-                      name="futureTime"
-                      value={formData.futureTime}
-                      onChange={handleChange}
-                      fullWidth
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      required
-                    />
-                  </Grid>
-                </>
-              )}
-              <Grid item xs={12}>
-                <TextField
-                  label="Full Name"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
                   fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Phone Number"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  fullWidth
-                  required
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   label="Address"
                   name="address"
-                  value={formData.address}
+                  value={orderDetails.address}
                   onChange={handleChange}
-                  fullWidth
                   required
+                  fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
+                <TextField
+                  label="Phone"
+                  name="phone"
+                  value={orderDetails.phone}
+                  onChange={handleChange}
+                  required
                   fullWidth
-                >
-                  Check Delivery Availability
-                </Button>
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Email"
+                  name="email"
+                  value={orderDetails.email}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Card Holder Name"
+                  name="cardHolderName"
+                  value={orderDetails.cardHolderName}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Billing Zip Code"
+                  name="billingZipCode"
+                  value={orderDetails.billingZipCode}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Card Number"
+                  name="cardNumber"
+                  value={orderDetails.cardNumber}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="CVV"
+                  name="cvv"
+                  value={orderDetails.cvv}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Box display="flex" justifyContent="center">
+                  <Button type="submit" variant="contained" color="primary">
+                    Place Order
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </form>
-          <Snackbar
-            open={snackbar.open}
-            autoHideDuration={6000}
-            onClose={handleCloseSnackbar}
-          >
-            <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-              {snackbar.message}
-            </Alert>
-          </Snackbar>
-        </Container>
-      </div>
-      <div className="place-order-right">
-        <div className="cart-total">
-          <h2>{t("Cart Total")}</h2>
-          <div>
-            <div className='cart-total-details'>
-              <p>{t("SubTotal")}</p>
-              <p>Rs.{getTotalCartAmount()}</p>
-            </div>
-            <hr />
-            <div className='cart-total-details'>
-              <p>{t("Delivery Fee")}</p>
-              <p>Rs.{getTotalCartAmount() === 0 ? 0 : 2}</p>
-            </div>
-            <hr />
-            <div className='cart-total-details'>
-              <b>{t("Total")}</b>
-              <b>Rs.{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
-            </div>
-          </div>
-          <button type="button" onClick={handleCheckout}>{t("PROCEED TO PAYMENT")}</button>
-        </div>
-      </div>
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <ProceedCheckOut closeModal={onClose} />
-          </div>
-        </div>
-      )}
-    </div>
+        </Grid>
+      </Grid>
+    </Box>
   );
-}
+};
 
 export default PlaceOrder;

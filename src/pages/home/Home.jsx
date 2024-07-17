@@ -1,9 +1,8 @@
-// Home.jsx
 import React, { useState } from 'react';
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu';
 import FoodDisplay from '../../components/foodDisplay/FoodDisplay';
 import AppDownload from '../../components/appDownload/AppDownload';
-import OrderType from '../../components/Order Type/OrderType';
+
 import ScrollButton from '../../ScrollButton';
 import TakeOut from '../../components/Order Type/TakeOut'; // Import the TakeOut component
 
@@ -40,7 +39,7 @@ const Home = () => {
       
       {/* Other components */}
       <FoodDisplay category={category} foodList={foodList} />
-      <OrderType onSelectOrderType={handleSelectOrderType} userLocation={""} />
+      
       <AppDownload /><br />
       <ScrollButton />
     </div>

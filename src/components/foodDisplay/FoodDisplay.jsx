@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import CartNew from '../../pages/cart/CartNew';
 import CustomizePizza from '../customize/CustomizeForm';
 
-const FoodDisplay = ({ category }) => {
+const FoodDisplay = ({ category}) => {
+ 
   const { t } = useTranslation();
   const {
     feistyProducts,
@@ -15,9 +16,11 @@ const FoodDisplay = ({ category }) => {
     extras,
     loading,
     error,
-    getTotalPriceOfCartItems, 
-    cart
+    getTotalPriceOfCartItems,
+    cart,
+    selectedOrderType
   } = useContext(StoreContext);
+
   const [showCustomizeForm, setShowCustomizeForm] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState(null);
   const [promotionApplied, setPromotionApplied] = useState(false);
@@ -31,7 +34,7 @@ const FoodDisplay = ({ category }) => {
   const toggleCustomizeForm = (item) => {
     setSelectedPizza(item);
     setShowCustomizeForm(!showCustomizeForm);
-    setCustomizedPrice(null); 
+    setCustomizedPrice(null);
   };
 
   const handleApplyPromotion = () => {
@@ -39,7 +42,7 @@ const FoodDisplay = ({ category }) => {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Loading...</div>;
 
   const renderItems = () => {
     switch (category) {
@@ -108,12 +111,13 @@ const FoodDisplay = ({ category }) => {
 
   return (
     <div className='container'>
-      <div className='cart-container fixed-cart' >
-        <CartNew />
+      <div className='cart-container fixed-cart'>
+        <CartNew selectedOrderType={selectedOrderType} />
       </div>
       <div className='food-display-container'>
         <div className='food-display' id='food-display'>
-          <h2>{category === 'Beverages'
+          <h2>
+            {category === 'Beverages'
               ? t("Beverages")
               : category === 'Appetizers'
               ? t("Appetizers")

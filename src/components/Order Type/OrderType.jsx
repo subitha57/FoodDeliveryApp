@@ -1,99 +1,63 @@
-  import React, { useState, useEffect } from 'react';
-  import { ToggleButton, ToggleButtonGroup, Modal, Backdrop, Fade, Button } from '@mui/material';
-  import Delivery from './Delivery';
-  import TakeOut from './TakeOut';
-  import DineIn from './DineIn';
-  import './OrderType.css';
-  import CloseIcon from '@mui/icons-material/Close';
+import React, { useState,useContext } from 'react';
+import { Box, Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { OrderMode, OrderModeLabel } from '../../enums/OrderMode'; // Adjust the import path as necessary
+import { StoreContext } from '../../context/StoreContextProvider';
 
-  const OrderType = ({ onSelectOrderType, onClose, isAuthenticated }) => {
-    const [selectedOrderType, setSelectedOrderType] = useState('');
-    const [open, setOpen] = useState(false);
+const OrderType = ({ onOrderTypeChange }) => {
+ 
+  const navigate = useNavigate();
+  const { selectedOrderType, setSelectedOrderType } = useContext(StoreContext);
 
-    useEffect(() => {
-      if (isAuthenticated) {
-        setOpen(true);
-      }
-    }, [isAuthenticated]);
-
-    const handleSelectOrderType = (orderType) => {
-      setSelectedOrderType(orderType);
-      onSelectOrderType(orderType);
-      console.log("ordertype:", orderType);
-    };
-
-    const handleContinue = () => {
-      handleClose();
-    };
-
-    const handleClose = () => {
-      setOpen(false);
-      onClose(); // Notify the parent component that the modal is closed
-    };
-
-    if (!isAuthenticated) {
-      return null; // Do not render anything if the user is not authenticated
-    }
-
-    return (
-      <Modal
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className='orderTypePopup'>
-            <div className='closeButton'>
-              <button onClick={handleClose} className="button" style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
-                <CloseIcon />
-              </button>
-            </div>
-            <div className='Order-type'>
-              <h1>Order Type</h1>
-              <div className="order-type-container">
-                <ToggleButtonGroup
-                  value={selectedOrderType}
-                  exclusive
-                  sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
-                >
-                  <ToggleButton
-                    value="Delivery"
-                    onClick={() => handleSelectOrderType('Delivery')}
-                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '0.rem' }}
-                  >
-                    <span className="order-type-icon">🚚</span>Delivery
-                    {selectedOrderType === 'Delivery' && <span className="checkmark-icon">✔️</span>}
-                  </ToggleButton>
-                  <ToggleButton
-                    value="TakeOut"
-                    onClick={() => handleSelectOrderType('TakeOut')}
-                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '0.9rem' }}
-                  >
-                    <span className="order-type-icon">🥡</span>Take Out
-                    {selectedOrderType === 'TakeOut' && <span className="checkmark-icon">✔️</span>}
-                  </ToggleButton>
-                  <ToggleButton
-                    value="DineIn"
-                    onClick={() => handleSelectOrderType('DineIn')}
-                    sx={{ width: '30%', height: '60px', backgroundColor: 'skyblue', color: 'black', fontSize: '1.0rem' }}
-                  >
-                    <span className="order-type-icon">🍽️</span>Dine In
-                    {selectedOrderType === 'DineIn' && <span className="checkmark-icon">✔️</span>}
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </div>
-            </div>
-            {selectedOrderType === 'Delivery' && <Delivery onClose={handleContinue} closeOrderType={handleClose} />}
-            {selectedOrderType === 'TakeOut' && <TakeOut onClose={handleContinue} closeOrderType={handleClose} />}
-            {selectedOrderType === 'DineIn' && <DineIn onClose={handleContinue} closeOrderType={handleClose} />}
-          </div>
-        </Fade>
-      </Modal>
-    );
+  const handleOrderTypeClick = (orderMode) => {
+    setSelectedOrderType(orderMode);
+    onOrderTypeChange(orderMode);
+    navigate('/Home'); // Navigate to the home page
   };
 
-  export default OrderType;
+  return (
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: '70vh', backgroundColor: '#antikwhite' }} // Adjust background color here
+    >
+      <Box sx={{ textAlign: 'center', p: 4, bgcolor: 'background.paper', borderRadius: 1 }}>
+        <h2>Select Order Type</h2><br/><br/>
+        <Grid container spacing={4} justifyContent="center">
+          {Object.keys(OrderMode).map((key) => {
+            const orderMode = OrderMode[key];
+            const isSelected = selectedOrderType === orderMode;
+
+            return (
+              <Grid item key={orderMode}>
+                <Box
+                  onClick={() => handleOrderTypeClick(orderMode)}
+                  sx={{
+                    p: 2,
+                    borderRadius: 1,
+                    bgcolor: isSelected ? 'blue' : 'grey.300',
+                    color: isSelected ? 'white' : 'black',
+                    cursor: 'pointer',
+                    transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                    transition: 'transform 0.2s ease-in-out, background-color 0.2s ease-in-out',
+                    textAlign: 'center',
+                    boxShadow: isSelected ? '0px 4px 20px rgba(0, 0, 0, 0.3)' : 'none',
+                    '&:hover': {
+                      bgcolor: isSelected ? 'blue' : 'grey.400',
+                      transform: 'scale(1.05)'
+                    }
+                  }}
+                >
+                  {OrderModeLabel[orderMode]}
+                </Box>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+    </Grid>
+  );
+};
+
+export default OrderType;

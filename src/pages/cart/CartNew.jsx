@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import PlaceOrder from '../placeOrder/PlaceOrder';
 import ViewPromotions from '../../components/ViewPromotions/ViewPromotions';
 import { useTranslation } from 'react-i18next';
+import { OrderModeLabel } from '../../enums/OrderMode';
 
-const CartNew = ({ selectedOrderType }) => {
+const CartNew = ({ selectedOrderType, hideCheckoutButton  }) => {
+   
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cart, removeFromCart, getTotalPriceOfCartItems, cartRestaurant, user } = useContext(StoreContext);
@@ -76,7 +78,7 @@ const CartNew = ({ selectedOrderType }) => {
         setShowPromotions(false);
     };
 
-    const handleProceedToCheckout = async () => {
+   {/* const handleProceedToCheckout = async () => {
        
         const orderData = {
             userName: user?.userName || null,
@@ -154,7 +156,7 @@ const CartNew = ({ selectedOrderType }) => {
         } catch (error) {
             console.error('Error saving order:', error);
         }
-    };
+    }; */}
 
     const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0) - discount ;
 
@@ -167,6 +169,14 @@ const CartNew = ({ selectedOrderType }) => {
                     <p>{cartRestaurant.BusinessName}</p>
                 </div>
             )}<br />
+          {selectedOrderType !== null ? (
+        <div className="selected-order-type">
+          <h3>Order Type:</h3>
+          <p>{OrderModeLabel[selectedOrderType]}</p>
+        </div>
+      ) : (
+        <p>No Order Type Selected</p>
+      )}<br />
             {/*{username ? (
                 <div className="logged-in-user">
                     <h3>Logged in as:</h3>
@@ -239,8 +249,10 @@ const CartNew = ({ selectedOrderType }) => {
                             {couponError && <p className="coupon-error">{couponError}</p>}
                         </div>
                     </div>
-                    <button onClick={handleProceedToCheckout}>{t("PROCEED TO CHECKOUT")}</button>
-                </div>
+                    {!hideCheckoutButton && (
+                        <button onClick={() => navigate('/PlaceOrder')}>{t("PROCEED TO CHECKOUT")}</button>
+                    )}
+                                    </div>
             </div>
         </div>
     );

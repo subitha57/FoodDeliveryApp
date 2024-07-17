@@ -7,6 +7,7 @@ import { StoreContext } from '../../context/StoreContextProvider';
 const RestaurantList = () => {
   const { setCartRestaurant } = useContext(StoreContext);
   const [stores, setStores] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,8 +15,10 @@ const RestaurantList = () => {
       try {
         const response = await axios.post('https://test.tandooripizza.com/api/online/stores', {});
         setStores(response.data.Data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching the store data', error);
+        setLoading(false);
       }
     };
 
@@ -33,6 +36,10 @@ const RestaurantList = () => {
     handleSelectRestaurant(restaurant);
     navigate('/OrderType');
   };
+
+  if (loading) {
+    return <div className="loading">Loading...</div>; // Add your preferred loading indicator here
+  }
 
   return (
     <div className='dummy-container'>

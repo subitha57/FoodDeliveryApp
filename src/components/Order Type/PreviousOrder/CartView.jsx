@@ -26,7 +26,6 @@ const CartNew = ({ selectedOrderType }) => {
         }
     }, []);
 
-    console.log("cart items", cart);
 
     const handleViewPromotions = () => {
         setShowPromotions(true);
@@ -166,6 +165,7 @@ const CartNew = ({ selectedOrderType }) => {
                     <p>{cartRestaurant.BusinessName}</p>
                 </div>
             )}<br />
+          
             {/*{username ? (
                 <div className="logged-in-user">
                     <h3>Logged in as:</h3>

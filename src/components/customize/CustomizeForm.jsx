@@ -22,6 +22,7 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   const [sauce, setSauce] = useState('');
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedPizzaName, setSelectedPizzaName] = useState('');
+  const [selectedPizzaState, setSelectedPizzaState] = useState(selectedPizza);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [showHalfAndHalfPizza, setShowHalfAndHalfPizza] = useState(false);
@@ -62,31 +63,32 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
     addToCart,
     user,
     cartRestaurant,
-    setUser 
+    setUser,
+    extraPrice 
   } = useContext(StoreContext);
 
   useEffect(() => {
-    if (selectedPizza) {
+    if (selectedPizzaState) {
       setSize('Medium');
-      setSelectedIngredients([...selectedPizza.DefaultIncrediantIds, ...selectedPizza.FixIncrediantIds]);
+      setSelectedIngredients([...selectedPizzaState.DefaultIncrediantIds, ...selectedPizzaState.FixIncrediantIds]);
     }
-  }, [selectedPizza]);
+  }, [selectedPizzaState]);
 
   useEffect(() => {
-    if (selectedPizza) {
+    if (selectedPizzaState) {
       let calculatedPrice = 0;
       switch (size) {
         case 'Small':
-          calculatedPrice = selectedPizza.SmallPrice;
+          calculatedPrice = selectedPizzaState.SmallPrice;
           break;
         case 'Medium':
-          calculatedPrice = selectedPizza.MediumPrice;
+          calculatedPrice = selectedPizzaState.MediumPrice;
           break;
         case 'Large':
-          calculatedPrice = selectedPizza.LargePrice;
+          calculatedPrice = selectedPizzaState.LargePrice;
           break;
         case 'Extra Large':
-          calculatedPrice = selectedPizza.ExtraLargePrice;
+          calculatedPrice = selectedPizzaState.ExtraLargePrice;
           break;
         default:
           calculatedPrice = 0;
@@ -102,11 +104,11 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
         }
       });
   
-      calculatedPrice += additionalCost;
+      calculatedPrice += additionalCost + extraPrice; 
       setLocalPrice(calculatedPrice);  // Update local price state
       setPrice(calculatedPrice);
     }
-  }, [selectedPizza, size, selectedIngredients]);
+  }, [selectedPizzaState, size, selectedIngredients, extraPrice]);
   
   const handleAddToCart = () => {
     if (!cartRestaurant) {
@@ -123,16 +125,16 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
     }
   };
   const addPizzaToCart = () => {
-    const deselectedDefaultIngredients = selectedPizza.DefaultIncrediantIds.filter(
+    const deselectedDefaultIngredients = selectedPizzaState.DefaultIncrediantIds.filter(
       (id) => !selectedIngredients.includes(id)
     );
 
     const customizedPizza = {
-      name: selectedPizza.Name,
+      name: selectedPizzaState.Name,
       size,
       price: localPrice,
       quantity,
-      image: selectedPizza.Image || defaultImage,
+      image: selectedPizzaState.Image || defaultImage,
       cheese:
         deselectedDefaultIngredients.length > 0
           ? "None "
@@ -177,7 +179,7 @@ const CustomizePizza = ({ selectedPizza, onClose, setPrice  }) => {
   };
 
   const isDefaultIngredient = (id) => {
-    return selectedPizza && selectedPizza.DefaultIncrediantIds.includes(id);
+    return selectedPizzaState && selectedPizzaState.DefaultIncrediantIds.includes(id);
   };
   const [cheeseCustomizations, setCheeseCustomizations] = useState({});
   const [meatCustomizations, setMeatCustomizations] = useState({});
@@ -223,8 +225,8 @@ const handleLoginSuccess = (userData) => {
       <div className="customize-pizza-container">
         <div className="pizza-details">
           <div className="pizza-image">
-            {selectedPizza && <h3>{selectedPizza.Name}</h3>}
-            <img src={selectedPizza ? selectedPizza.Image || defaultImage : defaultImage} alt={selectedPizza ? selectedPizza.Name : 'Default Pizza'} />
+            {selectedPizzaState && <h3>{selectedPizzaState.Name}</h3>}
+            <img src={selectedPizzaState ? selectedPizzaState.Image || defaultImage : defaultImage} alt={selectedPizzaState ? selectedPizzaState.Name : 'Default Pizza'} />
           </div>
           <div>
             <Button variant="contained" onClick={() => setOpen(true)}>Make it half and half pizza</Button>
@@ -244,11 +246,12 @@ const handleLoginSuccess = (userData) => {
           <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>Select Pizza</InputLabel>
             <Select
-              value={selectedPizza ? selectedPizza.Id : ''}
+              value={selectedPizzaState ? selectedPizzaState.Id : ''}
               onChange={(e) => {
                 const pizzaId = e.target.value;
                 const pizza = products.find(p => p.Id === parseInt(pizzaId));
                 setSelectedPizzaName(pizza.Name);
+                setSelectedPizzaState(pizza); 
               }}
             >
               <MenuItem value="">Select Pizza</MenuItem>
@@ -465,7 +468,9 @@ const handleLoginSuccess = (userData) => {
       </div>
       <hr />
       <div className="total-price">
-        <h3>Total Price: ${localPrice.toFixed(2)}</h3>
+        <h3>Pizza Price: ${localPrice.toFixed(2)}</h3>
+        <h3>Total Price: ${(localPrice * quantity).toFixed(2)}</h3>
+
         <Button variant="contained" color="primary" onClick={handleAddToCart}>Add to Cart</Button>
       </div>
     </div>

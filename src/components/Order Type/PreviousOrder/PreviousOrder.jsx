@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './PreviousOrder.css'; // Import the CSS file
 import ViewOrderDetails from './ViewOrderDetails';
+import { useNavigate } from 'react-router-dom';
 
 const AllOrder = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true); // New state for loading
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -41,6 +43,9 @@ const AllOrder = () => {
     console.log('Closing ViewOrderDetails');
     setSelectedOrder(null);
   };
+  const handleBackClick = () => {
+    navigate('/Home'); // Navigate to the home page
+  };
 
   if (loading) {
     return <div>Loading...</div>; // Show loading indicator while data is being fetched
@@ -49,6 +54,7 @@ const AllOrder = () => {
   return (
     <div>
       <h2>All Orders</h2>
+      <button className="back-button" onClick={handleBackClick}>Back</button>
       <div className="table-container">
         <table>
           <thead>
